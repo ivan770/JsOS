@@ -256,7 +256,7 @@
     os: './modules/os.js',
     net: './modules/net.js',
     dns: './modules/dns.js',
-    http: 'http-node',
+    // http: 'http-node',
     punycode: 'punycode',
     querystring: 'querystring-es3',
     string_decoder: 'string_decoder',
@@ -266,6 +266,8 @@
     inherits: './modules/inherits.js',
     sys: 'util/util.js',
     util: 'util/util.js',
+    http: './modules/http.js',
+    /* eslint-enable camelcase */
   }, runtimePackagePath);
 
   loader.require(`${runtimePackagePath}/index.js`);
