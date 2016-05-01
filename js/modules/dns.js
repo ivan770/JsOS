@@ -94,9 +94,21 @@ function lookup(hostname, opts, cb) {
     for (const i of [...data.results.keys()]) {
       const res = data.results[i];
       if (!opts.all && i === 0) {
-        const addr = res.address.join('.');
-        if (cb) {
-          cb(null, addr, 4);
+        var addr = res.address.join('.');
+        if (cb) cb(null, addr, 4);
+        return;
+      } else {
+        switch (res.record) {
+          case 'A':
+            if (opts.addrOnly) {
+              ret.push(res.address.join('.'));
+            } else {
+              ret.push({
+                address: res.address.join('.'),
+                family: 4
+              });
+            }
+            break;
         }
         return;
       }
