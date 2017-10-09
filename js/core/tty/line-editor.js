@@ -91,34 +91,14 @@ class LineEditor {
   }
 
 	removeCharRight(){
-		//return console.warn("Not implemented!");
 		if(this.inputPosition < this.inputText.length){
 			this.removeCursor();
-			//printer.moveOffset(1);
-			printer.print(' ');
-			//printer.moveOffset(-1);
+			this.moveCursorRight();
+			this.removeChar();
 			this.drawCursor();
 		}else{
-			if(DEBUG) console.log("Out of text ( > right)");
+			if(DEBUG) console.log("Out of text ( > right )");
 		}
-		//if (this.inputPosition < this.inputText.lendth) {
-      //this.removeCursor();
-      //if (this.inputPosition >= this.inputText.length) {
-        //this.inputText = this.inputText.slice(0, -1);
-        //printer.moveOffset(-1);
-      //} else {
-        //const rightSide = this.inputText.slice(this.inputPosition);
-        //this.inputText = this.inputText.slice(0, this.inputPosition - 1) + rightSide;
-        //printer.moveOffset(-1);
-        //for (const item of rightSide) {
-          //printer.print(item);
-        //}
-        //printer.print(' ');
-        //printer.moveOffset(-rightSide.length - 1);
-      //}
-      //--this.inputPosition;
-      //this.drawCursor();
-    //}
 	} 
   moveCursorLeft() {
     if (this.inputPosition > 0) {
