@@ -83,7 +83,7 @@ exports.readLine = (cb) => {
         printer.print('\n=>');
         isReading = false;
         setImmediate(() => {
-	  let text = editor.getText();
+	  let text - editor.getText();
           if(text[0] == "#"){
             let result;
 	    text = text.slice(1);
