@@ -80,9 +80,18 @@ exports.readLine = (cb) => {
         break;
       case 'enter':
         editor.removeCursor();
-        printer.print('\n');
+        printer.print('\n=>');
         isReading = false;
-        setImmediate(() => cb(editor.getText()));
+        setImmediate(() => {
+          let result;
+          try{
+            result = eval(editor.getText());
+          }catch(e){
+            result = "Error: "+e;
+          }
+          printer.print(result);
+          return cb(editor.getText())
+        });
         keyboard.onKeydown.remove(addinput);
         break;
       default:
