@@ -118,6 +118,24 @@ class LineEditor {
     }
   }
 
+	moveCursorStart(){
+		//console.warn("Not implented!");
+		this.removeCursor();
+		while (this.inputPosition > 0) {
+      this.moveCursorLeft();
+    }
+		this.drawCursor();
+	}
+
+	moveCursorEnd(){
+		//console.warn("Not implented!");
+		this.removeCursor();
+		while (this.inputPosition < this.inputText.length) {
+      this.moveCursorRight();
+    }
+		this.drawCursor();
+	}
+
 	writeHistory(cmd){
 		PERSISTENCE.Editor.history.push(cmd);
 		PERSISTENCE.Editor.historyPosition++;
@@ -125,25 +143,20 @@ class LineEditor {
 	}
 
 	previous(){
-		//console.warn("Not implemented!");
 		if(DEBUG) console.log("Editor->previous()");
 		if(PERSISTENCE.Editor.historyPosition > 0){
 			PERSISTENCE.Editor.historyPosition--;
 			this.setInputBox(PERSISTENCE.Editor.history[PERSISTENCE.Editor.historyPosition]||"");
-			//console.log(`history[${PERSISTENCE.Editor.historyPosition}] = ${PERSISTENCE.Editor.history[PERSISTENCE.Editor.historyPosition]}`);
 		}else{
 			if(DEBUG) console.log("Out of array ( < 0 )");
 		}
 	}
 
 	next(){
-		//console.warn("Not implemented!");
-		//console.dir(PERSISTENCE.Editor.history);
 		if(DEBUG) console.log("Editor->next()");
 		if(PERSISTENCE.Editor.historyPosition < PERSISTENCE.Editor.history.length){
 			PERSISTENCE.Editor.historyPosition++;
 			this.setInputBox(PERSISTENCE.Editor.history[PERSISTENCE.Editor.historyPosition]||"");
-			//console.log(`history[${PERSISTENCE.Editor.historyPosition}] = ${PERSISTENCE.Editor.history[PERSISTENCE.Editor.historyPosition]}`);
 		}else{
 			if(DEBUG) console.log("Out of array ( > max )");
 		}

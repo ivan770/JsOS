@@ -78,6 +78,10 @@ exports.readLine = (cb) => {
 			case 'kpdown':
 				editor.next();
 				break;
+			case 'kphome':
+				break;
+			case 'kpend':
+				break;
       case 'character':
         editor.putChar(keyinfo.character);
         break;
@@ -109,7 +113,7 @@ exports.readLine = (cb) => {
         keyboard.onKeydown.remove(addinput);
         break;
       default:
-				console.log(keyinfo.type);
+				console.log(`Keyboard->${keyinfo.type}`);
         break;
     }
   }

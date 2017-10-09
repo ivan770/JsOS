@@ -78,6 +78,12 @@ exports.readLine = (cb) => {
 			case 'kpdown':
 				editor.next();
 				break;
+			case 'kphome':
+				editor.moveCursorStart();
+				break;
+			case 'kpend':
+				editor.moveCursorEnd();
+				break;
       case 'character':
         editor.putChar(keyinfo.character);
         break;
