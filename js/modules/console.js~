@@ -77,6 +77,7 @@ class Console {
 		const opts = optsOpt;
     opts.customInspect = true;
     this.print(util.inspect(obj, opts));
+
 	}
 }
 

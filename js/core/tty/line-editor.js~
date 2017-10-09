@@ -91,7 +91,7 @@ class LineEditor {
   }
 
 	removeCharRight(){
-		return console.warn("Not implemented!");
+		console.warn("Not implemented!");
 		if (this.inputPosition < this.inputText.lendth) {
       this.removeCursor();
       if (this.inputPosition >= this.inputText.length) {
