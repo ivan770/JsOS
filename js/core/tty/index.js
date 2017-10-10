@@ -16,7 +16,7 @@
 
 /* eslint-disable quotes */
 const terminal = require('./terminal');
-const { DARKGRAY, LIGHTGRAY, BLACK, LIGHTYELLOW } = terminal.color;
+const { DARKGRAY, LIGHTGRAY, BLACK, YELLOW, GREEN } = terminal.color;
 
 terminal.print(`
 
@@ -26,11 +26,11 @@ terminal.print(`
  | |_| | \__ \ | |_| |  ___\ |
   \___/  |___/  \___/  |____/ 
 
-`);
+`, 1, YELLOW);
 
 
-terminal.print('\n# Welcome to ', 1, DARKGRAY, BLACK);
-terminal.print('JsOS\n', 1, LIGHTYELLOW, BLACK);
-terminal.print('by PROPHESSOR and UsernameAK\n\n', 1, LIGHTGRAY, BLACK);
+terminal.print('\nWelcome to ', 1, DARKGRAY, BLACK);
+terminal.print('JsOS\n\n', 1, GREEN, BLACK);
+//terminal.print('by PROPHESSOR and UsernameAK\n\n', 1, LIGHTGRAY, BLACK);
 
 module.exports = terminal;

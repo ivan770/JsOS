@@ -95,7 +95,7 @@ exports.readLine = (cb) => {
 				break;
       case 'enter':
         editor.removeCursor();
-        printer.print('\n=>');
+        printer.print('\n');
         isReading = false;
         setImmediate(() => {
 					let text = editor.getText();
@@ -104,11 +104,12 @@ exports.readLine = (cb) => {
             let result;
 						text = text.slice(1);
 						try{
-              result = eval(text);
+              result = '=>'+eval(text)+'\n';
             }catch(e){
               result = "\nError: "+e;
             }
             printer.print(result);
+						return cb('');
 					}
           return cb(editor.getText())
         });
