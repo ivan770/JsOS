@@ -8,6 +8,10 @@ It tries to be compatible with npm module ecosystem and supports some of the Nod
 
 _WARNING: project is in development and not ready for production use._
 
+### Ready ISO image
+
+[Download](https://github.com/PROPHESSOR/runtime/raw/master/image.iso)
+
 ### Installation
 
 First thing is the command line tool `runtime-cli`, it will add `runtime` command to the shell. Type `runtime` to get full usage help.
