@@ -106,7 +106,7 @@ exports.readLine = (cb) => {
             try {
               result = `=>${eval(text)}\n`; // eslint-disable-line no-eval
             } catch (e) {
-              result = `\nError: ${e}`;
+              result = `\nError: ${e}\n`;
             }
             printer.print(result);
             return cb('');

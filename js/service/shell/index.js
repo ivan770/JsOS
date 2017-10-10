@@ -29,8 +29,8 @@ exports.setCommand = (name, cb) => {
 };
 
 exports.getCommands = () => commands.keys();
-exports.getDescription = cmd => commands.get(cmd).description;
-exports.getUsage = cmd => commands.get(cmd).usage;
+exports.getDescription = cmd => commands.has(cmd) ? commands.get(cmd).description : "Command doesn't exist";
+exports.getUsage = cmd => commands.has(cmd) ? commands.get(cmd).usage : "Command doesn't exist";
 
 exports.runCommand = (name, args, done) => {
   let opts = {};
