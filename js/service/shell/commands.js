@@ -17,27 +17,39 @@ const processor = require('./index.js');
 debug('Loading commands...');
 
 const cmds = {
-  shutdown(args, f, res) {
-    console.log('Shuting down...');
-    $$.machine.shutdown();
-    return res(0);
+  shutdown: {
+    description: 'Shut down the computer',
+    run(args, f, res) {
+      console.log('Shuting down...');
+      $$.machine.shutdown();
+      return res(0);
+    },
   },
-  reboot(args, f, res) {
-    console.log('Rebooting...');
-    $$.machine.reboot();
-    return res(0);
+  reboot: {
+    description: 'Reboot the computer',
+    run(args, f, res) {
+      console.log('Rebooting...');
+      $$.machine.reboot();
+      return res(0);
+    },
   },
-  echo(suffix, f, res) {
-    f.stdio.onwrite(suffix || '');
-    return res(0);
+  echo: {
+    description: 'Display text into the screen',
+    run(suffix = '', f, res) {
+      f.stdio.onwrite(suffix);
+      return res(0);
+    },
   },
-  help(args, f, res) {
-    let out = 'Help:\n';
-    for (const i of processor.getCommands()) {
-      out += `${i}\n`;
-    }
-    f.stdio.onwrite(out);
-    return res(0);
+  help: {
+    description: 'Show this message =)',
+    run(args, f, res) {
+      let out = 'Commands list:\n';
+      for (const i of processor.getCommands()) {
+        out += `${i}: ${processor.getDescription(i)}\n`;
+      }
+      f.stdio.onwrite(out);
+      return res(0);
+    },
   },
 };
 

@@ -24,11 +24,12 @@ const stdio = runtime.stdio.defaultStdio;
 
 exports.setCommand = (name, cb) => {
   assert(typeutils.isString(name));
-  assert(typeutils.isFunction(cb));
+  assert(typeutils.isObject(cb));
   commands.set(name, cb);
 };
 
 exports.getCommands = () => commands.keys();
+exports.getDescription = cmd => commands.get(cmd).description;
 
 exports.runCommand = (name, args, done) => {
   let opts = {};
@@ -44,7 +45,7 @@ exports.runCommand = (name, args, done) => {
 
   const stringargs = opts.args.join(' ');
   opts.stdio = opts.stdio || runtime.stdio.defaultStdio;
-  commands.get(name)(stringargs, {
+  commands.get(name).run(stringargs, {
     stdio: opts.stdio,
   }, done);
 };
