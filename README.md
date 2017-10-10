@@ -10,7 +10,7 @@ _WARNING: project is in development and not ready for production use._
 
 ### Ready ISO image
 
-[Download](https://github.com/PROPHESSOR/runtime/raw/master/image.iso)
+[Download](https://github.com/PROPHESSOR/jsos/raw/master/image.iso)
 
 ### Installation
 
