@@ -1,5 +1,5 @@
 {
-  "name": "runtimejs",
+  "name": "jsos",
   "version": "0.2.16",
   "description": "Core runtime.js library",
   "main": "js/index.js",
@@ -12,14 +12,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:runtimejs/runtime.git"
+    "url": "git@github.com:prophessor/jsos.git"
   },
-  "author": "runtime.js project authors",
+  "author": "PROPHESSOR, UsernameAK, runtimejs authors",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/runtimejs/runtime/issues"
+    "url": "https://github.com/prophessor/jsos/issues"
   },
-  "homepage": "http://runtimejs.org",
+  "homepage": "https://vk.com/jsosofficial",
   "devDependencies": {
     "eslint": "^3.0.1",
     "eslint-config-airbnb-base": "^4.0.0",
