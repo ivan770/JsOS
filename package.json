@@ -28,7 +28,7 @@
     "tape": "^4.0.0"
   },
   "runtimejs": {
-    "debug": false
+    "debug": true
   },
   "dependencies": {
     "assert": "^1.3.0",
