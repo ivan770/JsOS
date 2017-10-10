@@ -14,8 +14,7 @@ _WARNING: project is in development and not ready for production use._
 
 ### System requirements
 
-CPU: x86_64
-
+CPU: x86_64 <br/>
 RAM: >256MB
 
 ### Installation
