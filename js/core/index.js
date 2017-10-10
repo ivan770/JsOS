@@ -47,6 +47,4 @@ class Runtime {
   }
 }
 
-global.DEBUG = true;
-
 global.runtime = global.$$ = module.exports = new Runtime();

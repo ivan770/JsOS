@@ -72,51 +72,51 @@ exports.readLine = (cb) => {
       case 'kpright':
         editor.moveCursorRight();
         break;
-			case 'kpup':
-				editor.previous();
-				break;
-			case 'kpdown':
-				editor.next();
-				break;
-			case 'kphome':
-				editor.moveCursorStart();
-				break;
-			case 'kpend':
-				editor.moveCursorEnd();
-				break;
+      case 'kpup':
+        editor.previous();
+        break;
+      case 'kpdown':
+        editor.next();
+        break;
+      case 'kphome':
+        editor.moveCursorStart();
+        break;
+      case 'kpend':
+        editor.moveCursorEnd();
+        break;
       case 'character':
         editor.putChar(keyinfo.character);
         break;
       case 'backspace':
         editor.removeChar();
         break;
-			case 'kpdel':
-				editor.removeCharRight();
-				break;
+      case 'kpdel':
+        editor.removeCharRight();
+        break;
       case 'enter':
         editor.removeCursor();
         printer.print('\n');
         isReading = false;
         setImmediate(() => {
-					let text = editor.getText();
-					editor.writeHistory(text);
-          if(text[0] == "#"){
+          let text = editor.getText();
+          editor.writeHistory(text);
+          if (text[0] === '#') {
             let result;
-						text = text.slice(1);
-						try{
-              result = '=>'+eval(text)+'\n';
-            }catch(e){
-              result = "\nError: "+e;
+            text = text.slice(1);
+            try {
+              result = `=>${eval(text)}\n`;
+            } catch (e) {
+              result = `\nError: ${e}`;
             }
             printer.print(result);
-						return cb('');
-					}
-          return cb(editor.getText())
+            return cb('');
+          }
+          return cb(editor.getText());
         });
         keyboard.onKeydown.remove(addinput);
         break;
       default:
-				console.log(`Keyboard->${keyinfo.type}`);
+        console.log(`Keyboard->${keyinfo.type}`);
         break;
     }
   }
