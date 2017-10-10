@@ -14,6 +14,8 @@
 
 'use strict';
 
+/* global PERSISTENCE */
+
 const printer = require('./printer');
 
 class LineEditor {
@@ -90,16 +92,16 @@ class LineEditor {
     }
   }
 
-	removeCharRight(){
-		if(this.inputPosition < this.inputText.length){
-			this.removeCursor();
-			this.moveCursorRight();
-			this.removeChar();
-			this.drawCursor();
-		}else{
-			if(DEBUG) console.log("Out of text ( > right )");
-		}
-	} 
+  removeCharRight() {
+    if (this.inputPosition < this.inputText.length) {
+      this.removeCursor();
+      this.moveCursorRight();
+      this.removeChar();
+      this.drawCursor();
+    } else {
+      debug('Out of text ( > right )');
+    }
+  }
   moveCursorLeft() {
     if (this.inputPosition > 0) {
       this.removeCursor();
@@ -118,49 +120,49 @@ class LineEditor {
     }
   }
 
-	moveCursorStart(){
-		//console.warn("Not implented!");
-		this.removeCursor();
-		while (this.inputPosition > 0) {
+  moveCursorStart() {
+		// console.warn("Not implented!");
+    this.removeCursor();
+    while (this.inputPosition > 0) {
       this.moveCursorLeft();
     }
-		this.drawCursor();
-	}
+    this.drawCursor();
+  }
 
-	moveCursorEnd(){
-		//console.warn("Not implented!");
-		this.removeCursor();
-		while (this.inputPosition < this.inputText.length) {
+  moveCursorEnd() {
+		// console.warn("Not implented!");
+    this.removeCursor();
+    while (this.inputPosition < this.inputText.length) {
       this.moveCursorRight();
     }
-		this.drawCursor();
-	}
+    this.drawCursor();
+  }
 
-	writeHistory(cmd){
-		PERSISTENCE.Editor.history.push(cmd);
-		PERSISTENCE.Editor.historyPosition++;
-		console.log(`Editor->writeHistory(${cmd}) ==> ${JSON.stringify(PERSISTENCE.Editor.history)} [${typeof(PERSISTENCE.Editor.history)}]`);
-	}
+  writeHistory(cmd) {
+    PERSISTENCE.Editor.history.push(cmd);
+    PERSISTENCE.Editor.historyPosition++;
+    console.log(`Editor->writeHistory(${cmd}) ==> ${JSON.stringify(PERSISTENCE.Editor.history)} [${typeof(PERSISTENCE.Editor.history)}]`);
+  }
 
-	previous(){
-		if(DEBUG) console.log("Editor->previous()");
-		if(PERSISTENCE.Editor.historyPosition > 0){
-			PERSISTENCE.Editor.historyPosition--;
-			this.setInputBox(PERSISTENCE.Editor.history[PERSISTENCE.Editor.historyPosition]||"");
-		}else{
-			if(DEBUG) console.log("Out of array ( < 0 )");
-		}
-	}
+  previous() {
+    debug('Editor->previous()');
+    if (PERSISTENCE.Editor.historyPosition > 0) {
+      PERSISTENCE.Editor.historyPosition--;
+      this.setInputBox(PERSISTENCE.Editor.history[PERSISTENCE.Editor.historyPosition] || '');
+    } else {
+      debug('Out of array ( < 0 )');
+    }
+  }
 
-	next(){
-		if(DEBUG) console.log("Editor->next()");
-		if(PERSISTENCE.Editor.historyPosition < PERSISTENCE.Editor.history.length){
-			PERSISTENCE.Editor.historyPosition++;
-			this.setInputBox(PERSISTENCE.Editor.history[PERSISTENCE.Editor.historyPosition]||"");
-		}else{
-			if(DEBUG) console.log("Out of array ( > max )");
-		}
-	}
+  next() {
+    debug('Editor->next()');
+    if (PERSISTENCE.Editor.historyPosition < PERSISTENCE.Editor.history.length) {
+      PERSISTENCE.Editor.historyPosition++;
+      this.setInputBox(PERSISTENCE.Editor.history[PERSISTENCE.Editor.historyPosition] || '');
+    } else {
+      debug('Out of array ( > max )');
+    }
+  }
 
   clearInputBox() {
     while (this.inputPosition < this.inputText.length) {
