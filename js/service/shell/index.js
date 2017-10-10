@@ -30,6 +30,7 @@ exports.setCommand = (name, cb) => {
 
 exports.getCommands = () => commands.keys();
 exports.getDescription = cmd => commands.get(cmd).description;
+exports.getUsage = cmd => commands.get(cmd).usage;
 
 exports.runCommand = (name, args, done) => {
   let opts = {};

@@ -104,7 +104,7 @@ exports.readLine = (cb) => {
             let result;
             text = text.slice(1);
             try {
-              result = `=>${eval(text)}\n`;
+              result = `=>${eval(text)}\n`; // eslint-disable-line no-eval
             } catch (e) {
               result = `\nError: ${e}`;
             }

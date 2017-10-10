@@ -14,11 +14,15 @@
 'use strict';
 
 const processor = require('./index.js');
+
+/* global $$ */
+
 debug('Loading commands...');
 
 const cmds = {
   shutdown: {
     description: 'Shut down the computer',
+    usage: 'shutdown',
     run(args, f, res) {
       console.log('Shuting down...');
       $$.machine.shutdown();
@@ -27,6 +31,7 @@ const cmds = {
   },
   reboot: {
     description: 'Reboot the computer',
+    usage: 'reboot',
     run(args, f, res) {
       console.log('Rebooting...');
       $$.machine.reboot();
@@ -35,24 +40,34 @@ const cmds = {
   },
   echo: {
     description: 'Display text into the screen',
+    usage: 'echo <text>',
     run(suffix = '', f, res) {
       f.stdio.onwrite(suffix);
       return res(0);
     },
   },
   help: {
-    description: 'Show this message =)',
-    run(args, f, res) {
-      let out = 'Commands list:\n';
-      for (const i of processor.getCommands()) {
-        out += `${i}: ${processor.getDescription(i)}\n`;
+    description: 'Show this message or show usage of the command =)',
+    usage: 'help <command>',
+    run(_args, f, res) {
+      let args = _args.trim();
+      if (!args) {
+        let out = 'Commands list:\n';
+        for (const i of processor.getCommands()) {
+          out += `${i}: ${processor.getDescription(i)}\n`;
+        }
+        f.stdio.write(out);
+      } else {
+        args = args.split(/\s/)[0]; // Safety
+        f.stdio.setColor('lightcyan');
+        f.stdio.write(processor.getUsage(args));
       }
-      f.stdio.onwrite(out);
       return res(0);
     },
   },
 };
 
+/* eslint no-restricted-syntax:0, guard-for-in:0 */
 for (const i in cmds) {
   processor.setCommand(i, cmds[i]);
 }
