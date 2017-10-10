@@ -5,7 +5,7 @@ import datetime
 SetOption('num_jobs', 4)
 
 build = os.getenv('RUNTIME_BUILD', "debug")
-print 'Build', build
+print('Build', build)
 
 config = {
     "project_name": "out/runtimejs",
@@ -13,13 +13,13 @@ config = {
     "toolchain_bin_path": "",
     "fasm_pathname": "fasm",
     "link_script": "etc/kernel.ld",
-    "name_gxx": "x86_64-elf-g++",
-    "name_gcc": "x86_64-elf-gcc",
-    "name_as": "x86_64-elf-as",
-    "name_ld": "x86_64-elf-gcc",
-    "name_ar": "x86_64-elf-ar",
-    "name_ranlib": "x86_64-elf-ranlib",
-    "name_objcopy": "x86_64-elf-objcopy",
+    "name_gxx": "g++",
+    "name_gcc": "gcc",
+    "name_as": "as",
+    "name_ld": "gcc",
+    "name_ar": "ar",
+    "name_ranlib": "ranlib",
+    "name_objcopy": "objcopy",
     "flags_common": {
         "shared": set([
             '-m64',

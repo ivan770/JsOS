@@ -1256,6 +1256,4 @@ libs_config = {
 
 
 for targetname, params in libs_config.items():
-    target_env = env_base.Clone();
-    target_env.Replace(CPPPATH = params["include"])
-    target_env.Library(target = targetname, source = params["source"])
+    env_base.Library(target = targetname, source = params["source"], CPPPATH = params["include"])

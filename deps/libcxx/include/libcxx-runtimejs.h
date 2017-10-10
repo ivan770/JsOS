@@ -45,27 +45,27 @@ static inline locale_t uselocale(locale_t) {
 
 // These are quick-and-dirty hacks to make things pretend to work
 // We should not use locale functions in kernel
-static inline
+// static inline
 long long strtoll_l(const char *__nptr, char **__endptr,
     int __base, locale_t __loc) {
   return strtoll(__nptr, __endptr, __base);
 }
-static inline
+// static inline
 long strtol_l(const char *__nptr, char **__endptr,
     int __base, locale_t __loc) {
   return strtol(__nptr, __endptr, __base);
 }
-static inline
+// static inline
 long double strtold_l(const char *__nptr, char **__endptr,
     locale_t __loc) {
   return strtold(__nptr, __endptr);
 }
-static inline
+// static inline
 unsigned long long strtoull_l(const char *__nptr, char **__endptr,
     int __base, locale_t __loc) {
   return strtoull(__nptr, __endptr, __base);
 }
-static inline
+// static inline
 unsigned long strtoul_l(const char *__nptr, char **__endptr,
     int __base, locale_t __loc) {
   return strtoul(__nptr, __endptr, __base);
