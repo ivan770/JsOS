@@ -26,7 +26,7 @@ const pci = require('./pci');
 const net = require('./net');
 const stdio = require('./stdio');
 
-const PERSISTENCE = require('../persistence');
+require('../persistence');
 
 class Runtime {
   constructor() {
