@@ -12,6 +12,11 @@ _WARNING: project is in development and not ready for production use._
 
 [Download](https://github.com/PROPHESSOR/jsos/raw/master/image.iso)
 
+### System requirements
+
+CPU: x86_64
+RAM: >256MB
+
 ### Installation
 
 First thing is the command line tool `runtime-cli`, it will add `runtime` command to the shell. Type `runtime` to get full usage help.
