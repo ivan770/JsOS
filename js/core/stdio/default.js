@@ -47,4 +47,8 @@ defaultStdio.onreadline = cb => tty.readLine(cb);
 
 defaultStdio.onwriteerror = error => tty.print(error, 1, tty.color.RED);
 
+defaultStdio.print = defaultStdio.onwrite;
+defaultStdio.error = defaultStdio.error;
+
+
 module.exports = defaultStdio;
