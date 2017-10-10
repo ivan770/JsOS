@@ -6,8 +6,9 @@
 *.a
 *.pyc
 *.host
-*.swp
-*~
+*.*.swp
+*.js~
+*.*~
 tmp/
 v8.log
 bochsout.txt
