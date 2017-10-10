@@ -116,7 +116,7 @@ exports.readLine = (cb) => {
         keyboard.onKeydown.remove(addinput);
         break;
       default:
-        console.log(`Keyboard->${keyinfo.type}`);
+        debug(`Keyboard->${keyinfo.type}`);
         break;
     }
   }
