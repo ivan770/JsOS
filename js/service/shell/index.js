@@ -1,4 +1,5 @@
 // Copyright 2014-present runtime.js project authors
+// Copyright 2017-present JsOS project authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -26,6 +27,8 @@ exports.setCommand = (name, cb) => {
   assert(typeutils.isFunction(cb));
   commands.set(name, cb);
 };
+
+exports.getCommands = () => commands.keys();
 
 exports.runCommand = (name, args, done) => {
   let opts = {};

@@ -35,29 +35,32 @@ runtime.dns = require('./service/dns-resolver');
 
 runtime.debug = isDebug;
 
+// Init base commands
+require('./service/shell/commands');
+
 // Example shell command
-runtime.shell.setCommand('1', (args, env, cb) => {
-  env.stdio.writeLine('OK.');
-  runtime.dns.resolve('www.google.com', {}, (err, data) => {
-    if (err) {
-      return cb(1);
-    }
-    console.log(JSON.stringify(data));
-    cb(0);
-  });
-});
+// runtime.shell.setCommand('1', (args, env, cb) => {
+//   env.stdio.writeLine('OK.');
+//   runtime.dns.resolve('www.google.com', {}, (err, data) => {
+//     if (err) {
+//       return cb(1);
+//     }
+//     console.log(JSON.stringify(data));
+//     cb(0);
+//   });
+// });
 
-runtime.shell.setCommand('poweroff', (args, env, cb) => {
-  env.stdio.writeLine('Going down, now!');
-  runtime.machine.shutdown();
-  cb(0);
-});
+// runtime.shell.setCommand('poweroff', (args, env, cb) => {
+//   env.stdio.writeLine('Going down, now!');
+//   runtime.machine.shutdown();
+//   cb(0);
+// });
 
-runtime.shell.setCommand('reboot', (args, env, cb) => {
-  env.stdio.writeLine('Restarting, now!');
-  runtime.machine.reboot();
-  cb(0);
-});
+// runtime.shell.setCommand('reboot', (args, env, cb) => {
+//   env.stdio.writeLine('Restarting, now!');
+//   runtime.machine.reboot();
+//   cb(0);
+// });
 
 
 // Start device drivers
