@@ -26,8 +26,6 @@ const pci = require('./pci');
 const net = require('./net');
 const stdio = require('./stdio');
 
-require('../persistence');
-
 class Runtime {
   constructor() {
     Object.assign(this, {

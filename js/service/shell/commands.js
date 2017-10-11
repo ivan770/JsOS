@@ -113,6 +113,20 @@ const cmds = {
       return res(0);
     },
   },
+  install: {
+    description: 'Install the applications',
+    usage: 'install <app>',
+    run(app, f, res) {
+      if ($$.appman.install(app.trim())) {
+        f.stdio.setColor('green');
+        f.stdio.writeLine(`App ${app} installed successful!`);
+        return res(0);
+      } else {
+        f.stdio.writeError(`Error happened during ${app} installation`);
+        return res(1);
+      }
+    },
+  },
 };
 
 /* eslint no-restricted-syntax:0, guard-for-in:0 */

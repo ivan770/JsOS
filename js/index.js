@@ -24,6 +24,8 @@ console.log('Prepare to loading...');
 const isDebug = packagejson.runtimejs.debug;
 global.debug = isDebug ? console.log : () => {};
 
+require('./persistence');
+
 // Load runtime.js core
 const runtime = require('./core');
 
@@ -37,6 +39,9 @@ runtime.debug = isDebug;
 
 // Init base commands
 require('./service/shell/commands');
+
+// Init app manager
+runtime.appman = require('./service/appman');
 
 // Start device drivers
 require('./driver/ps2');
