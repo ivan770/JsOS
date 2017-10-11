@@ -69,11 +69,14 @@ class StdioInterface {
 
   // stderr
   writeError(...text) {
+    this.write('\n');
     if (typeof text[0] === 'string') {
       this.onwriteerror(text.join(' '));
     } else {
       this.onwriteerror(text[0].stack);
     }
+    this.setColor('green');
+    this.write('\n>>');
   }
 }
 
