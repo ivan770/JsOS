@@ -14,8 +14,6 @@
 'use strict';
 
 const processor = require('./index.js');
-// const assert = require('assert');
-// const typeutils = require('typeutils');
 
 /* global $$ */
 
@@ -60,7 +58,7 @@ const cmds = {
         }
         f.stdio.write(out);
       } else {
-        args = args.split(/\s/)[0]; // Safety
+        args = args.split(/\s+/)[0]; // Safety
         f.stdio.setColor('lightcyan');
         f.stdio.write(processor.getUsage(args));
       }
