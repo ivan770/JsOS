@@ -85,9 +85,9 @@ class Process extends EventEmitter {
       }),
       nextTick: (fn, ...args) => setImmediate(() => fn(...args)),
       pid: 1,
-      platform: 'runtime',
+      platform: 'jsos',
       release: {
-        name: 'runtime',
+        name: 'jsos',
       },
       send: void 0,
       stderr: null,

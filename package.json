@@ -1,14 +1,18 @@
 {
   "name": "jsos",
   "version": "0.2.16",
-  "description": "Core runtime.js library",
+  "description": "The operating system written on JavaScript and based on runtime.js",
   "main": "js/index.js",
   "private": true,
   "scripts": {
     "postinstall": "node scripts/update-versions.js",
     "lint": "eslint js",
     "test": "runtimeify test/unit/index.js -o initrd && runtime-qemu ./initrd",
-    "test-build": "runtimeify test/unit/index.js -o initrd && runtime-qemu ./initrd --kernel ../disk/boot/runtime"
+    "test-build": "runtimeify test/unit/index.js -o initrd && runtime-qemu ./initrd --kernel ../disk/boot/runtime",
+    "start":"runtime start",
+    "release-start":"qemu-system-x86_64 -m 512 -kernel kernel -initrd .initrd",
+    "build-iso":"grub-mkrescue -o build.iso .",
+    "build-kernel":"cmake ."
   },
   "repository": {
     "type": "git",
