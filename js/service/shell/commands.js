@@ -95,6 +95,24 @@ const cmds = {
       });
     },
   },
+  time: {
+    description: 'Display the current time',
+    usage: 'time',
+    run(a, f, res) {
+      f.stdio.setColor('yellow');
+      f.stdio.writeLine(`${(new Date).toLocaleTimeString()}`);
+      return res(0);
+    },
+  },
+  date: {
+    description: 'Display the current date',
+    usage: 'date',
+    run(a, f, res) {
+      f.stdio.setColor('yellow');
+      f.stdio.writeLine(`${(new Date).toDateString()}`);
+      return res(0);
+    },
+  },
 };
 
 /* eslint no-restricted-syntax:0, guard-for-in:0 */
