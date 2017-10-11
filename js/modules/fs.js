@@ -106,3 +106,9 @@ exports.readFileSync = (path, opts) => {
 
   return buf;
 };
+
+/* eslint no-unused-vars:0 */
+
+exports.writeFile = (path, data, cb) => console.warn('Not implemented!');
+
+exports.writeFileSync = (path, data) => console.warn('Not implemented!');
