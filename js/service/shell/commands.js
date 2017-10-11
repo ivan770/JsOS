@@ -14,6 +14,8 @@
 'use strict';
 
 const processor = require('./index.js');
+// const assert = require('assert');
+// const typeutils = require('typeutils');
 
 /* global $$ */
 
@@ -63,6 +65,34 @@ const cmds = {
         f.stdio.write(processor.getUsage(args));
       }
       return res(0);
+    },
+  },
+  dns: {
+    description: 'Get DNS namespace from url',
+    usage: 'dns <url>',
+    run(args, env, cb) {
+      if (!args) {
+        env.stdio.writeError('You forgot to enter the URL');
+        return cb(0);
+      }
+      env.stdio.setColor('yellow');
+      env.stdio.writeLine(`Sending request to ${args}...`);
+      $$.dns.resolve(args, {}, (err, data) => {
+        if (err) {
+          env.stdio.writeError('Error!');
+          return cb(1);
+        }
+        console.log(JSON.stringify(data));
+        if (data.results[0]) {
+          env.stdio.setColor('green');
+          env.stdio.writeLine('OK!');
+          env.stdio.writeLine(JSON.stringify(data, null, 4));
+        } else {
+          env.stdio.setColor('red');
+          env.stdio.writeLine('Error: Does URL exist?');
+        }
+        cb(0);
+      });
     },
   },
 };
