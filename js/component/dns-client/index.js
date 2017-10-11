@@ -73,7 +73,7 @@ class DNSClient {
           this._sendQuery(req.domain, req.opts.query || 'A');
           --req.retry;
         } else {
-          req.cb(new Error('E_FAILED'));
+          req.cb('Your network card is not supported');// new Error('E_FAILED'));
           requests[i] = null;
         }
       }

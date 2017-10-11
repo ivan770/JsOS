@@ -38,7 +38,6 @@ runtime.debug = isDebug;
 // Init base commands
 require('./service/shell/commands');
 
-// Example shell command
 // runtime.shell.setCommand('1', (args, env, cb) => {
 //   env.stdio.writeLine('OK.');
 //   runtime.dns.resolve('www.google.com', {}, (err, data) => {
@@ -50,18 +49,6 @@ require('./service/shell/commands');
 //   });
 // });
 
-// runtime.shell.setCommand('poweroff', (args, env, cb) => {
-//   env.stdio.writeLine('Going down, now!');
-//   runtime.machine.shutdown();
-//   cb(0);
-// });
-
-// runtime.shell.setCommand('reboot', (args, env, cb) => {
-//   env.stdio.writeLine('Restarting, now!');
-//   runtime.machine.reboot();
-//   cb(0);
-// });
-
 
 // Start device drivers
 require('./driver/ps2');
@@ -69,6 +56,6 @@ require('./driver/virtio');
 
 // Set time
 require('./core/cmos-time'); // load cmos
-require('./core/set-time'); // fetch NTP
+if (isDebug) require('./core/set-time'); // fetch NTP
 
 module.exports = runtime;
