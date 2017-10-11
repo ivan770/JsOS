@@ -43,7 +43,7 @@ const cmds = {
   echo: {
     description: 'Display text into the screen',
     usage: 'echo <text>',
-    run(suffix = '', f, res) {
+    run(suffix, f, res) {
       f.stdio.onwrite(suffix);
       return res(0);
     },
@@ -70,26 +70,28 @@ const cmds = {
   dns: {
     description: 'Get DNS namespace from url',
     usage: 'dns <url>',
-    run(args, env, cb) {
+    run(_args, env, cb) {
+      const $ = env.stdio;
+      const args = _args.trim();
       if (!args) {
-        env.stdio.writeError('You forgot to enter the URL');
+        $.writeError('You forgot to enter the URL');
         return cb(0);
       }
-      env.stdio.setColor('yellow');
-      env.stdio.writeLine(`Sending request to ${args}...`);
-      $$.dns.resolve(args, {}, (err, data) => {
+      $.setColor('yellow');
+      $.writeLine(`Sending request to ${args}...`);
+      runtime.dns.resolve(args, {}, (err, data) => {
         if (err) {
-          env.stdio.writeError('Error!');
+          $.writeError('Error!');
           return cb(1);
         }
         console.log(JSON.stringify(data));
         if (data.results[0]) {
-          env.stdio.setColor('green');
-          env.stdio.writeLine('OK!');
-          env.stdio.writeLine(JSON.stringify(data, null, 4));
+          $.setColor('green');
+          $.writeLine('OK!');
+          $.writeLine(JSON.stringify(data, null, 4));
         } else {
-          env.stdio.setColor('red');
-          env.stdio.writeLine('Error: Does URL exist?');
+          $.setColor('red');
+          $.writeLine('Error: Does URL exist?');
         }
         cb(0);
       });
