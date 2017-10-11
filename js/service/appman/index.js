@@ -36,6 +36,7 @@ class App {
     try {
       app = require(`../../apps/${name}`);
     } catch (e) {
+      debug(e);
       return !!$$.stdio.defaultStdio.writeError(`Unable to install app ${name}`);
     }
 

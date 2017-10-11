@@ -9,10 +9,10 @@
     "lint": "eslint js",
     "test": "runtimeify test/unit/index.js -o initrd && runtime-qemu ./initrd",
     "test-build": "runtimeify test/unit/index.js -o initrd && runtime-qemu ./initrd --kernel ../disk/boot/runtime",
-    "start":"runtime start",
-    "release-start":"qemu-system-x86_64 -m 512 -kernel kernel -initrd .initrd",
-    "build-iso":"grub-mkrescue -o build.iso .",
-    "build-kernel":"cmake ."
+    "start": "runtime start",
+    "release-start": "qemu-system-x86_64 -m 512 -kernel kernel -initrd .initrd",
+    "build-iso": "grub-mkrescue -o build.iso .",
+    "build-kernel": "cmake ."
   },
   "repository": {
     "type": "git",
@@ -53,6 +53,14 @@
     "typeutils": "^1.0.1",
     "u8-view": "^1.0.0",
     "url": "^0.11.0",
-    "util": "^0.10.3"
+    "util": "^0.10.3",
+    "diff_match_patch": "0.1.1",
+    "get-set": "*",
+    "js-vim-command": "*",
+    "mauve": "*",
+    "underscore": "1.4.4",
+    "terminal-ui": "*",
+    "terminal-keys": "*",
+    "commander": "1.2.0"
   }
 }
