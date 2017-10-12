@@ -26,6 +26,7 @@ const pci = require('./pci');
 const net = require('./net');
 const stdio = require('./stdio');
 const speaker = require('../driver/ibmpc/pcspeaker');
+const ata = require('../driver/ata');
 
 class Runtime {
   constructor() {
@@ -39,6 +40,7 @@ class Runtime {
       net,
       stdio,
       speaker,
+      ata,
       machine: {
         reboot: __SYSCALL.reboot,
         shutdown: () => __SYSCALL.acpiEnterSleepState(5),

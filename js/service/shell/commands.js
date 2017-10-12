@@ -150,7 +150,7 @@ const cmds = {
 
       if (mode === 'play') {
         $$.speaker.play(frec, duration);
-        f.stdio.writeLine(`Playing ${frec} gz at ${duration} ms...`);
+        f.stdio.writeLine(`Playing ${frec} Hz at ${duration} ms...`);
         return res(0);
       } else if (mode === 'stop') {
         $$.speaker.stop();
@@ -159,6 +159,21 @@ const cmds = {
       }
       f.stdio.writeError('Use "play" or "stop"!');
       return res(1);
+    },
+    listparts: {
+      description: 'List HDD partitions',
+      usage: 'listparts',
+      run(args, f, res) {
+        const buf = $$.ata.read(0, 1).slice(0x1BE, 64);
+        for (let i = 0; i < 4; i++) {
+          if (buf[i * 16]) {
+            f.stdio.writeLine(`Partition ${i} exists on drive`);
+          } else {
+            f.stdio.writeLine(`Partition ${i} doesn't exist on drive`);
+          }
+        }
+        return res(0);
+      },
     },
   },
 };
