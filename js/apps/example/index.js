@@ -1,15 +1,16 @@
-/* global $$ */
+// Example application for JsOS
+// By PROPHESSOR
 
 'use strict';
+let io;
 
-const io = $$.stdio.defaultStdio;
-
-function main() {
+function main(api, res) {
+  io = api.stdio;
   io.setColor('green');
   io.writeLine('It works!!!');
-  return 0; // 1 = error
+  return res(0); // 1 = error
 }
 
-exports.call = (cmd, args, api) => main();
+exports.call = (cmd, args, api, res) => main(api, res);
 
 exports.commands = ['example'];

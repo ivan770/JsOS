@@ -73,8 +73,8 @@ class App {
       return res('App doesn\'t exist!');
     }
     const args = _args.join(' ');
-    const callback = PERSISTENCE.Apps[app].run(app, args, f);
-    return res(callback);
+    /* const callback =  */PERSISTENCE.Apps[app].run(app, args, f, res);
+    // return res(callback);
     // return console.warn('Not implemented!');
   }
 

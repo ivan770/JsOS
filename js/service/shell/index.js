@@ -21,6 +21,7 @@ const assert = require('assert');
 const runtime = require('../../core');
 const commands = new Map();
 const stdio = runtime.stdio.defaultStdio;
+const keyboard = require('../../core/keyboard');
 
 exports.setCommand = (name, cb) => {
   assert(typeutils.isString(name));
@@ -48,6 +49,7 @@ exports.runCommand = (name, args, done) => {
   opts.stdio = opts.stdio || runtime.stdio.defaultStdio;
   commands.get(name).run(stringargs, {
     stdio: opts.stdio,
+    keyboard,
   }, done);
 };
 
