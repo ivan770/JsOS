@@ -7,6 +7,10 @@ const ioPort42 = driverUtils.ioPort(0x42);
 const ioPort61 = driverUtils.ioPort(0x61);
 
 class Speaker {
+  constructor() {
+    debug('Speaker initialized!');
+  }
+
   play(freq, duration) {
     const newfreq = freq >>> 0;
     const div = (1193180 / newfreq) >>> 0;
