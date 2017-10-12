@@ -1,44 +1,68 @@
 'use strict';
 
 const Vim = require('./js-vim');
-const tui = require('terminal-ui');
+let vim;
+let kb;
+let io;
+let res;
+// const tui = require('terminal-ui');
 
-const mauve = require('./mauve');
-const scheme = require('./lib/scheme');
-mauve.set(scheme);
+// const mauve = require('./mauve');
+// const scheme = require('./lib/scheme');
+// mauve.set(scheme);
 
-function main(api) {
+const kbaliases = {
+  enter: '\n',
+  tab: '\t',
+  backspace: '\b',
+  space: ' ',
+  escape: 'esc',
+  kpup: '↑',
+  kpdown: '↓',
+  kpleft: '←',
+  kpright: '→',
+};
+
+// const kbignore = ['kpdown', 'kpup', 'kpleft', 'kpright'];
+
+function keyboard(key) {
+  if (key.type === 'kppagedown') {
+    kb.onKeydown.remove(keyboard);
+    return res(0);
+  }
+
+  // if (kbignore.indexOf(key.type) !== -1) return false;
+  if (key.type === 'character') {
+    vim.exec(kbaliases[key.character] || key.character);
+  } else {
+    vim.exec(kbaliases[key.type] || key.type.slice(0, 2) === 'kp' ? '' : key.type);
+  }
+  return false;
+}
+
+function main(api, cb) {
     // Instance
-  const vim = new Vim();
+  vim = new Vim();
 
-    // Apply node commands (file write, etc.)
+  kb = api.keyboard;
+  io = api.stdio;
+  res = cb;
+
+  // Apply node commands (file write, etc.)
   require('./lib/commands')(vim);
 
-    // Keystrokes
-  const Keys = require('terminal-keys');
-  const keys = new Keys();
+  kb.onKeydown.add(keyboard);
 
-    // Connect keys to vim instance
-  keys.fn = function (key) {
-    vim.exec(key);
-  };
-
-    // Clear the terminal screen
-//   tui.clear();
+  io.clear();
+  io.write(vim.view.getText());
 
     // Tie tui to vim.view
   vim.view.on('change', () => {
-    api.stdio.write(vim.view.getText());
-    // tui.write(vim.view.getText());
+    io.clear();
+    io.write(vim.view.getText());
   });
-
-    // Open file if one has been indicated
-  const files = []; // TODO: make this take cl args
-  if (files.length) {
-    vim.exec(`:e ${files.shift()}\n`);
-  }
 }
 exports.commands = ['vim'];
-exports.call = (app, args, api) => {
-  main(api);
+exports.call = (app, args, api, res) => {
+  main(api, res);
 };

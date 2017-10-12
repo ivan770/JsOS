@@ -29,7 +29,7 @@ mauve.set({
 var View = module.exports = function(obj) {
 	//Grab a handle
 	this.vim = obj.vim;
-	this.color = true;
+	this.color = false;
 
 	//Set dimensions, defaulting to 24 lines of 80 columns	
 	this.lines = obj.lines || 24;
