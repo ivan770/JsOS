@@ -63,7 +63,7 @@ const cmds = {
         f.stdio.writeLine('Commands list:');
         // let out = 'Commands list:\n';
         for (const i of processor.getCommands()) {
-        //   out += `${i}: ${processor.getDescription(i)}\n`;
+          //   out += `${i}: ${processor.getDescription(i)}\n`;
           f.stdio.setColor('yellow');
           f.stdio.write(i);
           f.stdio.setColor('white');
@@ -160,20 +160,31 @@ const cmds = {
       f.stdio.writeError('Use "play" or "stop"!');
       return res(1);
     },
-    listparts: {
-      description: 'List HDD partitions',
-      usage: 'listparts',
-      run(args, f, res) {
-        const buf = $$.ata.read(0, 1).slice(0x1BE, 64);
-        for (let i = 0; i < 4; i++) {
-          if (buf[i * 16]) {
-            f.stdio.writeLine(`Partition ${i} exists on drive`);
-          } else {
-            f.stdio.writeLine(`Partition ${i} doesn't exist on drive`);
-          }
+  },
+  listparts: {
+    description: 'List HDD partitions',
+    usage: 'listparts',
+    run(args, f, res) {
+      const buf = $$.ata.read(0, 1).slice(0x1BE, 64);
+      for (let i = 0; i < 4; i++) {
+        if (buf[i * 16]) {
+          f.stdio.writeLine(`Partition ${i} exists on drive`);
+        } else {
+          f.stdio.writeLine(`Partition ${i} doesn't exist on drive`);
         }
-        return res(0);
-      },
+      }
+      return res(0);
+    },
+  },
+  startx: {
+    description: 'Start graphics mode',
+    usage: 'startx',
+    run(args, f, res) {
+      if (!require('../../core/graphics/init')()) {
+        f.stdio.writeError("Graphics init error");
+        return res(1);
+      }
+      return res(0);
     },
   },
 };
