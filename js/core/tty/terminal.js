@@ -21,6 +21,7 @@ exports.color = printer.color;
 exports.print = printer.print;
 exports.moveOffset = printer.moveOffset;
 exports.moveTo = printer.moveTo;
+exports.clear = printer.clear;
 
 let isReading = false;
 
@@ -83,6 +84,12 @@ exports.readLine = (cb) => {
         break;
       case 'kpend':
         editor.moveCursorEnd();
+        break;
+      case 'kppageup':
+        printer.scrollUp(0);
+        break;
+      case 'kppagedown':
+        printer.scrollDown(0);
         break;
       case 'character':
         editor.putChar(keyinfo.character);

@@ -23,6 +23,8 @@ let bgcolor = tty.color.BLACK;
 
 defaultStdio.onwrite = text => tty.print(text, 1, fgcolor, bgcolor);
 
+defaultStdio.onclear = tty.clear;
+
 defaultStdio.onsetcolor = (fg) => {
   if (!fg) {
     fgcolor = tty.color.WHITE;

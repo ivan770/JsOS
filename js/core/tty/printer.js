@@ -30,6 +30,17 @@ function scrollUp() {
   posCurrent -= w;
 }
 
+function scrollDown() {
+  buffer.scrollDown(vga.color.BLACK);
+  posCurrent -= w;
+}
+
+function clear() {
+  buffer.clear(vga.color.BLACK);
+  posCurrent = 0;
+  refresh();
+}
+
 refresh();
 
 exports.color = vga.color;
@@ -88,3 +99,7 @@ exports.moveTo = (xOpt, yOpt) => {
   }
   posCurrent = (y * w) + x;
 };
+
+exports.scrollUp = scrollUp;
+exports.scrollDown = scrollDown;
+exports.clear = clear;

@@ -46,6 +46,14 @@ const cmds = {
       return res(0);
     },
   },
+  clear: {
+    description: 'Clear the display',
+    usage: 'clear',
+    run(a, f, res) {
+      f.stdio.clear();
+      return res(0);
+    },
+  },
   help: {
     description: 'Show this message or show usage of the command =)',
     usage: 'help <command>',
