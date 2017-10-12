@@ -27,6 +27,7 @@ const net = require('./net');
 const stdio = require('./stdio');
 const speaker = require('../driver/ibmpc/pcspeaker');
 const ata = require('../driver/ata');
+const graphics = require('./graphics');
 
 class Runtime {
   constructor() {
@@ -41,6 +42,7 @@ class Runtime {
       stdio,
       speaker,
       ata,
+      graphics,
       machine: {
         reboot: __SYSCALL.reboot,
         shutdown: () => __SYSCALL.acpiEnterSleepState(5),

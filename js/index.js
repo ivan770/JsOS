@@ -45,7 +45,11 @@ runtime.appman = require('./service/appman');
 
 // Start device drivers
 require('./driver/ps2');
+debug('PS/2 Loaded!');
 require('./driver/virtio');
+debug('virtio Loaded!');
+require('./driver/bga');
+debug('BGA Loaded!');
 
 // Set time
 require('./core/cmos-time'); // load cmos
