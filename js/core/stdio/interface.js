@@ -41,6 +41,10 @@ class StdioInterface {
     this.onsetbackgroundcolor(bg);
   }
 
+  clear() {
+    this.onclear();
+  }
+
   // stdin
   read(cb) {
     this.onread(cb);

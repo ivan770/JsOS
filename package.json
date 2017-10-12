@@ -1,6 +1,6 @@
 {
   "name": "jsos",
-  "version": "0.2.16",
+  "version": "0.1.3",
   "description": "The operating system written on JavaScript and based on runtime.js",
   "main": "js/index.js",
   "private": true,

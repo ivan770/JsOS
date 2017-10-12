@@ -46,17 +46,30 @@ const cmds = {
       return res(0);
     },
   },
+  clear: {
+    description: 'Clear the display',
+    usage: 'clear',
+    run(a, f, res) {
+      f.stdio.clear();
+      return res(0);
+    },
+  },
   help: {
     description: 'Show this message or show usage of the command =)',
     usage: 'help <command>',
     run(_args, f, res) {
       let args = _args.trim();
       if (!args) {
-        let out = 'Commands list:\n';
+        f.stdio.writeLine('Commands list:');
+        // let out = 'Commands list:\n';
         for (const i of processor.getCommands()) {
-          out += `${i}: ${processor.getDescription(i)}\n`;
+        //   out += `${i}: ${processor.getDescription(i)}\n`;
+          f.stdio.setColor('yellow');
+          f.stdio.write(i);
+          f.stdio.setColor('white');
+          f.stdio.writeLine(`: ${processor.getDescription(i)}`);
         }
-        f.stdio.write(out);
+        // f.stdio.write(out);
       } else {
         args = args.split(/\s+/)[0]; // Safety
         f.stdio.setColor('lightcyan');
@@ -121,10 +134,31 @@ const cmds = {
         f.stdio.setColor('green');
         f.stdio.writeLine(`App ${app} installed successful!`);
         return res(0);
-      } else {
-        f.stdio.writeError(`Error happened during ${app} installation`);
-        return res(1);
       }
+      f.stdio.writeError(`Error happened during ${app} installation`);
+      return res(1);
+    },
+  },
+  speaker: {
+    description: 'Beep',
+    usage: 'speaker <play/stop> <frecuency> <duration>',
+    run(_args, f, res) {
+      const args = _args.split(/\s+/);
+      const mode = args[0];
+      const frec = Number(args[1]) || 100;
+      const duration = Number(args[2]) || 1000;
+
+      if (mode === 'play') {
+        $$.speaker.play(frec, duration);
+        f.stdio.writeLine(`Playing ${frec} gz at ${duration} ms...`);
+        return res(0);
+      } else if (mode === 'stop') {
+        $$.speaker.stop();
+        f.stdio.writeLine('Stop.');
+        return res(0);
+      }
+      f.stdio.writeError('Use "play" or "stop"!');
+      return res(1);
     },
   },
 };

@@ -25,6 +25,7 @@ const ps2 = require('./ps2');
 const pci = require('./pci');
 const net = require('./net');
 const stdio = require('./stdio');
+const speaker = require('../driver/ibmpc/pcspeaker');
 
 class Runtime {
   constructor() {
@@ -37,6 +38,7 @@ class Runtime {
       allocator,
       net,
       stdio,
+      speaker,
       machine: {
         reboot: __SYSCALL.reboot,
         shutdown: () => __SYSCALL.acpiEnterSleepState(5),

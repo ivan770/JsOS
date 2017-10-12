@@ -96,7 +96,7 @@ class Process extends EventEmitter {
       title: '',
       umask: () => 0,
       uptime: () => Math.round(performance.now() / 1000),
-      version: '0.0.0',
+      version: require('../../package.json').version,
       versions: {},
     });
   }

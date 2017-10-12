@@ -113,6 +113,15 @@ class VGABuffer {
       setCharXY(this.b, t, h - 1, ' ', bg, bg);
     }
   }
+  scrollDown(bg) {
+    // testInstance(this);
+    // testColor(bg);
+    // this.b.set(this.b.subarray(w * 2, w * h * 2));
+    // for (let t = 0; t < w; ++t) {
+    //   setCharXY(this.b, t, h + 1, ' ', bg, bg);
+    // }
+    return debug('Not implemented!');
+  }
 }
 
 function testInstance(obj) {
