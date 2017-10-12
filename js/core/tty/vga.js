@@ -120,7 +120,7 @@ class VGABuffer {
     // for (let t = 0; t < w; ++t) {
     //   setCharXY(this.b, t, h + 1, ' ', bg, bg);
     // }
-    return debug('Not implented!');
+    return debug('Not implemented!');
   }
 }
 

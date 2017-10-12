@@ -148,11 +148,11 @@ const cmds = {
       const frec = Number(args[1]) || 100;
       const duration = Number(args[2]) || 1000;
 
-      if (mode == 'play') {
+      if (mode === 'play') {
         $$.speaker.play(frec, duration);
         f.stdio.writeLine(`Playing ${frec} gz at ${duration} ms...`);
         return res(0);
-      } else if (mode == 'stop') {
+      } else if (mode === 'stop') {
         $$.speaker.stop();
         f.stdio.writeLine('Stop.');
         return res(0);
