@@ -54,6 +54,7 @@ set_target_properties(libgcc PROPERTIES
   IMPORTED_LOCATION "/home/usernameak/opt/cross/lib/gcc/x86_64-elf/7.2.0/no-red-zone/libgcc.a"
 )
 
+add_library(startup OBJECT src/startup.cc)
 
 add_executable(kernel
                 src/startup.asm
@@ -61,7 +62,7 @@ add_executable(kernel
                 src/libc_calls.cc
                 src/ap_startup.asm
                 src/main.cc
-                src/startup.cc
+                #src/startup.cc
                 src/kernel/thread.cc
                 src/kernel/fileio.cc
                 src/kernel/mem-manager.cc

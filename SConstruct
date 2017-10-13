@@ -17,8 +17,8 @@ config = {
     "name_gcc": "x86_64-elf-gcc",
     "name_as": "x86_64-elf-as",
     "name_ld": "x86_64-elf-gcc",
-    "name_ar": "x86_64-elf-ar",
-    "name_ranlib": "x86_64-elf-ranlib",
+    "name_ar": "x86_64-elf-gcc-ar",
+    "name_ranlib": "x86_64-elf-gcc-ranlib",
     "name_objcopy": "x86_64-elf-objcopy",
     "flags_common": {
         "shared": set([
