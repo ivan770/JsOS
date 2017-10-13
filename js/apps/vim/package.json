@@ -8,9 +8,10 @@
     "dependencies": {
         "js-vim": "*",
         "mauve": "*",
-        "terminal-ui": "*",
-        "terminal-keys": "*",
-        "commander": "1.2.0"
+        "diff_match_patch": "0.1.1",
+        "get-set": "*",
+        "js-vim-command": "*",
+        "underscore": "1.4.4"
     },
     "scripts": {
         "start": "node index.js",
