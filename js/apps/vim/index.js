@@ -12,10 +12,10 @@ const kbaliases = {
   backspace: '\b',
   space: ' ',
   escape: 'esc',
-  kpup: '↑',
-  kpdown: '↓',
-  kpleft: '←',
-  kpright: '→',
+  // kpup: '↑',
+  // kpdown: '↓',
+  // kpleft: '←',
+  // kpright: '→',
 };
 
 // const kbignore = ['kpdown', 'kpup', 'kpleft', 'kpright'];
@@ -30,7 +30,8 @@ function keyboard(key) {
   if (key.type === 'character') {
     vim.exec(kbaliases[key.character] || key.character);
   } else {
-    vim.exec(kbaliases[key.type] || key.type.slice(0, 2) === 'kp' ? '' : key.type);
+    if (kbaliases[key.type]) vim.exec(kbaliases[key.type]);
+    else debug(`Ignoring ${key.type}`);
   }
   return false;
 }

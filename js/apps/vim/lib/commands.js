@@ -3,7 +3,7 @@
 /* global $$ */
 
 // const fs = require('fs');
-const io = $$.stdio;
+const io = $$.stdio.defaultStdio;
 
 function main(Vim, exit) {
   Vim.addCommand({
@@ -76,7 +76,7 @@ function main(Vim, exit) {
 
   Vim.addCommand({
     mode: 'command',
-    match: 'ZZ',
+    match: 'zz', // ZZ
     fn(keys, vim, match) {
 			//   vim.exec(':w\n');
       vim.exec(':q\n');
