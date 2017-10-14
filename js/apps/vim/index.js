@@ -5,11 +5,6 @@ let vim;
 let kb;
 let io;
 let res;
-// const tui = require('terminal-ui');
-
-// const mauve = require('./mauve');
-// const scheme = require('./lib/scheme');
-// mauve.set(scheme);
 
 const kbaliases = {
   enter: '\n',
@@ -17,13 +12,11 @@ const kbaliases = {
   backspace: '\b',
   space: ' ',
   escape: 'esc',
-  kpup: '↑',
-  kpdown: '↓',
-  kpleft: '←',
-  kpright: '→',
+  kpup: 'k', // '↑'
+  kpdown: 'j', // '↓'
+  kpleft: 'h', // '←'
+  kpright: 'l', //'→'
 };
-
-// const kbignore = ['kpdown', 'kpup', 'kpleft', 'kpright'];
 
 function keyboard(key) {
   if (key.type === 'kppagedown') {
@@ -31,38 +24,40 @@ function keyboard(key) {
     return res(0);
   }
 
-  // if (kbignore.indexOf(key.type) !== -1) return false;
   if (key.type === 'character') {
     vim.exec(kbaliases[key.character] || key.character);
   } else {
-    vim.exec(kbaliases[key.type] || key.type.slice(0, 2) === 'kp' ? '' : key.type);
+    if (kbaliases[key.type]) vim.exec(kbaliases[key.type]);
+    else debug(`Ignoring ${key.type}`);
   }
   return false;
 }
 
+function exit() {
+  kb.onKeydown.remove(keyboard);
+  res(0);
+}
+
 function main(api, cb) {
-    // Instance
   vim = new Vim();
+
+  require('./lib/commands')(vim, exit);
 
   kb = api.keyboard;
   io = api.stdio;
   res = cb;
-
-  // Apply node commands (file write, etc.)
-  require('./lib/commands')(vim);
 
   kb.onKeydown.add(keyboard);
 
   io.clear();
   io.write(vim.view.getText());
 
-    // Tie tui to vim.view
   vim.view.on('change', () => {
     io.clear();
     io.write(vim.view.getText());
   });
 }
 exports.commands = ['vim'];
-exports.call = (app, args, api, res) => {
-  main(api, res);
+exports.call = (app, args, api, cb) => {
+  main(api, cb);
 };
