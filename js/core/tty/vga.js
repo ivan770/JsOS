@@ -30,7 +30,7 @@ const graphicsEnabled = false;
 const w = 80;
 const h = 25;
 const len = w * h;
-/*const buf = driverUtils.physicalMemory(0xb8000, len * 2).buffer();
+/* const buf = driverUtils.physicalMemory(0xb8000, len * 2).buffer();
 const b = new Uint8Array(buf);*/
 
 exports.WIDTH = w;
@@ -161,7 +161,7 @@ exports.draw = (drawbuf) => {
             const state = (row >> (7 - fx)) & 1;
             const px = x * fw + fx;
             const py = y * fh + fy;
-            //const dboffset = ((y * w * fh + fy) + x * fw * fx) * 3;
+            // const dboffset = ((y * w * fh + fy) + x * fw * fx) * 3;
             const dboffset = (px + py * w * fw) * 3;
             dbuf[dboffset + 2] = (state ? colorScheme[fg] : colorScheme[bg])[0];// * 255;
             dbuf[dboffset + 1] = (state ? colorScheme[fg] : colorScheme[bg])[1];// * 255;
@@ -170,6 +170,7 @@ exports.draw = (drawbuf) => {
         }
       }
     }
+    $$.graphics.flush();
   }
 };
 
