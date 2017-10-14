@@ -26,4 +26,10 @@ module.exports = {
   get constants() {
     return renderers.getConstants();
   },
+  setPixel(x, y, r, g, b) {
+    const dboffset = (x + y * screen.width) * 3;
+    this.displayBuffer[dboffset + 2] = r;// * 255;
+    this.displayBuffer[dboffset + 1] = g;// * 255;
+    this.displayBuffer[dboffset] = b;// * 255;
+  }
 };
