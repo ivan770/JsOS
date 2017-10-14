@@ -6,11 +6,12 @@
  * ================================//
  */
 
- /* global $$ */
+/* global $$ */
 
 'use strict';
 
 const io = $$.stdio.defaultStdio;
+const graphics = $$.graphics;
 
 const $JsMobileBasic = {
   name: 'JsMobileBasic',
@@ -19,9 +20,14 @@ const $JsMobileBasic = {
   url: 'http://vk.com/JsMobileBasic',
   // Mobile: $Config.Mobile,
   Debug: true,
-  background: 'black',
+  background: [0, 0, 0],
   // canvas: document.getElementById('c'),
   // graphic: false
+};
+
+const $TMP = {
+  color: [],
+  bgcolor: [],
 };
 
 // #region Init
@@ -189,8 +195,9 @@ const DEG2RAD = PI / 180;
 
 const JsMB = {
   setColor(color) { // TODO:
-    ctx.fillStyle = color;
-    ctx.strokeStyle = color;
+    // color="black"="rgb(0,0,0)"="rgba(0,0,0,1)"
+    // [r,g,b]
+    $TMP.color = color;
     return true;
   },
   setLineWidth(width) {
@@ -202,14 +209,19 @@ const JsMB = {
     return true;
   },
   cls() { // TODO:
-    clearRect(0, 0, screenWidth(), screenHeight());
-    document.getElementById('p').innerHTML = '';
+    for (let x = 0; x < this.screenWidth(); x++) {
+      for (let y = 0; y < this.screenHeight(); y++) {
+        graphics.setPixel(x, y, ...$JsMobileBasic.background);
+      }
+    }
+    // clearRect(0, 0, this.screenWidth(), screenHeight());
+    // document.getElementById('p').innerHTML = '';
     return true;
   },
   fillScreen(color) {
     ctx.save();
     setColor(color);
-    fillRect(0, 0, screenWidth(), screenHeight());
+    fillRect(0, 0, this.screenWidth(), screenHeight());
     ctx.restore();
     return true;
   },
@@ -361,7 +373,8 @@ const JsMB = {
   },
   // Конвертеры
   rgb(red = 0, green = 0, blue = 0) { // TODO:
-    return `rgb(${red},${green},${blue})`;
+    // return `rgb(${red},${green},${blue})`;
+    return [red, green, blue];
   },
   rgba(red = 0, green = 0, blue = 0, alpha = 0) {
     return `rgba(${red},${green},${blue},${alpha})`;
@@ -614,7 +627,7 @@ const JsMB = {
     return JSON.stringify(object, '', 4);
   },
   toPSON(object) {
-    return JSON.stringify(object, (a, b) => typeof(b) === 'function' ? `${b}` : b, 4);
+    return JSON.stringify(object, (a, b) => typeof (b) === 'function' ? `${b}` : b, 4);
   },
   // Menu
   menuAdd(name, title, onClick, type, fortype) {
@@ -794,16 +807,10 @@ const JsMB = {
   },
   // Getter
   screenWidth() {
-    if ($JsMobileBasic.graphic) {
-      return $JsMobileBasic.canvas.width;
-    }
-    return window.innerWidth;
+    return graphics.screen.width;
   },
   screenHeight() {
-    if ($JsMobileBasic.graphic) {
-      return $JsMobileBasic.canvas.height;
-    }
-    return window.innerHeight;
+    return graphics.screen.height;
   },
   getMouseX() {
     return $Mouse.x;
@@ -856,7 +863,7 @@ const JsMB = {
 
 };
 
-//#region Listeners
+// #region Listeners
 
 // Обработчики событий
 // function _eventListeners() {
@@ -937,8 +944,8 @@ if (!$JsMobileBasic.Mobile) debug('// ======Initialized successful======//', 'ba
 //   }
 // };
 
-//#endregion Listeners
+// #endregion Listeners
 
 if (!$JsMobileBasic.Mobile) debug('// ======Including modules/libraries======//', 'color:gray;');
 
-module.exports = JsMB;
+module.exports = $$.JsMB = JsMB;
