@@ -222,6 +222,7 @@ const JsMB = {
         graphics.setPixel(x, y, ...$JsMobileBasic.background);
       }
     }
+    graphics.flush();
     // clearRect(0, 0, this.screenWidth(), screenHeight());
     // document.getElementById('p').innerHTML = '';
     return true;
@@ -236,6 +237,7 @@ const JsMB = {
         graphics.setPixel(x, y, ...color);
       }
     }
+    graphics.flush();
     return true;
   },
   drawRect(x, y, x1, y1) {
