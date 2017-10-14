@@ -26,7 +26,7 @@ function bgaAvailable() {
 if (bgaAvailable()) {
   const driver = {
     init(device) {
-      const buf = new Uint8Array(device.bars[0].resource.buffer());
+      const buf = new require("buffer").Buffer(device.bars[0].resource.buffer());
       const renderer = new runtime.graphics.GraphicsRenderer('bga');
       renderer.onenablegraphics = (width, height, bitDepth) => {
         writeBgaRegister(constants.VBE_DISPI_INDEX_ENABLE, constants.VBE_DISPI_DISABLED);

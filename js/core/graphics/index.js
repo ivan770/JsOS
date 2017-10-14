@@ -4,14 +4,14 @@ const GraphicsRenderer = require('./graphics-renderer');
 const { Screen, symbols: screenSymbols } = require('./screen');
 const renderers = require('./renderers');
 const screen = new Screen();
-let secondBuffer = null;
+//let secondBuffer = null;
 
 module.exports = {
   graphicsAvailable() {
     return renderers.renderersAvailable();
   },
   enableGraphics(width, height, bitDepth) {
-    secondBuffer = new Uint8Array(width * height * (bitDepth / 8));
+    //secondBuffer = new Uint8Array(width * height * (bitDepth / 8));
     const renderer = renderers.getDefaultRenderer();
     renderer.enableGraphics(width, height, bitDepth);
     screen[screenSymbols.reset]();
@@ -22,11 +22,12 @@ module.exports = {
     return screen;
   },
   get displayBuffer() {
-    return secondBuffer; // renderers.getDefaultRenderer().displayBuffer;
+    return renderers.getDefaultRenderer().displayBuffer;
   },
   flush() {
-    const buf = renderers.getDefaultRenderer().displayBuffer;
-    buf.set(secondBuffer);
+    /*const buf = renderers.getDefaultRenderer().displayBuffer;
+    buf.set(secondBuffer);*/
+    debug("FLUSH!");
   },
   addRenderer: renderers.addRenderer,
   get constants() {

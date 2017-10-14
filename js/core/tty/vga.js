@@ -30,6 +30,8 @@ const graphicsEnabled = false;
 const w = 80;
 const h = 25;
 const len = w * h;
+const prevState = new Uint8Array(len * 2);
+prevState.fill(0);
 /* const buf = driverUtils.physicalMemory(0xb8000, len * 2).buffer();
 const b = new Uint8Array(buf);*/
 
@@ -143,34 +145,40 @@ exports.draw = (drawbuf) => {
   testInstance(drawbuf);
   if (!global.$$ || !global.$$.graphics || !global.$$.graphics.graphicsAvailable()) {
     vgaOld.draw(drawbuf);
+    prevState.set(drawbuf.b);
   } else {
     if (!graphicsEnabled) {
       $$.graphics.enableGraphics(640, 400, 24);
     }
     const dbuf = $$.graphics.displayBuffer;
-    for (let x = 0; x < w; x++) {
-      for (let y = 0; y < h; y++) {
+    for (let y = 0; y < h; y++) {
+      for (let x = 0; x < w; x++) {
         const offset = ((y * w) + x) * 2;
         const colorByte = drawbuf.b[offset + 1];
         const bg = (colorByte >> 4) & 0xF;
         const fg = colorByte & 0xF;
         const charCode = drawbuf.b[offset];
-        for (let fy = 0; fy < fh; fy++) {
-          const row = font[charCode * fh + fy];
-          for (let fx = 0; fx < fw; fx++) {
-            const state = (row >> (7 - fx)) & 1;
-            const px = x * fw + fx;
-            const py = y * fh + fy;
-            // const dboffset = ((y * w * fh + fy) + x * fw * fx) * 3;
-            const dboffset = (px + py * w * fw) * 3;
-            dbuf[dboffset + 2] = (state ? colorScheme[fg] : colorScheme[bg])[0];// * 255;
-            dbuf[dboffset + 1] = (state ? colorScheme[fg] : colorScheme[bg])[1];// * 255;
-            dbuf[dboffset] = (state ? colorScheme[fg] : colorScheme[bg])[2];// * 255;
+        //debug(prevState[offset]);
+        //debug(charCode);
+        //if(prevState[offset] != charCode && prevState[offset + 1] != colorByte) {
+          for (let fy = 0; fy < fh; fy++) {
+            const row = font[charCode * fh + fy];
+            for (let fx = 0; fx < fw; fx++) {
+              const state = (row >> (7 - fx)) & 1;
+              const px = x * fw + fx;
+              const py = y * fh + fy;
+              // const dboffset = ((y * w * fh + fy) + x * fw * fx) * 3;
+              const dboffset = (px + py * w * fw) * 3;
+              dbuf[dboffset + 2] = (state ? colorScheme[fg] : colorScheme[bg])[0];// * 255;
+              dbuf[dboffset + 1] = (state ? colorScheme[fg] : colorScheme[bg])[1];// * 255;
+              dbuf[dboffset] = (state ? colorScheme[fg] : colorScheme[bg])[2];// * 255;
+            }
           }
-        }
+        //}
       }
     }
-    $$.graphics.flush();
+    prevState.set(drawbuf.b);
+    //$$.graphics.flush();
   }
 };
 
