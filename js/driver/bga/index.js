@@ -32,6 +32,10 @@ if (bgaAvailable()) {
         writeBgaRegister(constants.VBE_DISPI_INDEX_ENABLE, constants.VBE_DISPI_DISABLED);
         writeBgaRegister(constants.VBE_DISPI_INDEX_XRES, width);
         writeBgaRegister(constants.VBE_DISPI_INDEX_YRES, height);
+        // writeBgaRegister(constants.VBE_DISPI_INDEX_VIRT_WIDTH, width);
+        // writeBgaRegister(constants.VBE_DISPI_INDEX_VIRT_HEIGHT, height * 2);
+        // writeBgaRegister(constants.VBE_DISPI_INDEX_X_OFFSET, 0);
+        // writeBgaRegister(constants.VBE_DISPI_INDEX_Y_OFFSET, height);
         writeBgaRegister(constants.VBE_DISPI_INDEX_BPP, bitDepth);
         writeBgaRegister(constants.VBE_DISPI_INDEX_ENABLE, constants.VBE_DISPI_ENABLED | constants.VBE_DISPI_LFB_ENABLED);
       };
