@@ -38,4 +38,5 @@ npm-debug.log
 /runtimecorelib.json
 /cmake-build
 build.iso
-.initrd
+/.initrd
+/build

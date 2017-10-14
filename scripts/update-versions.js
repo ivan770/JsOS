@@ -2,7 +2,7 @@ var fs = require('fs');
 var path = require('path');
 var os = require('os');
 var package = require('../package.json');
-var releaseId = require('./helpers/release-id')(package.version);
+var releaseId = package.kernelVersion;
 
 console.log('### version "' + package.version + '" (release #' + releaseId.toString(16) + ')');
 

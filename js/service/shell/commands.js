@@ -184,6 +184,15 @@ const cmds = {
         f.stdio.writeError("Graphics init error");
         return res(1);
       }
+    },
+  },
+  meminfo: {
+    description: 'Information about RAM',
+    usage: 'meminfo',
+    run(args, f, res) {
+      const info = __SYSCALL.memoryInfo();
+      f.stdio.writeLine(`MEM:  ${+((info.pmUsed / 1024 / 1024).toFixed(2))}M / ${+((info.pmTotal / 1024 / 1024).toFixed(2))}M`);
+      f.stdio.writeLine(`HEAP: ${+((info.heapUsed / 1024 / 1024).toFixed(2))}M / ${+((info.heapTotal / 1024 / 1024).toFixed(2))}M`);
       return res(0);
     },
   },
