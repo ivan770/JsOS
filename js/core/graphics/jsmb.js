@@ -186,7 +186,7 @@ const RAD2DEG = 180 / PI;
 const DEG2RAD = PI / 180;
 
 const JsMB = {
-  setColor(color) {
+  setColor(color) { // TODO:
     ctx.fillStyle = color;
     ctx.strokeStyle = color;
     return true;
@@ -199,7 +199,7 @@ const JsMB = {
     ctx.fillRect(x, y, x1, y1);
     return true;
   },
-  cls() {
+  cls() { // TODO:
     clearRect(0, 0, screenWidth(), screenHeight());
     document.getElementById('p').innerHTML = '';
     return true;
@@ -358,7 +358,7 @@ const JsMB = {
     return true;
   },
   // Конвертеры
-  rgb(red = 0, green = 0, blue = 0) {
+  rgb(red = 0, green = 0, blue = 0) { // TODO:
     return `rgb(${red},${green},${blue})`;
   },
   rgba(red = 0, green = 0, blue = 0, alpha = 0) {
@@ -418,33 +418,30 @@ const JsMB = {
     if (repeat == undefined) repeat = 'repeat';
     return ctx.createPattern($Gel[gelname], repeat);
   },
-  //IO
+  // IO
   input(text) {
-    return prompt(text);
+    return io.prompt(text);
   },
   print(text) {
     io.write(text);
     return true;
   },
   println(text) {
-    //    const p = document.getElementById('p');
-    //    p.style = 'position:fixed;top:0px;left:0px;width:100%;height:100%;-webkit-user-select:none;';
-    //    p.innerHTML += `${text}<br/>`;
     io.writeln(text);
     return true;
   },
-  //Sounds
+  // Sounds
   playSound(file, loop, channel) {
     if (channel === undefined) {
       channel = 0;
     }
     if ($Player[channel] === undefined) {
-      var p = document.createElement('audio');
-      p.id = "player" + channel;
+      const p = document.createElement('audio');
+      p.id = `player${  channel}`;
       document.getElementById('audio').appendChild(p);
-      $Player[channel] = document.getElementById('player' + channel);
+      $Player[channel] = document.getElementById(`player${channel}`);
     }
-    $Player[channel].setAttribute("src", file);
+    $Player[channel].setAttribute('src', file);
     if (!loop) {
       $Player[channel].setAttribute('loop', '0');
       $Player[channel].play();
@@ -459,19 +456,19 @@ const JsMB = {
       channel = 0;
     }
     if (channel == -1) {
-      for (var i in $Player) {
+      for (const i in $Player) {
         $Player[i].pause();
       }
       return true;
     }
     if ($Player[channel] === undefined) {
-      debug("На данном канале нет плеера");
+      debug('На данном канале нет плеера');
       return false;
     }
     $Player[channel].pause();
     return true;
   },
-  //Math
+  // Math
   sqrt(x) {
     return Math.sqrt(x);
   },
@@ -525,7 +522,7 @@ const JsMB = {
   },
   min: Math.min,
   max: Math.max,
-  //Strings
+  // Strings
   len(str) {
     return str.length;
   },
@@ -560,16 +557,16 @@ const JsMB = {
     return parseFloat(str);
   },
   int: val,
-  //Files
+  // Files
   saveData(filename, data, callback) {
     $Init.File[0]();
     $Init.NW[0]();
     $Init.Path[0]();
-  
+
     const file = `${filename}.json`;
     const filePath = $Path.join($NW.App.dataPath, file);
     data = toJSON(data);
-  
+
     $File.writeFile(filePath, data, (err) => {
       if (err) {
         alert(`Ошибка при сохранении: ${err.message}`);
@@ -578,21 +575,21 @@ const JsMB = {
         callback();
       }
     });
-  
+
     window.localStorage.setItem(name, data);
   },
   readData(filename) {
     $Init.File[0]();
     $Init.NW[0]();
     $Init.Path[0]();
-  
+
     const file = `${filename}.json`;
     const filePath = $Path.join($NW.App.dataPath, file);
     const data = $File.readFileSync(filePath, 'utf8');
     const json = parseJSON(data);
     return json;
   },
-  //Local Storage
+  // Local Storage
   localSaveData(name, data) {
     if (typeof (data) === 'object') {
       data = toJSON(data);
@@ -607,17 +604,17 @@ const JsMB = {
       return window.localStorage.getItem(name);
     }
   },
-  //JSON
+  // JSON
   parseJSON(json) {
     return JSON.parse(json);
   },
   toJSON(object) {
     return JSON.stringify(object, '', 4);
   },
-  toPSON(object){
-    return JSON.stringify(object, (a,b)=>typeof(b)==='function'?b+"":b, 4);
+  toPSON(object) {
+    return JSON.stringify(object, (a, b) => typeof(b) === 'function' ? `${b}` : b, 4);
   },
-  //Menu
+  // Menu
   menuAdd(name, title, onClick, type, fortype) {
     $Init.NW[0]();
     if (!$Init.NW[2]) {
@@ -672,7 +669,7 @@ const JsMB = {
     debug('Создание меню невозможно!');
     return false;
   },
-  //Bar
+  // Bar
   menuBarAdd(name, title, subMenu) {
     $Init.NW[0]();
     if (!$Init.NW[2]) {
@@ -762,7 +759,7 @@ const JsMB = {
         if (error) {
           debug(`Ошибка при работе с процессом: ${error}`);
         }
-  
+
         return stdout;
       });
     } else {
@@ -770,7 +767,7 @@ const JsMB = {
       return false;
     }
   },
-  //Modules
+  // Modules
   include(file) {
     const e = document.createElement('script');
     e.src = file;
@@ -779,21 +776,21 @@ const JsMB = {
     return true;
   },
   getModuleName(ID) {
-    return ID.name; ///FIXME: What the hell?
+    return ID.name; // /FIXME: What the hell?
   },
   getModuleAuthor(ID) {
-    return ID.author; ///FIXME: What the hell?
+    return ID.author; // /FIXME: What the hell?
   },
   getModuleDescription(ID) {
-    return ID.description; ///FIXME: What the hell?
+    return ID.description; // /FIXME: What the hell?
   },
   getModuleUrl(ID) {
-    return ID.url; ///FIXME: What the hell?
+    return ID.url; // /FIXME: What the hell?
   },
   getModuleVersion(ID) {
-    return ID.version; ///FIXME: What the hell?
+    return ID.version; // /FIXME: What the hell?
   },
-  //Getter
+  // Getter
   screenWidth() {
     if ($JsMobileBasic.graphic) {
       return $JsMobileBasic.canvas.width;
@@ -818,7 +815,7 @@ const JsMB = {
   getRightClicksCount() {
     return $Mouse.rcount;
   },
-  //tech
+  // tech
   log(text) {
     console.log(text);
     return true;
