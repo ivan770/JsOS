@@ -4,20 +4,22 @@
  * ---v.Alpha 11 for JsOS Project---
  * ~~~~~~~~~~by PROPHESSOR~~~~~~~~~~
  * ================================//
-*/
+ */
 
-const io = $$.stdio.defaultStdio;
+ 'use strict';
 
-var $JsMobileBasic = {
-    name: 'JsMobileBasic',
-    version: 'Alpha 11',
-    author: 'PROPHESSOR',
-    url: 'http://vk.com/JsMobileBasic',
+ const io = $$.stdio.defaultStdio;
+
+ const $JsMobileBasic = {
+   name: 'JsMobileBasic',
+   version: 'Alpha 11',
+   author: 'PROPHESSOR',
+   url: 'http://vk.com/JsMobileBasic',
     // Mobile: $Config.Mobile,
-    Debug: true,
+   Debug: true,
     // canvas: document.getElementById('c'),
     // graphic: false
-}
+ };
 
 // var $Init = {
 //     _Support: function () {
@@ -103,7 +105,7 @@ var $JsMobileBasic = {
 // if (!$JsMobileBasic.Mobile) debug($JsMobileBasic.url, 'background:gray;color:yellow;');
 
 // ======Инициализация рабочей среды======//
-if (!$JsMobileBasic.Mobile) debug('// ======Initializing workspace======//', 'color:gray;');
+ if (!$JsMobileBasic.Mobile) debug('// ======Initializing workspace======//', 'color:gray;');
 // Чтение конфига
 // if (typeof $Config == "undefined") {
 //     console.error('Не найдена конфигурация в файле index.html!');
@@ -112,50 +114,50 @@ if (!$JsMobileBasic.Mobile) debug('// ======Initializing workspace======//', 'co
 // if ($Config.fullscreen) fullScreen(1);
 
 // if ($Config.type == 'graphic') {
-    // $JsMobileBasic.graphic = true;
-    // if(!$JsMobileBasic.Mobile) debug('Используется графика!', 'background:black;color:yellow;');
+// $JsMobileBasic.graphic = true;
+// if(!$JsMobileBasic.Mobile) debug('Используется графика!', 'background:black;color:yellow;');
 
-    // $JsMobileBasic.$style = document.createElement('style');
-    // $JsMobileBasic.$style.innerHTML = 'html{overflow: hidden;} body{margin:0;padding:0;}';
-    // document.head.appendChild($JsMobileBasic.$style);
+// $JsMobileBasic.$style = document.createElement('style');
+// $JsMobileBasic.$style.innerHTML = 'html{overflow: hidden;} body{margin:0;padding:0;}';
+// document.head.appendChild($JsMobileBasic.$style);
 
-    // var c = document.getElementById("c");
-    //    $JsMobileBasic.canvas = c;
-    // var ctx = c.getContext("2d");
-    // if ($Config.canvas_size[0] == '*' && $Config.canvas_size[1] == '*') {
-        // if(!$JsMobileBasic.Mobile) debug('Canvas растянут на весь экран', 'background:black;color:#00ff00;');
-        // if (!$JsMobileBasic.Mobile) { $Config.canvas_size[2] ? debug('Вмещение включено') : debug('Вмещение выключено'); }
-        // c.height = window.innerHeight;
-        // c.width = window.innerWidth;
-        // if ($Config.canvas_size[2]) {
-        //     c.style = 'display:block; margin:0; padding:0; position:fixed; top:0px; left: 0px; width:100%; height:100%;';
-        // }
-    // } else {
-        if (!$JsMobileBasic.Mobile) debug($Config.canvas_size);
-        c.height = $Config.canvas_size[1];
-        c.width = $Config.canvas_size[0];
-    // }
+// var c = document.getElementById("c");
+//    $JsMobileBasic.canvas = c;
+// var ctx = c.getContext("2d");
+// if ($Config.canvas_size[0] == '*' && $Config.canvas_size[1] == '*') {
+// if(!$JsMobileBasic.Mobile) debug('Canvas растянут на весь экран', 'background:black;color:#00ff00;');
+// if (!$JsMobileBasic.Mobile) { $Config.canvas_size[2] ? debug('Вмещение включено') : debug('Вмещение выключено'); }
+// c.height = window.innerHeight;
+// c.width = window.innerWidth;
+// if ($Config.canvas_size[2]) {
+//     c.style = 'display:block; margin:0; padding:0; position:fixed; top:0px; left: 0px; width:100%; height:100%;';
+// }
 // } else {
-    // if (!$JsMobileBasic.Mobile) debug('Графика не используется!', 'background:black;color:yellow;');
-    // var c = window;
-    // var ctx = false;
-    // if (document.getElementById('c') != undefined) document.body.removeChild(document.getElementById('c'));
+ if (!$JsMobileBasic.Mobile) debug($Config.canvas_size);
+//  c.height = $Config.canvas_size[1];
+//  c.width = $Config.canvas_size[0];
+// }
+// } else {
+// if (!$JsMobileBasic.Mobile) debug('Графика не используется!', 'background:black;color:yellow;');
+// var c = window;
+// var ctx = false;
+// if (document.getElementById('c') != undefined) document.body.removeChild(document.getElementById('c'));
 // }
 
-document.getElementsByTagName('title')[0].innerHTML = $Config.name;
-if (!$JsMobileBasic.Mobile) debug('Имя проекта: ' + $Config.name, 'background:brown;color:yellow;');
+//  document.getElementsByTagName('title')[0].innerHTML = $Config.name;
+//  if (!$JsMobileBasic.Mobile) debug(`Имя проекта: ${$Config.name}`, 'background:brown;color:yellow;');
 
-var $Player = [document.getElementById("player0")];
+//  const $Player = [document.getElementById('player0')];
 // ======Инициализация интерпретатора======//
-if (!$JsMobileBasic.Mobile) debug('// ======Инициализация интерпретатора======//', 'color:gray;');
+ if (!$JsMobileBasic.Mobile) debug('// ======Initializeng interpreter======//', 'color:gray;');
 
-//var MobileBasic = {};
+// var MobileBasic = {};
 
-//Глобальные переменные
+// Глобальные переменные
 
 // var $NW, $Files, $OS, $Path, $Proc;
 
-//Контейнеры
+// Контейнеры
 // var $Mouse = {
 //     x: 0,
 //     y: 0,
@@ -171,172 +173,222 @@ if (!$JsMobileBasic.Mobile) debug('// ======Инициализация инте�
 // };
 // var $Element = {};
 // var $Menu = {
-    // $Bar: {}
+// $Bar: {}
 // };
 
-//Константы
+// Константы
 
-const PI = Math.PI;
-const G = 9.8;
-const RAD2DEG = 180 / PI;
-const DEG2RAD = PI / 180;
+ const PI = Math.PI;
+ const G = 9.8;
+ const RAD2DEG = 180 / PI;
+ const DEG2RAD = PI / 180;
 
-//Графика
+// Графика
 
-function setColor(color) {
-    ctx.fillStyle = color;
-    ctx.strokeStyle = color;
-    return true;
-};
-function setLineWidth(width) {
-    ctx.lineWidth = width;
-    return true;
-}
-function fillRect(x, y, x1, y1) {
-    ctx.fillRect(x, y, x1, y1);
-    return true;
-}
-function cls() {
-    clearRect(0, 0, screenWidth(), screenHeight());
-    document.getElementById('p').innerHTML = '';
-    return true;
-}
-function fillScreen(color) {
-    ctx.save();
-    setColor(color);
-    fillRect(0, 0, screenWidth(), screenHeight());
-    ctx.restore();
-    return true;
-}
-function drawRect(x, y, x1, y1) {
-    ctx.strokeRect(x, y, x1, y1);
-    return true;
-}
-function drawPlot(x, y) {
-    ctx.save();
-    setLineWidth(1);
-    drawLine(x, y, x + 1, y + 1);
-    ctx.restore()
-    return true;
-}
-function clearRect(x, y, x1, y1) {
-    ctx.clearRect(x, y, x1, y1);
-    return true;
-}
-function drawLine(x, y, x1, y1) {
-    ctx.beginPath();
-    ctx.moveTo(x, y);
-    ctx.lineTo(x1, y1)
-    ctx.stroke();
-    return true;
-}
-function drawCube(x, y, x1, y1, q) {
-    ctx.strokeRect(x, y, x1, y1);
-    ctx.strokeRect(x + (q / Math.sqrt(2)), y + (q / Math.sqrt(2)), x1, y1);
-    drawLine(x, y, x + (q / Math.sqrt(2)), y + (q / Math.sqrt(2)));
-    drawLine(x + x1, y, x + x1 + (q / Math.sqrt(2)), y + (q / Math.sqrt(2)));
-    drawLine(x, y + y1, x + (q / Math.sqrt(2)), y + y1 + (q / Math.sqrt(2)));
-    drawLine(x + x1, y + y1, x + x1 + (q / Math.sqrt(2)), y + y1 + (q / Math.sqrt(2)));
-    return true;
-}
-function drawArc(x, y, radius, startAngle, endAngle, counterClockwise) {
-    if (startAngle == undefined) { startAngle = 15 * Math.PI / 7; }
+ function setColor(color) {
+   ctx.fillStyle = color;
+   ctx.strokeStyle = color;
+   return true;
+ }
 
-    if (endAngle == undefined) { endAngle = 13 * Math.PI / 2; }
-    if (counterClockwise == undefined) { counterClockwise = false; }//направление дуги. По умолчанию false
+ function setLineWidth(width) {
+   ctx.lineWidth = width;
+   return true;
+ }
 
-    ctx.beginPath();
-    ctx.arc(x, y, radius, startAngle, endAngle, counterClockwise);
-    ctx.stroke();
-    return true;
-}
-function fillArc(x, y, radius, startAngle, endAngle, counterClockwise) {
-    if (startAngle == undefined) { startAngle = 15 * Math.PI / 7; }
-    if (endAngle == undefined) { endAngle = 13 * Math.PI / 2; }
-    if (counterClockwise == undefined) { counterClockwise = false; }
+ function fillRect(x, y, x1, y1) {
+   ctx.fillRect(x, y, x1, y1);
+   return true;
+ }
 
-    ctx.beginPath();
-    ctx.arc(x, y, radius, startAngle, endAngle, counterClockwise);
-    ctx.fill();
-    return true;
-}
-function fillRect4(x, y, x1, y1, x2, y2, x3, y3) {
-    var arr = [[x, y], [x1, y1], [x2, y2], [x3, y3]];
-    ctx.beginPath();
-    for (var i = 0; i < arr.length; i++) {
-        if (i == 0) ctx.moveTo(arr[i][0], arr[i][1]);
-        else ctx.lineTo(arr[i][0], arr[i][1]);
-    }
-    ctx.fill();
-    return true;
-}
-function drawRect4(x, y, x1, y1, x2, y2, x3, y3) {
-    var arr = [[x, y], [x1, y1], [x2, y2], [x3, y3]];
-    ctx.beginPath();
-    for (var i = 0; i < arr.length; i++) {
-        if (i == 0) ctx.moveTo(arr[i][0], arr[i][1]);
-        else ctx.lineTo(arr[i][0], arr[i][1]);
-    }
-    ctx.stroke();
-    return true;
-}
-function fillTriangle(x, y, x1, y1, x2, y2) {
-    var arr = [[x, y], [x1, y1], [x2, y2]];
-    ctx.beginPath();
-    for (var i = 0; i < arr.length; i++) {
-        if (i == 0) ctx.moveTo(arr[i][0], arr[i][1]);
-        else ctx.lineTo(arr[i][0], arr[i][1]);
-    }
-    ctx.fill();
-    return true;
-}
-function drawTriangle(x, y, x1, y1, x2, y2) {
-    var arr = [[x, y], [x1, y1], [x2, y2]];
-    ctx.beginPath();
-    for (var i = 0; i < arr.length; i++) {
-        if (i == 0) ctx.moveTo(arr[i][0], arr[i][1]);
-        else ctx.lineTo(arr[i][0], arr[i][1]);
-    }
-    ctx.stroke();
-    return true;
-}
-function drawString(text, x, y) {
-    ctx.fillText(text, x, y);
-    return true;
-};
-function setFontSize(size) {
-    ctx.font = size + "px " + $Font.family;
-    $Font.size = size;
-    return true;
-}
-function setFont(family) {
-    ctx.font = $Font.size + "px " + family;
-    $Font.family = family;
-    return true;
-}
+ function cls() {
+   clearRect(0, 0, screenWidth(), screenHeight());
+   document.getElementById('p').innerHTML = '';
+   return true;
+ }
 
-function makeLinearGradient(x, y, x1, y1) {
-    return ctx.createLinearGradient(x, y, x1, y1);
-}
-function makeRadialGradient(x, y, r, x1, y1, r1) {
-    return ctx.createRadialGradient(x, y, r, x1, y1, r1);
-}
-function setGradientColor(g, num, color) {
-    g.addColorStop(num, color);
-    return true;
-}
+ function fillScreen(color) {
+   ctx.save();
+   setColor(color);
+   fillRect(0, 0, screenWidth(), screenHeight());
+   ctx.restore();
+   return true;
+ }
 
-//Конвертеры
+ function drawRect(x, y, x1, y1) {
+   ctx.strokeRect(x, y, x1, y1);
+   return true;
+ }
 
-function rgb(red=0,green=0,blue=0){
-    return "rgb("+red+","+green+","+blue+")";
-}
+ function drawPlot(x, y) {
+   ctx.save();
+   setLineWidth(1);
+   drawLine(x, y, x + 1, y + 1);
+   ctx.restore();
+   return true;
+ }
 
-function rgba(red=0,green=0,blue=0,alpha=0){
-    return "rgba("+red+","+green+","+blue+","+alpha+")";
-}
+ function clearRect(x, y, x1, y1) {
+   ctx.clearRect(x, y, x1, y1);
+   return true;
+ }
 
-//Гели/спрайты
+ function drawLine(x, y, x1, y1) {
+   ctx.beginPath();
+   ctx.moveTo(x, y);
+   ctx.lineTo(x1, y1);
+   ctx.stroke();
+   return true;
+ }
+
+ function drawCube(x, y, x1, y1, q) {
+   ctx.strokeRect(x, y, x1, y1);
+   ctx.strokeRect(x + (q / Math.sqrt(2)), y + (q / Math.sqrt(2)), x1, y1);
+   drawLine(x, y, x + (q / Math.sqrt(2)), y + (q / Math.sqrt(2)));
+   drawLine(x + x1, y, x + x1 + (q / Math.sqrt(2)), y + (q / Math.sqrt(2)));
+   drawLine(x, y + y1, x + (q / Math.sqrt(2)), y + y1 + (q / Math.sqrt(2)));
+   drawLine(x + x1, y + y1, x + x1 + (q / Math.sqrt(2)), y + y1 + (q / Math.sqrt(2)));
+   return true;
+ }
+
+ function drawArc(x, y, radius, startAngle, endAngle, counterClockwise) {
+   if (startAngle == undefined) {
+     startAngle = 15 * Math.PI / 7;
+   }
+
+   if (endAngle == undefined) {
+     endAngle = 13 * Math.PI / 2;
+   }
+   if (counterClockwise == undefined) {
+     counterClockwise = false;
+   } // направление дуги. По умолчанию false
+
+   ctx.beginPath();
+   ctx.arc(x, y, radius, startAngle, endAngle, counterClockwise);
+   ctx.stroke();
+   return true;
+ }
+
+ function fillArc(x, y, radius, startAngle, endAngle, counterClockwise) {
+   if (startAngle == undefined) {
+     startAngle = 15 * Math.PI / 7;
+   }
+   if (endAngle == undefined) {
+     endAngle = 13 * Math.PI / 2;
+   }
+   if (counterClockwise == undefined) {
+     counterClockwise = false;
+   }
+
+   ctx.beginPath();
+   ctx.arc(x, y, radius, startAngle, endAngle, counterClockwise);
+   ctx.fill();
+   return true;
+ }
+
+ function fillRect4(x, y, x1, y1, x2, y2, x3, y3) {
+   const arr = [
+        [x, y],
+        [x1, y1],
+        [x2, y2],
+        [x3, y3],
+   ];
+   ctx.beginPath();
+   for (let i = 0; i < arr.length; i++) {
+     if (i == 0) ctx.moveTo(arr[i][0], arr[i][1]);
+     else ctx.lineTo(arr[i][0], arr[i][1]);
+   }
+   ctx.fill();
+   return true;
+ }
+
+ function drawRect4(x, y, x1, y1, x2, y2, x3, y3) {
+   const arr = [
+        [x, y],
+        [x1, y1],
+        [x2, y2],
+        [x3, y3],
+   ];
+   ctx.beginPath();
+   for (let i = 0; i < arr.length; i++) {
+     if (i == 0) ctx.moveTo(arr[i][0], arr[i][1]);
+     else ctx.lineTo(arr[i][0], arr[i][1]);
+   }
+   ctx.stroke();
+   return true;
+ }
+
+ function fillTriangle(x, y, x1, y1, x2, y2) {
+   const arr = [
+        [x, y],
+        [x1, y1],
+        [x2, y2],
+   ];
+   ctx.beginPath();
+   for (let i = 0; i < arr.length; i++) {
+     if (i == 0) ctx.moveTo(arr[i][0], arr[i][1]);
+     else ctx.lineTo(arr[i][0], arr[i][1]);
+   }
+   ctx.fill();
+   return true;
+ }
+
+ function drawTriangle(x, y, x1, y1, x2, y2) {
+   const arr = [
+        [x, y],
+        [x1, y1],
+        [x2, y2],
+   ];
+   ctx.beginPath();
+   for (let i = 0; i < arr.length; i++) {
+     if (i == 0) ctx.moveTo(arr[i][0], arr[i][1]);
+     else ctx.lineTo(arr[i][0], arr[i][1]);
+   }
+   ctx.stroke();
+   return true;
+ }
+
+ function drawString(text, x, y) {
+   ctx.fillText(text, x, y);
+   return true;
+ }
+
+ function setFontSize(size) {
+   ctx.font = `${size}px ${$Font.family}`;
+   $Font.size = size;
+   return true;
+ }
+
+ function setFont(family) {
+   ctx.font = `${$Font.size}px ${family}`;
+   $Font.family = family;
+   return true;
+ }
+
+ function makeLinearGradient(x, y, x1, y1) {
+   return ctx.createLinearGradient(x, y, x1, y1);
+ }
+
+ function makeRadialGradient(x, y, r, x1, y1, r1) {
+   return ctx.createRadialGradient(x, y, r, x1, y1, r1);
+ }
+
+ function setGradientColor(g, num, color) {
+   g.addColorStop(num, color);
+   return true;
+ }
+
+// Конвертеры
+
+ function rgb(red = 0, green = 0, blue = 0) {
+   return `rgb(${red},${green},${blue})`;
+ }
+
+ function rgba(red = 0, green = 0, blue = 0, alpha = 0) {
+   return `rgba(${red},${green},${blue},${alpha})`;
+ }
+
+// Гели/спрайты
 
 // function gelLoad(file, name) {
 //     $Gel[name] = new Image();
@@ -383,24 +435,29 @@ function rgba(red=0,green=0,blue=0,alpha=0){
 // }
 
 
-//Ввод
+// Ввод
 
-function input(text) {
-    return prompt(text);
-}
-
-
-//Вывод
+ function input(text) {
+   return prompt(text);
+ }
 
 
-function println(text) {
-    var p = document.getElementById('p');
-    p.style = "position:fixed;top:0px;left:0px;width:100%;height:100%;-webkit-user-select:none;";
-    p.innerHTML += text + "<br/>";
-    return true;
-}
+// Вывод
 
-//Звук
+ function print(text) {
+   io.write(text);
+   return true;
+ }
+
+ function println(text) {
+//    const p = document.getElementById('p');
+//    p.style = 'position:fixed;top:0px;left:0px;width:100%;height:100%;-webkit-user-select:none;';
+//    p.innerHTML += `${text}<br/>`;
+   io.writeln(text);
+   return true;
+ }
+
+// Звук
 
 // function playSound(file, loop, channel) {
 //     if (channel === undefined) {
@@ -440,569 +497,600 @@ function println(text) {
 //     return true;
 // };
 
-//Matheматика
+// Matheматика
 
-function sqrt(x) {
-    return Math.sqrt(x);
-}
-function random(a, b) {
-    return Math.floor(Math.random() * b + a);
-}
-function sin(x) {
-    return Math.sin(x);
-}
-function cos(x) {
-    return Math.cos(x);
-}
-function tan(x) {
-    return Math.tan(x);
-}
-function ctg(x) {
-    return 1 / Math.tan(x);
-}
-function asin(x) {
-    return Math.asin(x);
-}
-function acos(x) {
-    return Math.acos(x);
-}
-function atan(x) {
-    return Math.atan(x);
-}
-function mod(x, y) {
-    return x % y;
-}
-function abs(x) {
-    return Math.abs(x);
-}
-function pow(x, num) {
-    return Math.pow(x, num);
-}
-function ln(x) {
-    return Math.log(x);
-}
-function exp(x) {
-    return Math.exp(x);
-}
-function limit(variable, a, b) {
-    if (variable < a) {
-        variable = a;
-    }
-    if (variable > b) {
-        variable = b;
-    }
-    return variable;
-}
-var min = Math.min;
-var max = Math.max;
+ function sqrt(x) {
+   return Math.sqrt(x);
+ }
 
-function rad(deg) {
-    if (deg == 90) {
-        return PI / 2;
-    } else if (deg == 270) {
-        return 3 * PI / 2;
-    }
-    return deg * DEG2RAD
-}
+ function random(a, b) {
+   return Math.floor(Math.random() * b + a);
+ }
 
-function deg(rad) {
-    return rad * RAD2DEG;
-}
+ function sin(x) {
+   return Math.sin(x);
+ }
 
-//Строковые функции
-function len(str) {
-    return str.length;
-}
-function str(num) {
-    return num.toString;
-}
-function val(str) {
-    return parseInt(str);
-}
-function upper(str) {
-    return str.toUpperCase;
-}
-function lower(str) {
-    return str.toLowerCase;
-}
-function mid(str, pos, len) {
-    return str.substr(pos, len);
-}
-function chr(code) { //code to string
-    return String.fromCharCode(code);
-}
-function asc(str) { //string to code
-    return str.charCode;
-}
-function split(str, char) {
-    return str.split(char);
-}
-function replace(str, reg, to) {
-    str.replace(reg, to);
-}
-function float(str) {
-    return parseFloat(str);
-}
-var int = val;//int()=parseInt()=val()
+ function cos(x) {
+   return Math.cos(x);
+ }
 
-//Работа с файлами
+ function tan(x) {
+   return Math.tan(x);
+ }
 
+ function ctg(x) {
+   return 1 / Math.tan(x);
+ }
 
+ function asin(x) {
+   return Math.asin(x);
+ }
 
-function saveData(filename, data, callback) {
-    $Init.File[0]();
-    $Init.NW[0]();
-    $Init.Path[0]();
+ function acos(x) {
+   return Math.acos(x);
+ }
 
-    var file = filename + '.json';
-    var filePath = $Path.join($NW.App.dataPath, file);
-    data = toJSON(data);
+ function atan(x) {
+   return Math.atan(x);
+ }
 
-    $File.writeFile(filePath, data, function (err) {
-        if (err) {
-            alert('Ошибка при сохранении: ' + err.message);
-            return false;
-        } else if (callback) {
-            callback();
-        }
-    });
+ function mod(x, y) {
+   return x % y;
+ }
 
-    window.localStorage.setItem(name, data);
-}
+ function abs(x) {
+   return Math.abs(x);
+ }
 
-function readData(filename) {
-    $Init.File[0]();
-    $Init.NW[0]();
-    $Init.Path[0]();
+ function pow(x, num) {
+   return Math.pow(x, num);
+ }
 
-    var file = filename + '.json';
-    var filePath = $Path.join($NW.App.dataPath, file);
-    var data = $File.readFileSync(filePath, 'utf8');
-    var json = parseJSON(data);
-    return json;
-}
+ function ln(x) {
+   return Math.log(x);
+ }
 
-//Работа с локальными данными
+ function exp(x) {
+   return Math.exp(x);
+ }
 
-function localSaveData(name, data) {
-    if (typeof (data) == "object") {
-        data = toJSON(data);
-    }
-    window.localStorage.setItem(name, data);
-    return true;
-}
+ function limit(variable, a, b) {
+   if (variable < a) {
+     variable = a;
+   }
+   if (variable > b) {
+     variable = b;
+   }
+   return variable;
+ }
+ const min = Math.min;
+ const max = Math.max;
 
-function localReadData(name) {
-    try{
-        return parseJSON(window.localStorage.getItem(name));
-    }catch(e){
-        return window.localStorage.getItem(name);
-    }
-}
+ function rad(deg) {
+   if (deg == 90) {
+     return PI / 2;
+   } else if (deg == 270) {
+     return 3 * PI / 2;
+   }
+   return deg * DEG2RAD;
+ }
 
-function parseJSON(json) {
-    return JSON.parse(json);
-}
+ function deg(rad) {
+   return rad * RAD2DEG;
+ }
 
-function toJSON(object) {
-    return JSON.stringify(object, "", 4);
-}
+// Строковые функции
+ function len(str) {
+   return str.length;
+ }
 
-//OS
+ function str(num) {
+   return num.toString;
+ }
+
+ function val(str) {
+   return parseInt(str);
+ }
+
+ function upper(str) {
+   return str.toUpperCase;
+ }
+
+ function lower(str) {
+   return str.toLowerCase;
+ }
+
+ function mid(str, pos, len) {
+   return str.substr(pos, len);
+ }
+
+ function chr(code) { // code to string
+   return String.fromCharCode(code);
+ }
+
+ function asc(str) { // string to code
+   return str.charCode;
+ }
+
+ function split(str, char) {
+   return str.split(char);
+ }
+
+ function replace(str, reg, to) {
+   str.replace(reg, to);
+ }
+
+ function float(str) {
+   return parseFloat(str);
+ }
+ const int = val; // int()=parseInt()=val()
+
+// Работа с файлами
 
 
-//Работа с NW
+ function saveData(filename, data, callback) {
+   $Init.File[0]();
+   $Init.NW[0]();
+   $Init.Path[0]();
 
-//Контекстное меню
-function menuAdd(name, title, onClick, type, fortype) {
-    $Init.NW[0]();
-    if (!$Init.NW[2]) {
-        if ($Menu[name] == undefined) {
-            $Menu[name] = new $NW.Menu();
-        }
-        switch (type) {
-            case undefined:
-                $Menu[name].append(new $NW.MenuItem({
-                    label: title,
-                    click: onClick
-                }));
-                break;
-            case 'subMenu':
-                $Menu[name].append(new $NW.MenuItem({
-                    label: title,
-                    submenu: fortype
-                }));
-                break;
-            case 'checkbox':
-                $Menu[name].append(new $NW.MenuItem({
-                    label: title,
-                    type: 'checkbox',
-                    click: onClick
-                }));
-                break;
-        }
-        return true;
-    } else {
-        debug('Создание меню невозможно!');
-        return false;
-    }
-}
+   const file = `${filename}.json`;
+   const filePath = $Path.join($NW.App.dataPath, file);
+   data = toJSON(data);
 
-function menuShow(name, x, y) {
-    if (!$Init.NW[2]) {
-        $Menu[name].popup(x, y);
-        return true;
-    } else {
-        debug('Отображение меню невозможно!');
-        return false;
-    }
-}
+   $File.writeFile(filePath, data, (err) => {
+     if (err) {
+       alert(`Ошибка при сохранении: ${err.message}`);
+       return false;
+     } else if (callback) {
+       callback();
+     }
+   });
 
-function menuAddSeparator(name) {
-    $Init.NW[0]();
-    if (!$Init.NW[2]) {
-        if ($Menu[name] == undefined) {
-            $Menu[name] = new $NW.Menu();
-        }
-        $Menu[name].append(new $NW.MenuItem({
-            type: 'separator'
-        }));
-        return true;
-    } else {
-        debug('Создание меню невозможно!');
-        return false;
-    }
-}
+   window.localStorage.setItem(name, data);
+ }
 
-//Menu bar
+ function readData(filename) {
+   $Init.File[0]();
+   $Init.NW[0]();
+   $Init.Path[0]();
 
-function menuBarAdd(name, title, subMenu) {
-    $Init.NW[0]();
-    if (!$Init.NW[2]) {
-        if ($Menu.$Bar[name] == undefined) {
-            $Menu.$Bar[name] = new $NW.Menu({ type: 'menubar', title: title });
-        }
-        $Menu.$Bar[name].append(new $NW.MenuItem({ label: title, submenu: $Menu[subMenu] }));
-        return true;
-    } else {
-        debug('Создание меню невозможно!');
-        return false;
-    }
-}
+   const file = `${filename}.json`;
+   const filePath = $Path.join($NW.App.dataPath, file);
+   const data = $File.readFileSync(filePath, 'utf8');
+   const json = parseJSON(data);
+   return json;
+ }
 
-function menuBarShow(name) {
-    if (!$Init.NW[2]) {
-        $NW.Window.get().menu = $Menu.$Bar[name];
-        return true;
-    } else {
-        debug('Отображение меню невозможно!');
-        return false;
-    }
-}
+// Работа с локальными данными
+
+ function localSaveData(name, data) {
+   if (typeof (data) === 'object') {
+     data = toJSON(data);
+   }
+   window.localStorage.setItem(name, data);
+   return true;
+ }
+
+ function localReadData(name) {
+   try {
+     return parseJSON(window.localStorage.getItem(name));
+   } catch (e) {
+     return window.localStorage.getItem(name);
+   }
+ }
+
+ function parseJSON(json) {
+   return JSON.parse(json);
+ }
+
+ function toJSON(object) {
+   return JSON.stringify(object, '', 4);
+ }
+
+// OS
 
 
-//clipboard
+// Работа с NW
 
-function getClipboard(type) {
-    $Init.NW[0]();
-    if (!$Init.NW[2]) {
-        var clipboard = $NW.Clipboard.get();
-        if(type == undefined) type = 'text';
-        return clipboard.get(type);
-    } else {
-        debug('Работа с буфером обмена невозможна!');
-        return false;
-    }
-}
+// Контекстное меню
+ function menuAdd(name, title, onClick, type, fortype) {
+   $Init.NW[0]();
+   if (!$Init.NW[2]) {
+     if ($Menu[name] == undefined) {
+       $Menu[name] = new $NW.Menu();
+     }
+     switch (type) {
+       case undefined:
+         $Menu[name].append(new $NW.MenuItem({
+           label: title,
+           click: onClick,
+         }));
+         break;
+       case 'subMenu':
+         $Menu[name].append(new $NW.MenuItem({
+           label: title,
+           submenu: fortype,
+         }));
+         break;
+       case 'checkbox':
+         $Menu[name].append(new $NW.MenuItem({
+           label: title,
+           type: 'checkbox',
+           click: onClick,
+         }));
+         break;
+     }
+     return true;
+   }
+   debug('Создание меню невозможно!');
+   return false;
+ }
 
-function setClipboard(value, type) {
-    $Init.NW[0]();
-    if (!$Init.NW[2]) {
-        var clipboard = $NW.Clipboard.get();
-        if(type == undefined) type = 'text';
-        clipboard.set(value, type);
-        return true;
-    } else {
-        debug('Работа с буфером обмена невозможна!');
-        return false;
-    }
-}
+ function menuShow(name, x, y) {
+   if (!$Init.NW[2]) {
+     $Menu[name].popup(x, y);
+     return true;
+   }
+   debug('Отображение меню невозможно!');
+   return false;
+ }
 
-function clearClipboard() {
-    $Init.NW[0]();
-    if (!$Init.NW[2]) {
-        var clipboard = $NW.Clipboard.get();
-        clipboard.clear();
-        return true;
-    } else {
-        debug('Работа с буфером обмена невозможна!');
-        return false;
-    }
-}
+ function menuAddSeparator(name) {
+   $Init.NW[0]();
+   if (!$Init.NW[2]) {
+     if ($Menu[name] == undefined) {
+       $Menu[name] = new $NW.Menu();
+     }
+     $Menu[name].append(new $NW.MenuItem({
+       type: 'separator',
+     }));
+     return true;
+   }
+   debug('Создание меню невозможно!');
+   return false;
+ }
 
-//tray
+// Menu bar
 
-function menuTrayAdd(name, title, icon, menu) {
-    $Init.NW[0]();
-    if (!$Init.NW[2]) {
-        var tray = new $NW.Tray({
-            title: title,
-            icon: icon,
-            alticon: icon
-        });
-        tray.menu = $Menu[menu];
-        return true;
-    } else {
-        debug('Работа с треем невозможна!');
-        return false;
-    }
-}
+ function menuBarAdd(name, title, subMenu) {
+   $Init.NW[0]();
+   if (!$Init.NW[2]) {
+     if ($Menu.$Bar[name] == undefined) {
+       $Menu.$Bar[name] = new $NW.Menu({
+         type: 'menubar',
+         title,
+       });
+     }
+     $Menu.$Bar[name].append(new $NW.MenuItem({
+       label: title,
+       submenu: $Menu[subMenu],
+     }));
+     return true;
+   }
+   debug('Создание меню невозможно!');
+   return false;
+ }
 
-//Процессы
-
-function exec(target) {
-    $Init.Proc[0]();
-    if (!$Init.Proc[2]) {
-        $Proc.execSync(target);
-    }
-    return true;
-}
-
-function execFile(file, keys) {
-    $Init.Proc[0]();
-    if (!$Init.Proc[2]) {
-        if (typeof (keys) != "object") {
-            console.warn("Второй аргумент функции execFile должен быть масивом!");
-            keys = [];
-        }
-        var proc = $Proc.execFile(file, keys, (error, stdout, stderr) => {
-            if (error) {
-                debug("Ошибка при работе с процессом: " + error);
-            }
-
-            return stdout;
-        });
-    } else {
-        debug("Работа с процессами невозможна!");
-        return false;
-    }
-}
-//Работа с модулями
-function include(file) {
-    var e = document.createElement("script");
-    e.src = file;
-    e.type = "text/javascript";
-    document.getElementById('modules').appendChild(e);
-    return true;
-}
-
-function getModuleName(ID) {
-    return ID.name;
-}
-function getModuleAuthor(ID) {
-    return ID.author;
-}
-function getModuleDescription(ID) {
-    return ID.description;
-}
-function getModuleUrl(ID) {
-    return ID.url;
-}
-function getModuleVersion(ID) {
-    return ID.version;
-}
-
-//Получение значений
-
-function screenWidth() {
-    if ($JsMobileBasic.graphic) {
-        return $JsMobileBasic.canvas.width;
-    } else {
-        return window.innerWidth;
-    }
-}
-function screenHeight() {
-    if ($JsMobileBasic.graphic) {
-        return $JsMobileBasic.canvas.height;
-    } else {
-        return window.innerHeight;
-    }
-}
-function getMouseX() {
-    return $Mouse.x;
-}
-function getMouseY() {
-    return $Mouse.y;
-}
-function getLeftClicksCount() {
-    return $Mouse.lcount;
-}
-function getRightClicksCount() {
-    return $Mouse.rcount;
-}
+ function menuBarShow(name) {
+   if (!$Init.NW[2]) {
+     $NW.Window.get().menu = $Menu.$Bar[name];
+     return true;
+   }
+   debug('Отображение меню невозможно!');
+   return false;
+ }
 
 
-//Техническое
+// clipboard
 
-function log(text) {
-    console.log(text);
-    return true;
-}
+ function getClipboard(type) {
+   $Init.NW[0]();
+   if (!$Init.NW[2]) {
+     const clipboard = $NW.Clipboard.get();
+     if (type == undefined) type = 'text';
+     return clipboard.get(type);
+   }
+   debug('Работа с буфером обмена невозможна!');
+   return false;
+ }
 
-function debug(text, style) {
-    if ($Config.Debug_Mode) {
-        if (!$JsMobileBasic.Mobile) {
-            if(style === undefined) style = 'background: black; color: red;';
-            console.log('%c ' + text, style);
-            return true;
-        } else {
-            alert(style);
-            return true;
-        }
-    } else {
-        return false;
-    }
-}
+ function setClipboard(value, type) {
+   $Init.NW[0]();
+   if (!$Init.NW[2]) {
+     const clipboard = $NW.Clipboard.get();
+     if (type == undefined) type = 'text';
+     clipboard.set(value, type);
+     return true;
+   }
+   debug('Работа с буфером обмена невозможна!');
+   return false;
+ }
 
-function exit() {
-    window.close();
-    return true;
-}
+ function clearClipboard() {
+   $Init.NW[0]();
+   if (!$Init.NW[2]) {
+     const clipboard = $NW.Clipboard.get();
+     clipboard.clear();
+     return true;
+   }
+   debug('Работа с буфером обмена невозможна!');
+   return false;
+ }
 
-function fullScreen(mode) {
-    $Init["NW"][0]();
-    if (!$Init.NW[2]) {
-        if (mode) {
-            var tmp = $NW.Window.get();
-            tmp.enterFullscreen();
-        } else {
-            var tmp = $NW.Window.get();
-            tmp.leaveFullscreen();
-        }
-    } else {
-        debug("Работа с процессами невозможна!");
-        return false;
-    }
-}
+// tray
 
-//HTML5 функции
-function addInputForm(id, value, x, y) {
+ function menuTrayAdd(name, title, icon, menu) {
+   $Init.NW[0]();
+   if (!$Init.NW[2]) {
+     const tray = new $NW.Tray({
+       title,
+       icon,
+       alticon: icon,
+     });
+     tray.menu = $Menu[menu];
+     return true;
+   }
+   debug('Работа с треем невозможна!');
+   return false;
+ }
+
+// Процессы
+
+ function exec(target) {
+   $Init.Proc[0]();
+   if (!$Init.Proc[2]) {
+     $Proc.execSync(target);
+   }
+   return true;
+ }
+
+ function execFile(file, keys) {
+   $Init.Proc[0]();
+   if (!$Init.Proc[2]) {
+     if (typeof (keys) !== 'object') {
+       console.warn('Второй аргумент функции execFile должен быть масивом!');
+       keys = [];
+     }
+     const proc = $Proc.execFile(file, keys, (error, stdout, stderr) => {
+       if (error) {
+         debug(`Ошибка при работе с процессом: ${error}`);
+       }
+
+       return stdout;
+     });
+   } else {
+     debug('Работа с процессами невозможна!');
+     return false;
+   }
+ }
+// Работа с модулями
+ function include(file) {
+   const e = document.createElement('script');
+   e.src = file;
+   e.type = 'text/javascript';
+   document.getElementById('modules').appendChild(e);
+   return true;
+ }
+
+ function getModuleName(ID) {
+   return ID.name;
+ }
+
+ function getModuleAuthor(ID) {
+   return ID.author;
+ }
+
+ function getModuleDescription(ID) {
+   return ID.description;
+ }
+
+ function getModuleUrl(ID) {
+   return ID.url;
+ }
+
+ function getModuleVersion(ID) {
+   return ID.version;
+ }
+
+// Получение значений
+
+ function screenWidth() {
+   if ($JsMobileBasic.graphic) {
+     return $JsMobileBasic.canvas.width;
+   }
+   return window.innerWidth;
+ }
+
+ function screenHeight() {
+   if ($JsMobileBasic.graphic) {
+     return $JsMobileBasic.canvas.height;
+   }
+   return window.innerHeight;
+ }
+
+ function getMouseX() {
+   return $Mouse.x;
+ }
+
+ function getMouseY() {
+   return $Mouse.y;
+ }
+
+ function getLeftClicksCount() {
+   return $Mouse.lcount;
+ }
+
+ function getRightClicksCount() {
+   return $Mouse.rcount;
+ }
+
+
+// Техническое
+
+ function log(text) {
+   console.log(text);
+   return true;
+ }
+
+ function debug(text, style) {
+   if ($Config.Debug_Mode) {
+     if (!$JsMobileBasic.Mobile) {
+       if (style === undefined) style = 'background: black; color: red;';
+       console.log(`%c ${text}`, style);
+       return true;
+     }
+     alert(style);
+     return true;
+   }
+   return false;
+ }
+
+ function exit() {
+   window.close();
+   return true;
+ }
+
+ function fullScreen(mode) {
+   $Init.NW[0]();
+   if (!$Init.NW[2]) {
+     if (mode) {
+       var tmp = $NW.Window.get();
+       tmp.enterFullscreen();
+     } else {
+       var tmp = $NW.Window.get();
+       tmp.leaveFullscreen();
+     }
+   } else {
+     debug('Работа с процессами невозможна!');
+     return false;
+   }
+ }
+
+// HTML5 функции
+ function addInputForm(id, value, x, y) {
     // var e = document.createElement('input');
     // e.type = 'text';
     // e.setAttribute('id', id);
     // e.value = value;
     // document.getElementsByTagName("body")[0].appendChild(e);
     //     e.style = "position: absolute; left:"+x+"px; top:"+y+"px;";
-    return false;
-}
-function addInputPassForm(id, value, x, y) {
+   return false;
+ }
+
+ function addInputPassForm(id, value, x, y) {
     // var e = document.createElement('input');
     // e.type = 'password';
     // e.setAttribute('id', id);
     // e.value = value;
     // document.getElementsByTagName("body")[0].appendChild(e);
     //     e.style = "position: absolute; left:"+x+"px; top:"+y+"px;";
-    return false;
-}
-function addInputRadioForm(id, value, x, y) {
+   return false;
+ }
+
+ function addInputRadioForm(id, value, x, y) {
     // var e = document.createElement('input');
     // e.type = 'radio';
     // e.setAttribute('id', id);
     // document.getElementsByTagName("body")[0].appendChild(e);
     //     e.style = "position: absolute; left:"+x+"px; top:"+y+"px;";
-    return false;
-}
+   return false;
+ }
 
-function add(code) {
-    var e = document.createElement("div");
-    e.innerHTML = code;
-    document.getElementsByTagName("body")[0].appendChild(e);
-    return true;
-}
-function addElement(name, type) {
-    $Element[name] = document.createElement(type);
-    document.getElementById('includeHTML').appendChild(name)
-    return $Element[name];
-}
+ function add(code) {
+   const e = document.createElement('div');
+   e.innerHTML = code;
+   document.getElementsByTagName('body')[0].appendChild(e);
+   return true;
+ }
 
-//Обработчики событий
-function _eventListeners() {
-    c.addEventListener('mousemove', function (event) {
-        $Mouse.x = event.offsetX;
-        $Mouse.y = event.offsetY;
-        if (typeof (onMouseMove) !== "undefined") onMouseMove(event.pageX, event.pageY, event);
-    }, false);
-    c.addEventListener('click', function (event) {
-        $Mouse.lcount++;
+ function addElement(name, type) {
+   $Element[name] = document.createElement(type);
+   document.getElementById('includeHTML').appendChild(name);
+   return $Element[name];
+ }
+
+// Обработчики событий
+ function _eventListeners() {
+   c.addEventListener('mousemove', (event) => {
+     $Mouse.x = event.offsetX;
+     $Mouse.y = event.offsetY;
+     if (typeof (onMouseMove) !== 'undefined') onMouseMove(event.pageX, event.pageY, event);
+   }, false);
+   c.addEventListener('click', (event) => {
+     $Mouse.lcount++;
         //    onClick(event.offsetX, event.offsetY);
-        if (typeof (onClick) !== "undefined") onClick(event.pageX, event.pageY, event);
+     if (typeof (onClick) !== 'undefined') onClick(event.pageX, event.pageY, event);
         //    if($listener != undefined){
         //        eval($listener.click + '=onClick;');
         //    }
-    }, false);
-    c.addEventListener('mousedown', function (event) {
-        if (typeof (onMouseDown) !== "undefined") onMouseDown(event.pageX, event.pageY, event);
+   }, false);
+   c.addEventListener('mousedown', (event) => {
+     if (typeof (onMouseDown) !== 'undefined') onMouseDown(event.pageX, event.pageY, event);
         //    if($listener != undefined){
         //        eval($listener.mousedown + '=onMouseDown;');
         //    }
-    }, false);
-    c.addEventListener('mouseup', function (event) {
-        if (typeof (onMouseUp) !== "undefined") onMouseUp(event.pageX, event.pageY, event);
+   }, false);
+   c.addEventListener('mouseup', (event) => {
+     if (typeof (onMouseUp) !== 'undefined') onMouseUp(event.pageX, event.pageY, event);
         //    if($listener != undefined){
         //        eval($listener.mouseup + '=onMouseUp;');
         //    }
-    }, false);
-    c.addEventListener('contextmenu', function (event) {
-        $Mouse.rcount++;
-        if (typeof (onRightClick) !== "undefined") onRightClick(event.pageX, event.pageY, event);
+   }, false);
+   c.addEventListener('contextmenu', (event) => {
+     $Mouse.rcount++;
+     if (typeof (onRightClick) !== 'undefined') onRightClick(event.pageX, event.pageY, event);
         //    if($listener != undefined){
         //        eval($listener.rclick + '=onRightClick;');
         //    }
-    }, false);
-    window.addEventListener('keypress', function (event) {
-        if (typeof (onKeyPress) !== "undefined") onKeyPress(event.keyCode, event);
-    }, false);
+   }, false);
+   window.addEventListener('keypress', (event) => {
+     if (typeof (onKeyPress) !== 'undefined') onKeyPress(event.keyCode, event);
+   }, false);
 
-    window.addEventListener('keydown', function (event) {
-        if (typeof (onKeyDown) !== "undefined") onKeyDown(event.keyCode, event);
-    }, false);
+   window.addEventListener('keydown', (event) => {
+     if (typeof (onKeyDown) !== 'undefined') onKeyDown(event.keyCode, event);
+   }, false);
 
-    window.addEventListener('keyup', function (event) {
-        if (typeof (onKeyUp) !== "undefined") onKeyUp(event.keyCode, event);
-    }, false);
-}
+   window.addEventListener('keyup', (event) => {
+     if (typeof (onKeyUp) !== 'undefined') onKeyUp(event.keyCode, event);
+   }, false);
+ }
 
 // ======Прочее======//
-//Блокировка контекстного меню при правом клике
+// Блокировка контекстного меню при правом клике
 
-c.oncontextmenu = function () { return false; }
+ c.oncontextmenu = function () {
+   return false;
+ };
 
-if(!$JsMobileBasic.Mobile) debug('// ======Инициализация завершена======//', 'background:black;color: #00ff00;');
+ if (!$JsMobileBasic.Mobile) debug('// ======Инициализация завершена======//', 'background:black;color: #00ff00;');
 
-onload = function () {
-    _eventListeners();
-    try {
-        Main();
-    } catch (e) {
-        throw new Error("В файле Autorun.bas должен быть хук Main()!");
-    }
-    if (typeof Loop == "function") {
-        if (!window.requestAnimationFrame) {
-            window.requestAnimationFrame = (window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.msRequestAnimationFrame || window.oRequestAnimationFrame || function (fnc) {
-                return window.setTimeout(fnc, 1000 / 60);
-            });
-        }
-        function $Loop() {
-            window.requestAnimationFrame($Loop);
-            try {
-                Loop();
-            } catch (e) {
-                throw new Error("В файле Autorun.bas должен быть хук Loop()!");
-                $Loop = function () { };
-            }
-        }
-        $Loop();
-    }
-}
+ onload = function () {
+   _eventListeners();
+   try {
+     Main();
+   } catch (e) {
+     throw new Error('В файле Autorun.bas должен быть хук Main()!');
+   }
+   if (typeof Loop === 'function') {
+     if (!window.requestAnimationFrame) {
+       window.requestAnimationFrame = (window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.msRequestAnimationFrame || window.oRequestAnimationFrame || function (fnc) {
+         return window.setTimeout(fnc, 1000 / 60);
+       });
+     }
 
-if (!$JsMobileBasic.Mobile) debug('// ======Подключение модулей/библиотек======//', 'color:gray;');
+     function $Loop() {
+       window.requestAnimationFrame($Loop);
+       try {
+         Loop();
+       } catch (e) {
+         throw new Error('В файле Autorun.bas должен быть хук Loop()!');
+         $Loop = function () {};
+       }
+     }
+     $Loop();
+   }
+ };
+
+ if (!$JsMobileBasic.Mobile) debug('// ======Подключение модулей/библиотек======//', 'color:gray;');
