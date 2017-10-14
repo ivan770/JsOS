@@ -35,13 +35,6 @@ if (bgaAvailable()) {
         writeBgaRegister(constants.VBE_DISPI_INDEX_BPP, bitDepth);
         writeBgaRegister(constants.VBE_DISPI_INDEX_ENABLE, constants.VBE_DISPI_ENABLED | constants.VBE_DISPI_LFB_ENABLED);
       };
-      renderer.ongetgraphicsstate = () => {
-        return {
-          width: readBgaRegister(constants.VBE_DISPI_INDEX_XRES),
-          height: readBgaRegister(constants.VBE_DISPI_INDEX_YRES),
-          bpp: readBgaRegister(constants.VBE_DISPI_INDEX_BPP),
-        };
-      }
       renderer.ongetbuffer = () => buf;
       renderer.constants = constants;
       runtime.graphics.addRenderer(renderer);
