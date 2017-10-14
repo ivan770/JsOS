@@ -21,18 +21,20 @@ set(CMAKE_SYSTEM Generic)
 set(CMAKE_SHARED_LIBRARY_LINK_C_FLAGS "")
 set(CMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS "")
 
-set(CMAKE_CXX_COMPILER /home/usernameak/opt/cross/bin/x86_64-elf-g++)
-set(CMAKE_C_COMPILER /home/usernameak/opt/cross/bin/x86_64-elf-gcc)
-set(CMAKE_AR /home/usernameak/opt/cross/bin/x86_64-elf-gcc-ar)
-set(CMAKE_RANLIB /home/usernameak/opt/cross/bin/x86_64-elf-gcc-ranlib)
-set(CMAKE_OBJCOPY /home/usernameak/opt/cross/bin/x86_64-elf-objcopy)
+find_program(CXX_COMPILER x86_64-elf-g++)
+find_program(C_COMPILER x86_64-elf-gcc)
+find_program(AR x86_64-elf-gcc-ar)
+find_program(RANLIB x86_64-elf-gcc-ranlib)
+find_program(OBJCOPY x86_64-elf-objcopy)
+
+set(CMAKE_CXX_COMPILER ${CXX_COMPILER})
+set(CMAKE_C_COMPILER ${C_COMPILER})
+set(CMAKE_AR ${AR}})
+set(CMAKE_RANLIB ${RANLIB})
+set(CMAKE_OBJCOPY ${OBJCOPY}) # FIXME: ёбаный костыль
 
 set(CMAKE_MODULE_PATH ${CMAKE_ROOT}/Modules ${CMAKE_SOURCE_DIR}/cmake)
 
-#set(CMAKE_FASM_COMPILER /usr/bin/fasm)
-#set(CMAKE_FASM_COMPILER_ENV_VAR FASMPATH)
-#set(CMAKE_FASM_SOURCE_FILE_EXTENSIONS .asm)
-#SET(CMAKE_FASM_COMPILE_OBJECT "<CMAKE_ASM_COMPILER> <FLAGS> <SOURCE> <OBJECT>")
 enable_language(ASM_FASM)
 
 enable_language(ASM_GCC)
@@ -43,18 +45,15 @@ set(CXX_FLAGS " -nostdinc++ -std=c++11 -O3 -U__STRICT_ANSI__ -DENABLE_DEBUGGER_S
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${COMMON_FLAGS} -O2 -c -std=c99 -D_XOPEN_SOURCE=700 -DSODIUM_STATIC")
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${COMMON_FLAGS} ${CXX_FLAGS}")
-message(${CMAKE_CXX_FLAGS})
 
 set(CMAKE_EXE_LINKER_FLAGS " -mno-red-zone -nostdlib -nodefaultlibs -T ${CMAKE_SOURCE_DIR}/etc/kernel.ld")
 
-add_subdirectory(deps)
-
-add_library(libgcc STATIC IMPORTED) # or STATIC instead of SHARED
-set_target_properties(libgcc PROPERTIES
-  IMPORTED_LOCATION "/home/usernameak/opt/cross/lib/gcc/x86_64-elf/7.2.0/no-red-zone/libgcc.a"
+add_custom_target(
+    genversion
+    COMMAND node ${CMAKE_SOURCE_DIR}/scripts/update-versions.js
 )
 
-#add_library(startup OBJECT src/startup.cc)
+add_subdirectory(deps)
 
 add_executable(kernel
                 src/startup.cc
@@ -131,7 +130,11 @@ target_link_libraries(kernel
                 sodium
                 json11
                 musl
-                libgcc)
+                gcc)
+
+add_dependencies(kernel genversion)
+
+add_custom_command(TARGET kernel POST_BUILD COMMAND ${CMAKE_OBJCOPY} -O binary --strip-all --set-section-flags '.bss'=alloc,load,contents,data $<TARGET_FILE:kernel> ${CMAKE_BINARY_DIR}/runtime.img)
 
 #set(CMAKE_ASM_FASM_COMPILER fasm)
 #enable_language(ASM_FASM)
