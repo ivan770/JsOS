@@ -19,10 +19,12 @@ const $JsMobileBasic = {
   url: 'http://vk.com/JsMobileBasic',
   // Mobile: $Config.Mobile,
   Debug: true,
+  background: 'black',
   // canvas: document.getElementById('c'),
   // graphic: false
 };
 
+// #region Init
 // var $Init = {
 //     _Support: function () {
 //         if ($JsMobileBasic.Mobile) {
@@ -179,7 +181,7 @@ if (!$JsMobileBasic.Mobile) debug('// ======Initializeng interpreter======//', '
 // };
 
 // Константы
-
+// #endregion Init
 const PI = Math.PI;
 const G = 9.8;
 const RAD2DEG = 180 / PI;
@@ -437,7 +439,7 @@ const JsMB = {
     }
     if ($Player[channel] === undefined) {
       const p = document.createElement('audio');
-      p.id = `player${  channel}`;
+      p.id = `player${channel}`;
       document.getElementById('audio').appendChild(p);
       $Player[channel] = document.getElementById(`player${channel}`);
     }
@@ -854,6 +856,8 @@ const JsMB = {
 
 };
 
+//#region Listeners
+
 // Обработчики событий
 // function _eventListeners() {
 //   c.addEventListener('mousemove', (event) => {
@@ -932,6 +936,8 @@ if (!$JsMobileBasic.Mobile) debug('// ======Initialized successful======//', 'ba
 //     $Loop();
 //   }
 // };
+
+//#endregion Listeners
 
 if (!$JsMobileBasic.Mobile) debug('// ======Including modules/libraries======//', 'color:gray;');
 
