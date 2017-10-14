@@ -202,7 +202,7 @@ const RAD2DEG = 180 / PI;
 const DEG2RAD = PI / 180;
 
 const JsMB = {
-  setColor(color) { // TODO:
+  setColor(color) {
     // color="black"="rgb(0,0,0)"="rgba(0,0,0,1)"
     // [r,g,b]
     $TMP.color = color;
@@ -216,10 +216,11 @@ const JsMB = {
     ctx.fillRect(x, y, x1, y1);
     return true;
   },
-  cls() { // TODO:
+  cls() {
     for (let x = 0; x < this.screenWidth(); x++) {
       for (let y = 0; y < this.screenHeight(); y++) {
         graphics.setPixel(x, y, ...$JsMobileBasic.background);
+        graphics.flush();
       }
     }
     graphics.flush();
@@ -228,31 +229,28 @@ const JsMB = {
     return true;
   },
   fillScreen(color) {
-    // ctx.save();
-    // setColor(color);
-    // fillRect(0, 0, this.screenWidth(), screenHeight());
-    // ctx.restore();
     for (let x = 0; x < this.screenWidth(); x++) {
       for (let y = 0; y < this.screenHeight(); y++) {
         graphics.setPixel(x, y, ...color);
+        graphics.flush();
       }
     }
     graphics.flush();
     return true;
   },
-  drawRect(x, y, x1, y1) {
-    ctx.strokeRect(x, y, x1, y1);
+  drawRect(x, y, w, h) {
+    ctx.strokeRect(x, y, w, h);
     return true;
   },
   drawPlot(x, y) {
     ctx.save();
-    setLineWidth(1);
-    drawLine(x, y, x + 1, y + 1);
+    this.setLineWidth(1);
+    this.drawLine(x, y, x + 1, y + 1);
     ctx.restore();
     return true;
   },
-  clearRect(x, y, x1, y1) {
-    ctx.clearRect(x, y, x1, y1);
+  clearRect(x, y, w, h) {
+    ctx.clearRect(x, y, w, h);
     return true;
   },
   drawLine(x, y, x1, y1) {
@@ -392,7 +390,7 @@ const JsMB = {
     return [red, green, blue];
   },
   rgba(red = 0, green = 0, blue = 0, alpha = 0) {
-    return `rgba(${red},${green},${blue},${alpha})`;
+    return [red, green, blue, alpha];
   },
   rad(deg) {
     if (deg == 90) {
@@ -560,7 +558,7 @@ const JsMB = {
     return num.toString;
   },
   val(str) {
-    return parseInt(str);
+    return Number(str);
   },
   upper(str) {
     return str.toUpperCase();
