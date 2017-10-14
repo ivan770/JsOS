@@ -25,6 +25,14 @@ const $JsMobileBasic = {
   // graphic: false
 };
 
+const $Config = {
+  type: 'graphic', // graphic/console/api
+  canvas_size: ['*', '*', false], // [x,y,вместить]
+  Debug_Mode: true,
+  name: "Интерпретатор MobileBasic'a",
+  fullscreen: false,
+};
+
 const $TMP = {
   color: [],
   bgcolor: [],
@@ -219,10 +227,15 @@ const JsMB = {
     return true;
   },
   fillScreen(color) {
-    ctx.save();
-    setColor(color);
-    fillRect(0, 0, this.screenWidth(), screenHeight());
-    ctx.restore();
+    // ctx.save();
+    // setColor(color);
+    // fillRect(0, 0, this.screenWidth(), screenHeight());
+    // ctx.restore();
+    for (let x = 0; x < this.screenWidth(); x++) {
+      for (let y = 0; y < this.screenHeight(); y++) {
+        graphics.setPixel(x, y, ...color);
+      }
+    }
     return true;
   },
   drawRect(x, y, x1, y1) {
@@ -571,7 +584,7 @@ const JsMB = {
   float(str) {
     return parseFloat(str);
   },
-  int: val,
+  int: this.val,
   // Files
   saveData(filename, data, callback) {
     $Init.File[0]();
