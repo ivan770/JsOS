@@ -57,10 +57,9 @@ add_subdirectory(deps)
 
 add_executable(kernel
                 src/startup.cc
+                src/main.cc
                 src/icxxabi.cc
                 src/libc_calls.cc
-                src/ap_startup.asm
-                src/main.cc
                 src/kernel/thread.cc
                 src/kernel/fileio.cc
                 src/kernel/mem-manager.cc
@@ -94,13 +93,14 @@ add_executable(kernel
                 src/kernel/x64/irqs-x64.cc
                 src/kernel/x64/address-space-x64.cc
                 src/kernel/x64/cpu-trampoline-x64.cc
-                src/kernel/x64/irq-vectors-x64.asm
                 src/kernel/x64/cpu-x64.cc
                 src/kernel/x64/hpet-x64.cc
                 src/kernel/x64/acpi-x64.cc
                 src/kernel/x64/ioapic-x64.cc
                 src/kernel/v8utils.cc
                 src/startup.asm
+                src/ap_startup.asm
+                src/kernel/x64/irq-vectors-x64.asm
 )
 
 target_include_directories(kernel PRIVATE

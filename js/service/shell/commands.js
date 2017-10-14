@@ -160,20 +160,30 @@ const cmds = {
       f.stdio.writeError('Use "play" or "stop"!');
       return res(1);
     },
-    listparts: {
-      description: 'List HDD partitions',
-      usage: 'listparts',
-      run(args, f, res) {
-        const buf = $$.ata.read(0, 1).slice(0x1BE, 64);
-        for (let i = 0; i < 4; i++) {
-          if (buf[i * 16]) {
-            f.stdio.writeLine(`Partition ${i} exists on drive`);
-          } else {
-            f.stdio.writeLine(`Partition ${i} doesn't exist on drive`);
-          }
+  },
+  listparts: {
+    description: 'List HDD partitions',
+    usage: 'listparts',
+    run(args, f, res) {
+      const buf = $$.ata.read(0, 1).slice(0x1BE, 64);
+      for (let i = 0; i < 4; i++) {
+        if (buf[i * 16]) {
+          f.stdio.writeLine(`Partition ${i} exists on drive`);
+        } else {
+          f.stdio.writeLine(`Partition ${i} doesn't exist on drive`);
         }
-        return res(0);
-      },
+      }
+      return res(0);
+    },
+  },
+  meminfo: {
+    description: 'Information about RAM',
+    usage: 'meminfo',
+    run(args, f, res) {
+      const info = __SYSCALL.memoryInfo();
+      f.stdio.writeLine(`MEM:  ${+((info.pmUsed / 1024 / 1024).toFixed(2))}M / ${+((info.pmTotal / 1024 / 1024).toFixed(2))}M`);
+      f.stdio.writeLine(`HEAP: ${+((info.heapUsed / 1024 / 1024).toFixed(2))}M / ${+((info.heapTotal / 1024 / 1024).toFixed(2))}M`);
+      return res(0);
     },
   },
 };
