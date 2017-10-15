@@ -163,17 +163,32 @@ const cmds = {
   },
   listparts: {
     description: 'List HDD partitions',
-    usage: 'listparts',
+    usage: 'listparts <device>',
     run(args, f, res) {
-      const buf = $$.ata.read(0, 1).slice(0x1BE, 64);
-      for (let i = 0; i < 4; i++) {
-        if (buf[i * 16]) {
-          f.stdio.writeLine(`Partition ${i} exists on drive`);
-        } else {
-          f.stdio.writeLine(`Partition ${i} doesn't exist on drive`);
+      $$.block.devices[args].read(0, new Buffer(512)).then(buf => {
+        let firstsec;
+        for (let i = 0; i < 4; i++) {
+          console.log(buf[(i * 16) + 4]);
+          if (buf[(i * 16) + 4]) {
+            f.stdio.writeLine(`[${i}]:`);
+            f.stdio.writeLine(`  type: 0x${buf[(i * 16) + 4].toString(16)}`);
+            f.stdio.writeLine(`  size: ${buf.readUInt32LE((i * 16) + 0xC) / 1024 / 1024 * 512}M`);
+
+            firstsec = buf.readUInt32LE((i * 16) + 0x8);
+          }
         }
-      }
-      return res(0);
+        res(0);
+        return $$.block.devices[args].read(firstsec, buf);
+      }).then(fsbuf => {
+        f.stdio.writeLine('  assumming that FS is FAT, header:');
+        f.stdio.writeLine(`    created with: ${fsbuf.toString('utf8', 3, 11)}`);
+        f.stdio.writeLine(`    bytes per sector: ${fsbuf.readUInt16LE(11)}`);
+        f.stdio.writeLine(`    sectors per cluster: ${fsbuf[13]}`);
+        f.stdio.writeLine(`    ${fsbuf.readUInt16LE(14)} sectors reserved`);
+      }).catch((err) => {
+        f.stdio.writeError(err);
+        return res(1);
+      });
     },
   },
   meminfo: {
