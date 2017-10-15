@@ -2,8 +2,6 @@
 
 /* global $$ */
 
-const $$ = require('../../core');
-
 const driverUtils = require('../../core/driver-utils');
 
 class ATA {
