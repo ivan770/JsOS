@@ -31,7 +31,7 @@ set(CMAKE_CXX_COMPILER ${CXX_COMPILER})
 set(CMAKE_C_COMPILER ${C_COMPILER})
 set(CMAKE_AR ${AR}})
 set(CMAKE_RANLIB ${RANLIB})
-set(CMAKE_OBJCOPY ${OBJCOPY}) # FIXME: ёбаный костыль
+set(CMAKE_OBJCOPY ${OBJCOPY})
 
 set(CMAKE_MODULE_PATH ${CMAKE_ROOT}/Modules ${CMAKE_SOURCE_DIR}/cmake)
 
@@ -46,7 +46,7 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${COMMON_FLAGS} -O2 -c -std=c99 -D_XOPEN_SOU
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${COMMON_FLAGS} ${CXX_FLAGS}")
 
-set(CMAKE_EXE_LINKER_FLAGS " -mno-red-zone -nostdlib -nodefaultlibs -T ${CMAKE_SOURCE_DIR}/etc/kernel.ld")
+set(CMAKE_EXE_LINKER_FLAGS " -mno-red-zone -nostdlib -nodefaultlibs -T ${CMAKE_SOURCE_DIR}/etc/kernel.ld -Wl,-Map,${CMAKE_SOURCE_DIR}/etc/kernel.map")
 
 add_custom_target(
     genversion
@@ -57,10 +57,9 @@ add_subdirectory(deps)
 
 add_executable(kernel
                 src/startup.cc
+                src/main.cc
                 src/icxxabi.cc
                 src/libc_calls.cc
-                src/ap_startup.asm
-                src/main.cc
                 src/kernel/thread.cc
                 src/kernel/fileio.cc
                 src/kernel/mem-manager.cc
@@ -94,13 +93,14 @@ add_executable(kernel
                 src/kernel/x64/irqs-x64.cc
                 src/kernel/x64/address-space-x64.cc
                 src/kernel/x64/cpu-trampoline-x64.cc
-                src/kernel/x64/irq-vectors-x64.asm
                 src/kernel/x64/cpu-x64.cc
                 src/kernel/x64/hpet-x64.cc
                 src/kernel/x64/acpi-x64.cc
                 src/kernel/x64/ioapic-x64.cc
                 src/kernel/v8utils.cc
                 src/startup.asm
+                src/ap_startup.asm
+                src/kernel/x64/irq-vectors-x64.asm
 )
 
 target_include_directories(kernel PRIVATE

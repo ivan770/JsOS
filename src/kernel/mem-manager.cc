@@ -102,6 +102,47 @@ void MallocAllocator::InitOnce() {
   RT_ASSERT(nullptr != default_mspace_);
 }
 
+PhysicalAllocator::PhysicalAllocator() :
+    stack_32_(kStackStartAddress, 1 * Constants::MiB),
+    stack_64_(kStackStartAddress + Constants::MiB, 1 * Constants::MiB),
+    pages_status_(reinterpret_cast<bool*>(kPagesStatusStartAddress)),
+    available_phys_memory_(0),
+    used_phys_memory_(0) {
+
+    memset(reinterpret_cast<void*>(kPagesStatusStartAddress), 1, kPagesStatusSize);
+    MultibootMemoryMapEnumerator mmap = GLOBAL_multiboot()->memory_map();
+
+    do {
+      MemoryZone zone = mmap.NextAvailableMemory();
+      if (zone.empty()) {
+        break;
+      }
+      uintptr_t start = reinterpret_cast<uintptr_t>(Utils
+                        ::AlignPtr<void>(zone.ptr(), chunk_size()));
+
+      uintptr_t end = reinterpret_cast<uintptr_t>(
+                        PageAligned(reinterpret_cast<uint8_t*>(zone.ptr()) + zone.size()));
+
+      if (start < kAllocStartAddress) {
+        start = kAllocStartAddress;
+      }
+
+      if (start >= end) {
+        continue;
+      }
+
+      _insert_pages_range(reinterpret_cast<uintptr_t>(start), reinterpret_cast<uintptr_t>(end));
+    } while (true);
+
+    printf("System memory: %d MiB.\n", available_phys_memory_ / 1024 / 1024);
+
+    if (available_phys_memory_ < 94 * Constants::MiB) {
+      printf("System requires at least 128 MiB or memory.\n");
+      abort();
+    }
+  }
+
+
 
 } // namespace rt
 
