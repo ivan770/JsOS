@@ -158,27 +158,27 @@ exports.draw = (drawbuf) => {
         const bg = (colorByte >> 4) & 0xF;
         const fg = colorByte & 0xF;
         const charCode = drawbuf.b[offset];
-        //debug(prevState[offset]);
-        //debug(charCode);
-        //if(prevState[offset] != charCode && prevState[offset + 1] != colorByte) {
-          for (let fy = 0; fy < fh; fy++) {
-            const row = font[charCode * fh + fy];
-            for (let fx = 0; fx < fw; fx++) {
-              const state = (row >> (7 - fx)) & 1;
-              const px = x * fw + fx;
-              const py = y * fh + fy;
-              // const dboffset = ((y * w * fh + fy) + x * fw * fx) * 3;
-              const dboffset = (px + py * w * fw) * 3;
-              dbuf[dboffset + 2] = (state ? colorScheme[fg] : colorScheme[bg])[0];// * 255;
-              dbuf[dboffset + 1] = (state ? colorScheme[fg] : colorScheme[bg])[1];// * 255;
-              dbuf[dboffset] = (state ? colorScheme[fg] : colorScheme[bg])[2];// * 255;
-            }
+        // debug(prevState[offset]);
+        // debug(charCode);
+        // if(prevState[offset] != charCode && prevState[offset + 1] != colorByte) {
+        for (let fy = 0; fy < fh; fy++) {
+          const row = font[(charCode * fh) + fy];
+          for (let fx = 0; fx < fw; fx++) {
+            const state = (row >> (7 - fx)) & 1;
+            const px = (x * fw) + fx;
+            const py = (y * fh) + fy;
+            // const dboffset = ((y * w * fh + fy) + x * fw * fx) * 3;
+            const dboffset = (px + (py * w * fw)) * 3;
+            dbuf[dboffset + 2] = (state ? colorScheme[fg] : colorScheme[bg])[0];// * 255;
+            dbuf[dboffset + 1] = (state ? colorScheme[fg] : colorScheme[bg])[1];// * 255;
+            dbuf[dboffset] = (state ? colorScheme[fg] : colorScheme[bg])[2];// * 255;
           }
-        //}
+        }
+        // }
       }
     }
     prevState.set(drawbuf.b);
-    //$$.graphics.flush();
+    // $$.graphics.flush();
   }
 };
 

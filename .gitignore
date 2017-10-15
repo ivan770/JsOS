@@ -39,3 +39,4 @@ npm-debug.log
 /cmake-build
 build.iso
 .initrd
+etc/kernel.map
