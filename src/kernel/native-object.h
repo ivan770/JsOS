@@ -77,6 +77,9 @@ public:
   DECLARE_NATIVE(AcpiSystemReset);     // Reset system using ACPI
   DECLARE_NATIVE(AcpiEnterSleepState); // Call ACPI to enter system into sleep state
 
+  // JsOS syscalls: VESA
+  DECLARE_NATIVE(VesaGetCInfo);        // Get controller info
+
   void ObjectInit(ExportBuilder obj) {}
   JsObjectWrapperBase* Clone() const {
     return nullptr; // Not clonable

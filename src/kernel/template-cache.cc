@@ -122,6 +122,9 @@ v8::Local<v8::Context> TemplateCache::NewContext() {
     SET_SYSCALL("acpiSystemReset", NativesObject::AcpiSystemReset);
     SET_SYSCALL("acpiEnterSleepState", NativesObject::AcpiEnterSleepState);
 
+    // VESA
+    SET_SYSCALL("vesaGetCInfo", NativesObject::VesaGetCInfo);
+
 #undef SET_SYSCALL
     global->Set(iv8_, "__SYSCALL", syscall);
 

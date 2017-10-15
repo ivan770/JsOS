@@ -141,9 +141,9 @@ function testInstance(obj) {
 
 exports.draw = (drawbuf) => {
   testInstance(drawbuf);
-  if (!global.$$ || !global.$$.graphics || !global.$$.graphics.graphicsAvailable()) {
+  //if (!global.$$ || !global.$$.graphics || !global.$$.graphics.graphicsAvailable()) {
     vgaOld.draw(drawbuf);
-  } else {
+  /*} else {
     if (!graphicsEnabled) {
       $$.graphics.enableGraphics(640, 400, 24);
     }
@@ -171,6 +171,7 @@ exports.draw = (drawbuf) => {
       }
     }
   }
+  */
 };
 
 exports.allocBuffer = () => new VGABuffer();
