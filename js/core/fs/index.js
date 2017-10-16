@@ -2,16 +2,18 @@
 
 class Filesystem {
   getFileList() {
-    debug(this.partition.address + this.sectorsReserved);
-    debug(JSON.stringify(this.partition.device));
     return this.partition.device.read(this.partition.address + this.sectorsReserved + (this.numberOfFats * this.sectorsPerFat), Buffer.allocUnsafe(512)).then(buf => {
-      // debug(buf.toString('utf8', 0, 11));
       const list = [];
       for (let i = 0; i < 512; i += 32) {
         if (buf[i] == 0) break;
-        const name = buf.toString('utf8', i, i + 8);
-        const extension = buf.toString('utf8', i + 8, i + 11);
-        const filename = `${name.trim()}.${extension.trim()}`;
+        const name = buf.toString('utf8', i, i + 8).trim();
+        const extension = buf.toString('utf8', i + 8, i + 11).trim();
+        let filename;
+        if (extension) {
+          filename = `${name}.${extension}`;
+        } else {
+          filename = name;
+        }
         list.push(filename);
       }
       return new Promise(resolve => {
@@ -30,11 +32,8 @@ class Partition {
       fs.bytesPerSector = buf.readUInt16LE(11);
       fs.sectorsPerCluster = buf[13];
       fs.numberOfFats = buf[16];
-      debug(fs.numberOfFats);
       fs.sectorsReserved = buf.readUInt16LE(14);
-      debug(fs.sectorsReserved);
       fs.sectorsPerFat = buf.readUInt16LE(22);
-      debug(fs.sectorsPerFat);
       resolve(fs);
     }));
   }
