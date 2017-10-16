@@ -1,183 +1,138 @@
-var parse = (function () {
-    var input;
-    var output;
-    var data;
-    var ptr;
-    var debug = false;
-  
-    var ops = {
+// Brainfuck interpreter for JsOS
+// Original: https://github.com/skilldrick/brainfuck-js
+// Ported by PROPHESSOR
+
+'use strict';
+
+class Brainfuck {
+  constructor(code, input) {
+    const self = this;
+    this._input = 0;
+    this._output = 0;
+    this._data = 0;
+    this._ptr = 0;
+    this.debug = console.log; // ()=>{};
+    this._programChars = '';
+
+    this.ops = {
       '+': function () {
-        data[ptr] = data[ptr] || 0;
-        data[ptr]++;
-        debug && console.log('+', data[ptr], ptr);
+        self._data[self._ptr] = self._data[self._ptr] || 0;
+        self._data[self._ptr]++;
+        debug('+', self._data[self._ptr], self._ptr);
       },
-  
+
       '-': function () {
-        data[ptr] = data[ptr] || 0;
-        data[ptr]--;
-        debug && console.log('-', data[ptr], ptr);
+        self._data[self._ptr] = self._data[self._ptr] || 0;
+        self._data[self._ptr]--;
+        debug('-', self._data[self._ptr], self._ptr);
       },
-  
+
       '<': function () {
-        ptr--;
-        if (ptr < 0) {
-          ptr = 0; //Don't allow pointer to leave data array
+        self._ptr--;
+        if (self._ptr < 0) {
+          self._ptr = 0; // Don't allow pointer to leave data array
         }
-        debug && console.log('<', ptr);
+        debug('<', self._ptr);
       },
-  
+
       '>': function () {
-        ptr++;
-        debug && console.log('>', ptr);
+        self._ptr++;
+        debug('>', self._ptr);
       },
-  
+
       '.': function () {
-        var c = String.fromCharCode(data[ptr]);
-        output.push(c);
-        debug && console.log('.', c, data[ptr]);
+        const c = String.fromCharCode(self._data[self._ptr]);
+        self._output.push(c);
+        debug('.', c, self._data[self._ptr]);
       },
-  
+
       ',': function () {
-        var c = input.shift();
-        if (typeof c == "string") {
-          data[ptr] = c.charCodeAt(0);
+        const c = self._input.shift();
+        if (typeof c === 'string') {
+          self._data[self._ptr] = c.charCodeAt(0);
         }
-        debug && console.log(',', c, data[ptr]);
+        debug(',', c, self._data[self._ptr]);
       },
     };
-  
-    function program(nodes) {
-      return function (inputString) {
-        output = [];
-        data = [];
-        ptr = 0;
-  
-        input = inputString && inputString.split('') || [];
-  
-        nodes.forEach(function (node) {
+
+    this.parse(code)(input);
+  }
+
+  parse(str) {
+    this._programChars = str.split('');
+    return this.parseProgram();
+  }
+
+  parseProgram() {
+    const nodes = [];
+    let nextChar;
+
+    while (this._programChars.length > 0) {
+      nextChar = this._programChars.shift();
+      if (this.ops[nextChar]) {
+        nodes.push(this.ops[nextChar]);
+      } else if (nextChar === '[') {
+        nodes.push(this.parseLoop());
+      } else if (nextChar === ']') {
+        throw new Error('Missing opening bracket');
+      }
+    }
+
+    return this.program(nodes);
+  }
+
+  program(nodes) {
+    return function (inputString) {
+      this._output = [];
+      this._data = [];
+      this._ptr = 0;
+
+      this.input = inputString ? inputString.split('') : [];
+
+      nodes.forEach((node) => {
+        node();
+      });
+
+      return this._output.join('');
+    };
+  }
+
+
+  loop(nodes) {
+    return function () {
+      let loopCounter = 0;
+
+      while (this._data[this._ptr] > 0) {
+        if (loopCounter++ > 10000) {
+          throw new Error('Infinite loop detected');
+        }
+
+        nodes.forEach((node) => {
           node();
         });
-  
-        return output.join('');
       }
-    }
-  
-    function loop(nodes) {
-      return function () {
-        var loopCounter = 0;
-  
-        while(data[ptr] > 0) {
-          if (loopCounter++ > 10000) { throw "Infinite loop detected"; }
-  
-          nodes.forEach(function (node) {
-            node();
-          });
-        }
-      };
-    }
-  
-  
-  
-    var programChars;
-  
-    function parseProgram() {
-      var nodes = [];
-      var nextChar;
-  
-      while (programChars.length > 0) {
-        nextChar = programChars.shift();
-        if (ops[nextChar]) {
-          nodes.push(ops[nextChar]);
-        } else if (nextChar == '[') {
-          nodes.push(parseLoop());
-        } else if (nextChar == ']') {
-          throw "Missing opening bracket";
-        } else {
-          // ignore it
-        }
-      }
-  
-      return program(nodes);
-    }
-  
-    function parseLoop() {
-      var nodes = [];
-      var nextChar;
-  
-      while (programChars[0] != ']') {
-        nextChar = programChars.shift();
-        if (nextChar == undefined) {
-          throw "Missing closing bracket";
-        } else if (ops[nextChar]) {
-          nodes.push(ops[nextChar]);
-        } else if (nextChar == '[') {
-          nodes.push(parseLoop());
-        } else {
-          // ignore it
-        }
-      }
-      programChars.shift(); //discard ']'
-  
-      return loop(nodes);
-    }
-  
-    function parse(str) {
-      programChars = str.split('');
-      return parseProgram();
-    }
-  
-    return parse;
-  })();
-  
-  
-  function run(code, input) {
-    return parse(code)(input);
+    };
   }
-  
-  
-  $(document).ready(function () {
-    function makeUrl() {
-      var code = $('#code').val() || '';
-      var input = $('#input').val() || '';
-      var url = 'http://skilldrick.co.uk/brainfuck/';
-      url += '?code=' + code;
-      url += '&input=' + encodeURIComponent(input);
-      $('#url').attr('href', url);
-    }
-  
-    var queryString = window.location.search.substring(1);
-    var paramsArray = queryString.split('&');
-    var params = {};
-    for (var i = 0; i < paramsArray.length; i++) {
-      var param = paramsArray[i].split('=');
-      params[param[0]] = decodeURI(param[1]);
-    }
-  
-    $('#code').val(params.code);
-    $('#input').val(params.input);
-    makeUrl();
-  
-  
-    $('#code, #input').change(function () {
-      makeUrl();
-    });
-  
-    $('form').submit(function (e) {
-      e.preventDefault();
-      var code = $('#code').val();
-      var input = $('#input').val();
-      var output;
-      try {
-        output = run(code, input);
+
+  parseLoop() {
+    const nodes = [];
+    let nextChar;
+
+    while (this._programChars[0] != ']') {
+      nextChar = this._programChars.shift();
+      if (typeof nextChar === 'undefined') {
+        throw new Error('Missing closing bracket');
+      } else if (this.ops[nextChar]) {
+        nodes.push(this.ops[nextChar]);
+      } else if (nextChar === '[') {
+        nodes.push(this.parseLoop());
       }
-      catch (e) {
-        output = e;
-      }
-      $('#output').text(output);
-    });
-  });
-  
-  var output = run('++++++++++[>+++++++>++++++++++>+++>+<<<<-]>++.>+.+++++++..+++.>++.<<+++++++++++++++.>.+++.------.--------.>+.>.');
-  console.log(output);
-  output = run(',[.-]', 'Z');
-  console.log(output);
+    }
+    this._programChars.shift(); // discard ']'
+
+    return this.loop(nodes);
+  }
+
+}
+
+module.exports = Brainfuck;

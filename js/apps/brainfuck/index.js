@@ -15,3 +15,6 @@ function main(api, res) {
 exports.call = (cmd, args, api, res) => main(api, res);
 
 exports.commands = ['example'];
+
+// demo: ++++++++++[>+++++++>++++++++++>+++>+<<<<-]>++.>+.+++++++..+++.>++.<<+++++++++++++++.>.+++.------.--------.>+.>.
+// demo2: ',[.-]', 'Z'
