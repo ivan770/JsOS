@@ -164,9 +164,18 @@ const cmds = {
   listparts: {
     description: 'List HDD partitions',
     usage: 'listparts <device>',
-    run(args, f, res) {
-      $$.block.devices[args].read(0, new Buffer(512)).then(buf => {
+    run(_args, f, res) {
+      // debug(JSON.stringify($$.block.devices));
+      const args = _args.trim();
+      let iface;
+      for (const device of $$.block.devices) {
+        if (device.name === args) iface = device;
+      }
+      if (!iface) return res(1);
+
+      iface.read(0, Buffer.allocUnsafe(512)).then(_buf => {
         let firstsec;
+        const buf = _buf.slice(0x1BE, 0x1BE + 64);
         for (let i = 0; i < 4; i++) {
           console.log(buf[(i * 16) + 4]);
           if (buf[(i * 16) + 4]) {
@@ -177,18 +186,39 @@ const cmds = {
             firstsec = buf.readUInt32LE((i * 16) + 0x8);
           }
         }
-        res(0);
-        return $$.block.devices[args].read(firstsec, buf);
+        console.log(firstsec);
+        return iface.read(firstsec, buf);
       }).then(fsbuf => {
         f.stdio.writeLine('  assumming that FS is FAT, header:');
         f.stdio.writeLine(`    created with: ${fsbuf.toString('utf8', 3, 11)}`);
         f.stdio.writeLine(`    bytes per sector: ${fsbuf.readUInt16LE(11)}`);
         f.stdio.writeLine(`    sectors per cluster: ${fsbuf[13]}`);
         f.stdio.writeLine(`    ${fsbuf.readUInt16LE(14)} sectors reserved`);
+        f.stdio.writeLine(`    ${fsbuf.readUInt16LE(22)} sectors per FAT`);
+        f.stdio.writeLine(`    ${fsbuf.toString('utf8', 54, 62)}`);
+        f.stdio.writeLine(`    rootdir cluster: ${fsbuf.readUInt16LE(512)}`);
+        res(0);
       }).catch((err) => {
         f.stdio.writeError(err);
-        return res(1);
+        res(1);
       });
+    },
+  },
+  ls: {
+    description: 'List files in directory',
+    usage: 'ls /<drive>/<partition>',
+    run(_args, f, res) {
+      const args = _args.trim().split('/').slice(1);
+      const fs = require('../../core/fs');
+      const device = fs.getDeviceByName(args[0]);
+      const partition = +(args[1][1]);
+      fs.getPartitions(device).then((parts) => parts[partition].getFilesystem())
+        .then(filesystem => {
+          return filesystem.getFileList();
+        }).then(fileList => {
+          for (const name of fileList) f.stdio.writeLine(name);
+          res(0);
+        });
     },
   },
   meminfo: {
