@@ -207,9 +207,17 @@ const cmds = {
   ls: {
     description: 'List files in directory',
     usage: 'ls /<drive>/<partition>',
-    run(_args, f, res) {
-      const args = _args.trim().split('/').slice(1);
+    run(args, f, res) {
       const fs = require('../../core/fs');
+      fs.readdir(args, 'utf8', (err, list) => {
+        if (err) {
+          f.stdio.writeError(err);
+          return res(1);
+        }
+        for (const name of list) f.stdio.writeLine(name);
+        res(0);
+      });
+      /* const fs = require('../../core/fs');
       const device = fs.getDeviceByName(args[0]);
       const partition = +(args[1][1]);
       fs.getPartitions(device).then((parts) => parts[partition].getFilesystem())
@@ -218,7 +226,7 @@ const cmds = {
         }).then(fileList => {
           for (const name of fileList) f.stdio.writeLine(name);
           res(0);
-        });
+        });*/
     },
   },
   meminfo: {

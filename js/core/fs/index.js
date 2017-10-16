@@ -1,73 +1,60 @@
 'use strict';
 
-class Filesystem {
-  getFileList() {
-    return this.partition.device.read(this.partition.address + this.sectorsReserved + (this.numberOfFats * this.sectorsPerFat), Buffer.allocUnsafe(512)).then(buf => {
-      const list = [];
-      for (let i = 0; i < 512; i += 32) {
-        if (buf[i] == 0) break;
-        const name = buf.toString('utf8', i, i + 8).trim();
-        const extension = buf.toString('utf8', i + 8, i + 11).trim();
-        let filename;
-        if (extension) {
-          filename = `${name}.${extension}`;
-        } else {
-          filename = name;
-        }
-        list.push(filename);
+const llfs = require('./low-level');
+
+function resolvePath(path) {
+  const spl = path.split('/');
+  if (spl[spl.length - 1] === '') spl.pop();
+  if (spl[0]) throw new Error('Path is not absolute');
+  const level = spl.length - 1;
+  if (level >= 1) {
+    const device = llfs.getDeviceByName(spl[1]);
+    if (!device) throw new Error(`No device ${spl[1]}`);
+    spl[1] = device;
+    if (level >= 2) {
+      if (!(/^p\d+$/.test(spl[2]))) {
+        throw new Error(`Invalid partition name ${spl[2]}`);
       }
-      return new Promise(resolve => {
-        resolve(list);
-      });
-    });
-  }
-}
-
-class Partition {
-  getFilesystem() {
-    return this.device.read(this.address, Buffer.allocUnsafe(512)).then((buf) => new Promise((resolve) => {
-      const fs = new Filesystem;
-      fs.partition = this;
-      fs.createdWith = buf.toString('utf8', 3, 11).trim();
-      fs.bytesPerSector = buf.readUInt16LE(11);
-      fs.sectorsPerCluster = buf[13];
-      fs.numberOfFats = buf[16];
-      fs.sectorsReserved = buf.readUInt16LE(14);
-      fs.sectorsPerFat = buf.readUInt16LE(22);
-      resolve(fs);
-    }));
-  }
-}
-
-function getDeviceByName(name) {
-  let iface;
-  for (const device of $$.block.devices) {
-    if (device.name === name) iface = device;
-  }
-  if (!iface) return null;
-  return iface;
-}
-
-function getPartitions(device) {
-  return device.read(0, Buffer.allocUnsafe(512)).then((_buf) => new Promise((resolve) => {
-    const partitions = [];
-    const buf = _buf.slice(0x1BE, 0x1BE + 64);
-    for (let i = 0; i < 4; i++) {
-      const partition = new Partition();
-      const type = buf[(i * 16) + 0x4];
-      if (type) {
-        partition.device = device;
-        partition.type = type;
-        partition.address = buf.readUInt32LE((i * 16) + 0x8);
-        partition.size = buf.readUInt32LE((i * 16) + 0xC);
-        partitions.push(partition);
-      }
+      spl[2] = +(spl[2].slice(1));
     }
-    resolve(partitions);
-  }));
+  }
+  return {
+    level,
+    parts: spl.slice(1),
+  };
 }
 
 module.exports = {
-  getDeviceByName,
-  getPartitions,
+  readdir(path, options, callback) {
+    let resolved;
+    try {
+      resolved = resolvePath(path);
+    } catch (e) {
+      callback(e);
+      return;
+    }
+    if (resolved.level === 0) {
+      callback(null, $$.block.devices.map(device => device.name));
+    } else if (resolved.level >= 1) {
+      llfs.getPartitions(resolved.parts[0]).then(partitions => {
+        if (resolved.level >= 2) {
+          return partitions[resolved.parts[1]].getFilesystem();
+        }
+        callback(null, partitions.map((_, i) => `p${i}`));
+      }).then(filesystem => {
+        if (resolved.level <= 1) return;
+        if (resolved.level >= 3) {
+          callback(new Error('Subdirectories aren\'t supported yet'));
+        }
+        return filesystem.getFileList();
+      })
+      .then(list => {
+        if (resolved.level <= 1) return;
+        callback(null, list);
+      })
+      .catch(err => {
+        callback(err);
+      });
+    }
+  },
 };
