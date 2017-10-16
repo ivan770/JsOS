@@ -5,26 +5,30 @@
 'use strict';
 
 class Brainfuck {
-  constructor(code, input) {
-    const self = this;
-    this._input = 0;
-    this._output = 0;
-    this._data = 0;
-    this._ptr = 0;
-    this.debug = console.log; // ()=>{};
+  constructor() {
+    this._input = [];
+    this._output = [];
+    this._data = [];
+    this._ptr = [];
+    this.debug = () => {};// console.log;
     this._programChars = '';
+    // const self = this;
+    // this.ops =
+  }
 
-    this.ops = {
+  get ops() {
+    const self = this;
+    return {
       '+': function () {
         self._data[self._ptr] = self._data[self._ptr] || 0;
         self._data[self._ptr]++;
-        debug('+', self._data[self._ptr], self._ptr);
+        self.debug('+', self._data[self._ptr], self._ptr);
       },
 
       '-': function () {
         self._data[self._ptr] = self._data[self._ptr] || 0;
         self._data[self._ptr]--;
-        debug('-', self._data[self._ptr], self._ptr);
+        self.debug('-', self._data[self._ptr], self._ptr);
       },
 
       '<': function () {
@@ -32,18 +36,18 @@ class Brainfuck {
         if (self._ptr < 0) {
           self._ptr = 0; // Don't allow pointer to leave data array
         }
-        debug('<', self._ptr);
+        self.debug('<', self._ptr);
       },
 
       '>': function () {
         self._ptr++;
-        debug('>', self._ptr);
+        self.debug('>', self._ptr);
       },
 
       '.': function () {
         const c = String.fromCharCode(self._data[self._ptr]);
         self._output.push(c);
-        debug('.', c, self._data[self._ptr]);
+        self.debug('.', c, self._data[self._ptr]);
       },
 
       ',': function () {
@@ -51,11 +55,9 @@ class Brainfuck {
         if (typeof c === 'string') {
           self._data[self._ptr] = c.charCodeAt(0);
         }
-        debug(',', c, self._data[self._ptr]);
+        self.debug(',', c, self._data[self._ptr]);
       },
     };
-
-    this.parse(code)(input);
   }
 
   parse(str) {
@@ -82,27 +84,29 @@ class Brainfuck {
   }
 
   program(nodes) {
+    const self = this;
     return function (inputString) {
-      this._output = [];
-      this._data = [];
-      this._ptr = 0;
+      self._output = [];
+      self._data = [];
+      self._ptr = 0;
 
-      this.input = inputString ? inputString.split('') : [];
+      self.input = inputString ? inputString.split('') : [];
 
       nodes.forEach((node) => {
         node();
       });
 
-      return this._output.join('');
+      return self._output.join('');
     };
   }
 
 
   loop(nodes) {
+    const self = this;
     return function () {
       let loopCounter = 0;
 
-      while (this._data[this._ptr] > 0) {
+      while (self._data[self._ptr] > 0) {
         if (loopCounter++ > 10000) {
           throw new Error('Infinite loop detected');
         }
