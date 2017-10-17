@@ -15,6 +15,7 @@
 'use strict';
 const typeutils = require('typeutils');
 const { SystemError } = require('./errors');
+const fsmod = require('../core/fs');
 
 function makeErrorNotFound(path, op) {
   return new SystemError(`no such file or directory, ${op} '${path}'`, 'ENOENT');
@@ -106,6 +107,8 @@ exports.readFileSync = (path, opts) => {
 
   return buf;
 };
+
+exports.readdir = fsmod.readdir;
 
 /* eslint no-unused-vars:0 */
 

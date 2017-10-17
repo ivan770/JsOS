@@ -209,12 +209,29 @@ const cmds = {
     usage: 'ls /<drive>/<partition>',
     run(args, f, res) {
       const fs = require('../../core/fs');
-      fs.readdir(args, 'utf8', (err, list) => {
+      const filesize = require('../../utils/filesize');
+      fs.readdir(args, 'utf8', (err, list, efl) => {
         if (err) {
           f.stdio.writeError(err);
           return res(1);
         }
-        for (const name of list) f.stdio.writeLine(name);
+        if (!efl) {
+          for (const name of list) f.stdio.writeLine(`------ ${name}`);
+        } else {
+          for (const file of efl) {
+            let attrString = '';
+            if (file.readonly) attrString += 'R'; else attrString += '-';
+            if (file.hidden) attrString += 'H'; else attrString += '-';
+            if (file.system) attrString += 'S'; else attrString += '-';
+            if (file.label) attrString += 'L'; else attrString += '-';
+            if (file.directory) attrString += 'D'; else attrString += '-';
+            if (file.archive) attrString += 'A'; else attrString += '-';
+            f.stdio.writeLine(`${attrString} ${filesize(file.size, { fixed: 0 }).human('jedec')} ${file.name}`);
+          }
+        }
+        efl[0].readData().then(buf => {
+          console.log(buf.toString());
+        });
         res(0);
       });
       /* const fs = require('../../core/fs');

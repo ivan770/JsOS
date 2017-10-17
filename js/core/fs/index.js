@@ -50,7 +50,7 @@ module.exports = {
       })
       .then(list => {
         if (resolved.level <= 1) return;
-        callback(null, list);
+        callback(null, list.map(file => file.name), list);
       })
       .catch(err => {
         callback(err);
