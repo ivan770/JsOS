@@ -1,14 +1,19 @@
 'use strict';
 
+
+
 const fatfs = require('./fatfs');
 
 class Partition {
   getFilesystem() {
+    const device = this.device;
+    const address = this.address;
+    const size = this.size;
     const driver = {
-      sectorSize: this.device.formatInfo.sectorSize,
-      numSectors: this.size,
+      sectorSize: device.formatInfo.sectorSize,
+      numSectors: size,
       readSectors(sector, dest, callback) {
-        this.device.read(this.address + sector, dest).then(() => {
+        device.read(address + sector, dest).then(() => {
           callback();
         }).catch((err) => {
           callback(err);

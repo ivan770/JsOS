@@ -46,12 +46,12 @@ module.exports = {
         /* if (resolved.level >= 3) {
           callback(new Error('Subdirectories aren\'t supported yet'));
         }*/
-        return filesystem.readdir(resolved.parts.slice(2).join('/'), options, callback);
+        return filesystem.readdir(resolved.parts.slice(2).join('/'), callback);
       })
-      .then(list => {
+      /*.then(list => {
         if (resolved.level <= 1) return;
         callback(null, list.map(file => file.name), list);
-      })
+      })*/
       .catch(err => {
         callback(err);
       });
