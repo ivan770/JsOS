@@ -32,6 +32,7 @@ class Process extends EventEmitter {
       },
       arch: 'x64', // since runtime.js only runs in qemu-system-x86_64, it's an x64 system.
       argv: [],
+      browser: true,
       binding(name) {
         throw new Error(`no such module: ${name}`);
       },

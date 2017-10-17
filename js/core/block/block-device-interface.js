@@ -56,7 +56,7 @@ class BlockDeviceInterface {
     if (!this.onread) {
       throw new Error('driver was not initialized');
     }
-    return this.onread(sector, u8);
+    return this.onread(sector, u8, num);
   }
   write(sector, u8) {
     if (!this.onwrite) {

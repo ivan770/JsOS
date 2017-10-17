@@ -43,10 +43,10 @@ module.exports = {
         callback(null, partitions.map((_, i) => `p${i}`));
       }).then(filesystem => {
         if (resolved.level <= 1) return;
-        if (resolved.level >= 3) {
+        /* if (resolved.level >= 3) {
           callback(new Error('Subdirectories aren\'t supported yet'));
-        }
-        return filesystem.getFileList();
+        }*/
+        return filesystem.readdir(resolved.parts.slice(2).join('/'), options, callback);
       })
       .then(list => {
         if (resolved.level <= 1) return;
