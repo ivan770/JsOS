@@ -13,7 +13,7 @@
 // limitations under the License.
 
 /* 
- * NPI (Not Problem Installer)
+ * NPI (No Problem Installer)
  * Application installer for JsOS
  * Can use repositories like npm
  * 
@@ -29,6 +29,22 @@ function main(api, res) {
   return res(0); // 1 = error
 }
 
-exports.call = (cmd, args, api, res) => main(api, res);
 
-exports.commands = ['example'];
+
+exports.call = (cmd, args, api, res) => {
+    const arglist = args.split(/\s+/);
+    switch(arglist[0]){
+        case 'search':
+        case 's':
+            arglist.shift();
+            require('./npi-search')(arglist);
+            break;
+        case 'install':
+        case 'i':
+            arglist.shift();
+            require('./npi-install')(arglist);
+            break;
+    }
+};
+
+exports.commands = ['npi'];
