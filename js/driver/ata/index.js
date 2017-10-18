@@ -56,8 +56,8 @@ class ATA {
       this.ports[5].write8((sector >> 16) & 0xff);
       this.ports[7].write8(0x30);
       while (!(this.ports[7].read8() & 8)) __SYSCALL.halt();
-      for (let i = 0; i < numSectors * 256; i += 2) {
-        const data = u8[(i * 2)] | (u8[i * 2 + 1] << 8);
+      for (let i = 0; i < numSectors * 256; i++) {
+        const data = (u8[i * 2]) | (u8[(i * 2) + 1] << 8);
         this.ports[0].write16(data);
       }
       this.ports[7].write8(0xE7);

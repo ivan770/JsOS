@@ -69,7 +69,47 @@ module.exports = {
     }
     if (resolved.level >= 3) {
       llfs.getPartitions(resolved.parts[0]).then(partitions => partitions[resolved.parts[1]].getFilesystem()).then(filesystem => {
-        filesystem.readFile(resolved.parts.slice(2).join('/'), typeof options === 'string' ? {encoding: options} : options, callback);
+        filesystem.readFile(resolved.parts.slice(2).join('/'), typeof options === 'string' ? { encoding: options } : options, callback);
+      }).catch(err => {
+        callback(err);
+      });
+    } else {
+      callback(new Error('Is a directory'));
+    }
+  },
+  writeFile(path, data, options, callback) {
+    callback = callback || options;
+    options = options || {};
+    let resolved;
+    try {
+      resolved = resolvePath(path);
+    } catch (e) {
+      callback(e);
+      return;
+    }
+    if (resolved.level >= 3) {
+      llfs.getPartitions(resolved.parts[0]).then(partitions => partitions[resolved.parts[1]].getFilesystem()).then(filesystem => {
+        filesystem.writeFile(resolved.parts.slice(2).join('/'), data, typeof options === 'string' ? { encoding: options } : options, callback);
+      }).catch(err => {
+        callback(err);
+      });
+    } else {
+      callback(new Error('Is a directory'));
+    }
+  },
+  mkdir(path, options, callback) {
+    callback = callback || options;
+    options = options || {};
+    let resolved;
+    try {
+      resolved = resolvePath(path);
+    } catch (e) {
+      callback(e);
+      return;
+    }
+    if (resolved.level >= 3) {
+      llfs.getPartitions(resolved.parts[0]).then(partitions => partitions[resolved.parts[1]].getFilesystem()).then(filesystem => {
+        filesystem.mkdir(resolved.parts.slice(2).join('/'), options, callback);
       }).catch(err => {
         callback(err);
       });

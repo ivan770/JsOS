@@ -245,6 +245,20 @@ const cmds = {
       });
     },
   },
+  mkdir: {
+    description: 'Show file contents',
+    usage: 'cat <file>',
+    run(args, f, res) {
+      const fs = require('../../core/fs');
+      fs.mkdir(args, (err) => {
+        if (err) {
+          f.stdio.writeError(err);
+          return res(1);
+        }
+        res(0);
+      });
+    },
+  },
   meminfo: {
     description: 'Information about RAM',
     usage: 'meminfo',

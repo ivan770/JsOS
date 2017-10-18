@@ -1,7 +1,5 @@
 'use strict';
 
-
-
 const fatfs = require('./fatfs');
 
 class Partition {
@@ -14,6 +12,13 @@ class Partition {
       numSectors: size,
       readSectors(sector, dest, callback) {
         device.read(address + sector, dest).then(() => {
+          callback();
+        }).catch((err) => {
+          callback(err);
+        });
+      },
+      writeSectors(sector, data, callback) {
+        device.write(address + sector, data).then(() => {
           callback();
         }).catch((err) => {
           callback(err);
