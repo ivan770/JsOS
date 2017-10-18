@@ -585,6 +585,15 @@ NATIVE_FUNCTION(NativesObject, VesaGetCInfo)
   // TODO:
 }
 
+NATIVE_FUNCTION(NativesObject, Halt)
+{
+  PROLOGUE_NOTHIS;
+  
+  Cpu::Halt();
+
+  args.GetReturnValue().SetUndefined();
+}
+
 NATIVE_FUNCTION(IoPortX64Object, Write8) {
   PROLOGUE;
   USEARG(0);
