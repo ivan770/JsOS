@@ -39,10 +39,7 @@ rules:
     -
       functions: false
       classes: true
-  no-param-reassign:
-    - 2
-    -
-      props: false
+  no-param-reassign: 0
 
 parserOptions:
   ecmaVersion: 6

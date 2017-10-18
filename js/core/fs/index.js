@@ -26,6 +26,7 @@ function resolvePath(path) {
 
 module.exports = {
   readdir(path, options, callback) {
+    callback = callback || options;
     let resolved;
     try {
       resolved = resolvePath(path);
@@ -48,13 +49,32 @@ module.exports = {
         }*/
         return filesystem.readdir(resolved.parts.slice(2).join('/'), callback);
       })
-      /*.then(list => {
+      /* .then(list => {
         if (resolved.level <= 1) return;
         callback(null, list.map(file => file.name), list);
       })*/
       .catch(err => {
         callback(err);
       });
+    }
+  },
+  readFile(path, options, callback) {
+    callback = callback || options;
+    let resolved;
+    try {
+      resolved = resolvePath(path);
+    } catch (e) {
+      callback(e);
+      return;
+    }
+    if (resolved.level >= 3) {
+      llfs.getPartitions(resolved.parts[0]).then(partitions => partitions[resolved.parts[1]].getFilesystem()).then(filesystem => {
+        filesystem.readFile(resolved.parts.slice(2).join('/'), typeof options === 'string' ? {encoding: options} : options, callback);
+      }).catch(err => {
+        callback(err);
+      });
+    } else {
+      callback(new Error('Is a directory'));
     }
   },
 };

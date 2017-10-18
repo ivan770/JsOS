@@ -230,6 +230,21 @@ const cmds = {
         });*/
     },
   },
+  cat: {
+    description: 'Show file contents',
+    usage: 'cat <file>',
+    run(args, f, res) {
+      const fs = require('../../core/fs');
+      fs.readFile(args, 'utf8', (err, data) => {
+        if (err) {
+          f.stdio.writeError(err);
+          return res(1);
+        }
+        f.stdio.write(data);
+        res(0);
+      });
+    },
+  },
   meminfo: {
     description: 'Information about RAM',
     usage: 'meminfo',
