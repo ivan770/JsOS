@@ -19,7 +19,7 @@ function main(_args, api, res) {
   if (args[0] === 'hw') args[0] = '++++++++++[>+++++++>++++++++++>+++>+<<<<-]>++.>+.+++++++..+++.>++.<<+++++++++++++++.>.+++.------.--------.>+.>.';
 
   io.setColor('yellow');
-  io.write(`BF: Starting program ${args[0]} `);
+  io.write(`BF: Starting program ${args[0]}\n`);
   if (args[1]) io.write(`with data: ${args[1]}`);
 
 //   debugger;
