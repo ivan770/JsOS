@@ -13,14 +13,20 @@
 // limitations under the License.
 
 const http = require("http-node");
-//const request = new eshttp.HttpRequest('GET', '/', { 'User-Agent': 'eshttp' });
+
 class Rest{
 
-    static GET(){}
+    static GET(url, callback){
+        return http.get(url,callback);
+    }
 
-    static POST(){}
+    static POST(url, data, callback){
+        //TODO: Write me...
+    }
 
-    static getJSON(url){}
+    static getJSON(url, callback){
+        return this.GET(url, (data)=>callback(JSON.parse(data)));
+    }
 
 }
 
