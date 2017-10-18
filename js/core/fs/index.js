@@ -6,7 +6,9 @@ function resolvePath(path) {
   const spl = path.split('/');
   if (spl[spl.length - 1] === '') spl.pop();
   if (spl[0]) throw new Error('Path is not absolute');
-  const level = spl.length - 1;
+  let level = spl.length - 1;
+
+  if (level < 0) level = 0;
   if (level >= 1) {
     const device = llfs.getDeviceByName(spl[1]);
     if (!device) throw new Error(`No device ${spl[1]}`);

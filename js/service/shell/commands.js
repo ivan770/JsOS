@@ -29,6 +29,15 @@ const cmds = {
       return res(0);
     },
   },
+  suspend: {
+    description: 'Suspend the computer',
+    usage: 'suspend',
+    run(args, f, res) {
+      console.log('Suspending...');
+      $$.machine.suspend();
+      return res(0);
+    },
+  },
   reboot: {
     description: 'Reboot the computer',
     usage: 'reboot',
@@ -246,8 +255,8 @@ const cmds = {
     },
   },
   mkdir: {
-    description: 'Show file contents',
-    usage: 'cat <file>',
+    description: 'Make directory',
+    usage: 'mkdir <path>',
     run(args, f, res) {
       const fs = require('../../core/fs');
       fs.mkdir(args, (err) => {
