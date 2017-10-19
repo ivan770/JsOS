@@ -8,8 +8,6 @@ globals:
   $$: true
   PERSISTENCE: true
   performance: true
-  $$: true
-  PERSISTENCE: true
 
 env:
   es6: true
