@@ -26,7 +26,6 @@ class ATA {
   }
   read(sector, u8) {
     const numSectors = u8.length / 512;
-    console.log(numSectors);
     return new Promise((resolve, reject) => {
       if (!this.isOnline()) return reject(new Error('Device isn\'t online'));
       this.ports[6].write8(this.driveSelect | ((sector >> 24) & 0x0F));
