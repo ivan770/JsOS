@@ -44,6 +44,7 @@ class Runtime {
       machine: {
         reboot: __SYSCALL.reboot,
         shutdown: () => __SYSCALL.acpiEnterSleepState(5),
+        suspend: () => __SYSCALL.acpiEnterSleepState(3),
       },
     });
   }

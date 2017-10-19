@@ -29,6 +29,15 @@ const cmds = {
       return res(0);
     },
   },
+  suspend: {
+    description: 'Suspend the computer',
+    usage: 'suspend',
+    run(args, f, res) {
+      console.log('Suspending...');
+      $$.machine.suspend();
+      return res(0);
+    },
+  },
   reboot: {
     description: 'Reboot the computer',
     usage: 'reboot',
@@ -241,6 +250,20 @@ const cmds = {
           return res(1);
         }
         f.stdio.write(data);
+        res(0);
+      });
+    },
+  },
+  mkdir: {
+    description: 'Make directory',
+    usage: 'mkdir <path>',
+    run(args, f, res) {
+      const fs = require('../../core/fs');
+      fs.mkdir(args, (err) => {
+        if (err) {
+          f.stdio.writeError(err);
+          return res(1);
+        }
         res(0);
       });
     },

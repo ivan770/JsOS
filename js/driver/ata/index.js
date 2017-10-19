@@ -4,8 +4,6 @@
 
 const driverUtils = require('../../core/driver-utils');
 
-const nop = () => 0;
-
 class ATA {
   constructor(firstPort, interrupt, isSlave) {
     this.ports = [];
@@ -28,6 +26,7 @@ class ATA {
   }
   read(sector, u8) {
     const numSectors = u8.length / 512;
+    console.log(numSectors);
     return new Promise((resolve, reject) => {
       if (!this.isOnline()) return reject(new Error('Device isn\'t online'));
       this.ports[6].write8(this.driveSelect | ((sector >> 24) & 0x0F));
@@ -36,17 +35,25 @@ class ATA {
       this.ports[4].write8((sector >> 8) & 0xff);
       this.ports[5].write8((sector >> 16) & 0xff);
       this.ports[7].write8(0x20);
+      while ((this.ports[7].read8() & 0x80)) __SYSCALL.halt();
       while (!(this.ports[7].read8() & 8)) __SYSCALL.halt();
+      if ((this.ports[7].read8() & 0x1) || (this.ports[7].read8() & 0x20)) return reject(new Error('I/O error'));
       for (let i = 0; i < numSectors * 256; i++) {
         const data = this.ports[0].read16();
         u8[i * 2 + 1] = (data >> 8) & 0xFF;
         u8[(i * 2)] = data & 0xFF;
       }
+      this.ports[7].read8();
+      this.ports[7].read8();
+      this.ports[7].read8();
+      this.ports[7].read8();
+      // console.log(!!(this.ports[7].read8() & 8));
       return resolve(u8);
     });
   }
   write(sector, u8) {
     const numSectors = u8.length / 512;
+    console.log(numSectors);
     return new Promise((resolve, reject) => {
       if (!this.isOnline()) return reject(new Error('Device isn\'t online'));
       this.ports[6].write8(this.driveSelect | ((sector >> 24) & 0x0F));
@@ -55,12 +62,16 @@ class ATA {
       this.ports[4].write8((sector >> 8) & 0xff);
       this.ports[5].write8((sector >> 16) & 0xff);
       this.ports[7].write8(0x30);
+      while ((this.ports[7].read8() & 0x80)) __SYSCALL.halt();
       while (!(this.ports[7].read8() & 8)) __SYSCALL.halt();
-      for (let i = 0; i < numSectors * 256; i += 2) {
-        const data = u8[(i * 2)] | (u8[i * 2 + 1] << 8);
+      if ((this.ports[7].read8() & 0x1) || (this.ports[7].read8() & 0x20)) return reject(new Error('I/O error'));
+      for (let i = 0; i < numSectors * 256; i++) {
+        const data = (u8[i * 2]) | (u8[(i * 2) + 1] << 8);
         this.ports[0].write16(data);
       }
       this.ports[7].write8(0xE7);
+
+      while ((this.ports[7].read8() & 8)) this.ports[0].write16(0); // FIXME: WTF???? read breaks without this
       return resolve(u8);
     });
   }

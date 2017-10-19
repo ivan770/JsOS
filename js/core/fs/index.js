@@ -6,7 +6,9 @@ function resolvePath(path) {
   const spl = path.split('/');
   if (spl[spl.length - 1] === '') spl.pop();
   if (spl[0]) throw new Error('Path is not absolute');
-  const level = spl.length - 1;
+  let level = spl.length - 1;
+
+  if (level < 0) level = 0;
   if (level >= 1) {
     const device = llfs.getDeviceByName(spl[1]);
     if (!device) throw new Error(`No device ${spl[1]}`);
@@ -69,7 +71,47 @@ module.exports = {
     }
     if (resolved.level >= 3) {
       llfs.getPartitions(resolved.parts[0]).then(partitions => partitions[resolved.parts[1]].getFilesystem()).then(filesystem => {
-        filesystem.readFile(resolved.parts.slice(2).join('/'), typeof options === 'string' ? {encoding: options} : options, callback);
+        filesystem.readFile(resolved.parts.slice(2).join('/'), typeof options === 'string' ? { encoding: options } : options, callback);
+      }).catch(err => {
+        callback(err);
+      });
+    } else {
+      callback(new Error('Is a directory'));
+    }
+  },
+  writeFile(path, data, options, callback) {
+    callback = callback || options;
+    options = options || {};
+    let resolved;
+    try {
+      resolved = resolvePath(path);
+    } catch (e) {
+      callback(e);
+      return;
+    }
+    if (resolved.level >= 3) {
+      llfs.getPartitions(resolved.parts[0]).then(partitions => partitions[resolved.parts[1]].getFilesystem()).then(filesystem => {
+        filesystem.writeFile(resolved.parts.slice(2).join('/'), data, typeof options === 'string' ? { encoding: options } : options, callback);
+      }).catch(err => {
+        callback(err);
+      });
+    } else {
+      callback(new Error('Is a directory'));
+    }
+  },
+  mkdir(path, options, callback) {
+    callback = callback || options;
+    options = options || {};
+    let resolved;
+    try {
+      resolved = resolvePath(path);
+    } catch (e) {
+      callback(e);
+      return;
+    }
+    if (resolved.level >= 3) {
+      llfs.getPartitions(resolved.parts[0]).then(partitions => partitions[resolved.parts[1]].getFilesystem()).then(filesystem => {
+        filesystem.mkdir(resolved.parts.slice(2).join('/'), options, callback);
       }).catch(err => {
         callback(err);
       });
