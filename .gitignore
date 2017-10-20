@@ -40,3 +40,4 @@ npm-debug.log
 build.iso
 .initrd
 etc/kernel.map
+/build
