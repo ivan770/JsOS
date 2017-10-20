@@ -103,3 +103,5 @@ exports.moveTo = (xOpt, yOpt) => {
 exports.scrollUp = scrollUp;
 exports.scrollDown = scrollDown;
 exports.clear = clear;
+exports.width = w;
+exports.height = h;
