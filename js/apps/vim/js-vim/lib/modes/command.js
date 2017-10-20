@@ -712,7 +712,7 @@ module.exports = {
 		var pos = hist.position;
 		if (pos > 0) pos--;
 		this.histories[':'].position = pos;
-		this.keyBuffer === '';
+		this.keyBuffer = '';
 		this.exec(':');
 		this.exec(hist[pos]);
 	},
@@ -722,10 +722,19 @@ module.exports = {
 		if (pos > hist.length - 1) pos = hist.length - 1;
 		if (pos < hist.length - 1) pos++;
 		this.histories[':'].position = pos;
-		this.keyBuffer === '';
+		this.keyBuffer = '';
 		this.exec('esc');
 		this.exec(':');
 		this.exec(hist[pos]);
+	},
+	'/:(.*)\b/': function() {
+		let kb = this.keyBuffer;
+		debug(kb);
+		this.keyBuffer = '';
+		debug(kb);
+		this.exec('esc');
+		this.exec(':');
+		this.exec(kb);//FIXME: XD
 	},
 
 	'/^:abbreviate (.*?) (.*)\n$/': function(keys, vim, expr) {
