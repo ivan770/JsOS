@@ -2,44 +2,45 @@
 
 // origin https://github.com/F1LT3R/axel
 
+'use strict';
 
-// Requires
-let ansi = require('ansi'),
-  cursor = ansi(process.stdout),
+const printer = require("./printer");
+// const ansi = require('ansi');
+// const cursor = ansi(process.stdout);
 
-  stdo = process.stdout,
-  cols = stdo.columns,
-  rows = stdo.rows,
-  defaultChar = ' ',
+// const stdo = process.stdout;
+const cols = printer.width;
+const rows = printer.height;
+let defaultChar = ' ';
 
-  PI2 = Math.PI * 2,
+const PI2 = Math.PI * 2;
 
-  color = {
-    fg: {
-      r: 255,
-      g: 255,
-      b: 255,
-    },
-    bg: {
-      r: 255,
-      g: 255,
-      b: 255,
-    },
-  };
+const color = {
+  fg: {
+    r: 255,
+    g: 255,
+    b: 255,
+  },
+  bg: {
+    r: 255,
+    g: 255,
+    b: 255,
+  },
+};
 
 
 var axel = {
 
-    // Clears a block
+  // Clears a block
   scrub(x1, y1, w, h) {
-        // Turn off the color settings while we scrub
+    // Turn off the color settings while we scrub
     const oldBrush = this.defaultChar;
     cursor.reset();
     this.defaultChar = ' ';
 
     this.box(x1, y1, w, h);
 
-        // Put the colors back after
+    // Put the colors back after
     cursor.fg.rgb(color.fg.r, color.fg.g, color.fg.b);
     cursor.bg.rgb(color.bg.r, color.bg.g, color.bg.b);
     this.defaultChar = oldBrush;
@@ -51,7 +52,7 @@ var axel = {
   },
 
 
-    // Changes the foreground character █ default is [space]
+  // Changes the foreground character █ default is [space]
   set brush(character) {
     defaultChar = character || ' ';
   },
@@ -69,14 +70,14 @@ var axel = {
       cursor.hide();
     },
 
-        // Resets background & foreground colors
+    // Resets background & foreground colors
     reset() {
       cursor.reset();
     },
 
-        // Restores colors and places cursor after the graphics
-        // so that the drawing does not get drawn over when the
-        // program ends
+    // Restores colors and places cursor after the graphics
+    // so that the drawing does not get drawn over when the
+    // program ends
     restore() {
       cursor.reset();
       cursor.goto(axel.cols, axel.rows - 1);
@@ -102,17 +103,17 @@ var axel = {
 
   point(x, y, char) {
     if (!(
-                x < 0 || y < 0 ||
-                x > stdo.columns || y > stdo.rows ||
-                x < 0 || y < 0 ||
-                x > stdo.columns || y > stdo.rows
-            )) {
+        x < 0 || y < 0 ||
+        x > stdo.columns || y > stdo.rows ||
+        x < 0 || y < 0 ||
+        x > stdo.columns || y > stdo.rows
+      )) {
       cursor.goto(parseInt(x), parseInt(y)).write(char || defaultChar);
     }
   },
 
 
-    // Get in interpolation point between two points at a given magnitude
+  // Get in interpolation point between two points at a given magnitude
   lerp(p1, p2, m) {
     return ((p2 - p1) * m) + p1;
   },
@@ -144,28 +145,28 @@ var axel = {
   },
 
 
-    // Get the distance between two points
+  // Get the distance between two points
   dist(x1, y1, x2, y2) {
     return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
   },
 
 
-    // Get all the points along a line and draw them
+  // Get all the points along a line and draw them
   line(x1, y1, x2, y2) {
     const D = this.dist(x1, y1, x2, y2) + 1;
 
-        // this.point(x1, y1);
+    // this.point(x1, y1);
     for (let i = 0; i < D; i++) {
       let m = 1 / D * i,
         x = this.lerp(x1, x2, m),
         y = this.lerp(y1, y2, m);
       this.point(x, y);
     }
-        // this.point(x2, y2);
+    // this.point(x2, y2);
   },
 
   color(hex, g, b, a) {
-        // if
+    // if
   },
 
   text(x, y, text) {
@@ -173,17 +174,17 @@ var axel = {
   },
 
 
-    // moveTo: function (x, y) {
-    //   cursor.moveTo()
-    // },
+  // moveTo: function (x, y) {
+  //   cursor.moveTo()
+  // },
 
 
-    // Changes foreground color
+  // Changes foreground color
   fg(r, g, b) {
     cursor.fg.rgb(r, g, b);
   },
 
-    // Changes background color
+  // Changes background color
   bg(r, g, b) {
     cursor.bg.rgb(r, g, b);
   },
