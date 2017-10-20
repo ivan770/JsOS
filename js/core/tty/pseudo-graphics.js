@@ -5,6 +5,8 @@
 'use strict';
 
 const printer = require("./printer");
+const le = require("./line-editor");
+const ed = new le;
 // const ansi = require('ansi');
 // const cursor = ansi(process.stdout);
 
@@ -48,7 +50,8 @@ var axel = {
 
 
   clear() {
-    console.log('\033[2J');
+    // console.log('\033[2J');
+    printer.clear();
   },
 
 
@@ -64,15 +67,18 @@ var axel = {
 
   cursorInterface: {
     on() {
-      cursor.show();
+      // cursor.show();
+      ed.drawCursor();
     },
     off() {
-      cursor.hide();
+      // cursor.hide();
+      ed.removeCursor();
     },
 
     // Resets background & foreground colors
     reset() {
-      cursor.reset();
+      // cursor.reset();
+      //TODO: Write me....
     },
 
     // Restores colors and places cursor after the graphics
@@ -98,7 +104,8 @@ var axel = {
   },
 
   goto(x, y) {
-    cursor.goto(parseInt(x), parseInt(y));
+    // cursor.goto(parseInt(x), parseInt(y));
+    printer.moveTo(x,y);
   },
 
   point(x, y, char) {
@@ -108,7 +115,9 @@ var axel = {
         x < 0 || y < 0 ||
         x > stdo.columns || y > stdo.rows
       )) {
-      cursor.goto(parseInt(x), parseInt(y)).write(char || defaultChar);
+      // cursor.goto(parseInt(x), parseInt(y)).write(char || defaultChar);
+      this.goto(Number(x), Number(y));
+      ed.putChar(char || defaultChar);
     }
   },
 
@@ -120,8 +129,8 @@ var axel = {
 
 
   circ(x, y, m) {
-    let res = m * PI2,
-      i;
+    let res = m * PI2;
+    let i;
 
     for (i = 0; i < res; i += 1) {
       const loc = PI2 / res * i;
