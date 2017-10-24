@@ -580,8 +580,9 @@ class PciDevice {
       const classCode = pciAccessor.read(pciAccessor.fields().CLASS_CODE);
       return {
         classCode,
-        className: pciAccessor.read(pciAccessor.fields().SUBCLASS),
-        subclass: codeNameResolver.classCodeToName(classCode),
+        className: codeNameResolver.classCodeToName(classCode),
+        subclass: pciAccessor.read(pciAccessor.fields().SUBCLASS),
+        progIf: pciAccessor.read(pciAccessor.fields().PROG_IF),
       };
     };
 
@@ -952,6 +953,9 @@ function listPciDevices() {
       vendorId: pciDevice.vendorId(),
       deviceId: pciDevice.deviceId(),
       className: classData.className,
+      classCode: classData.classCode,
+      subclass: classData.subclass,
+      progIf: classData.progIf,
       subsystemData,
       irqVector,
       pin: pins[devicePin],

@@ -26,6 +26,7 @@ const pci = require('./pci');
 const net = require('./net');
 const stdio = require('./stdio');
 const speaker = require('../driver/ibmpc/pcspeaker');
+const Storage = require('./storage');
 // const fs = require('./fs');
 
 class Runtime {
@@ -40,6 +41,7 @@ class Runtime {
       net,
       stdio,
       speaker,
+      storage: new Storage,
       //fs,
       machine: {
         reboot: __SYSCALL.reboot,
