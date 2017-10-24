@@ -15,7 +15,7 @@
 'use strict';
 const typeutils = require('typeutils');
 const { SystemError } = require('./errors');
-// const fsmod = require('../core/fs');
+const fsmod = require('../core/fs');
 
 function makeErrorNotFound(path, op) {
   return new SystemError(`no such file or directory, ${op} '${path}'`, 'ENOENT');
@@ -87,7 +87,7 @@ function readFileImpl(fnName, path, opts) {
   return [null, new Buffer(buf)];
 }
 
-exports.readFile = (path, opts, cb) => {
+exports.readFileImpl = (path, opts, cb) => {
   // const options = typeutils.isFunction(opts) ? null : opts;
   const callback = typeutils.isFunction(opts) ? opts : cb;
 
@@ -99,7 +99,7 @@ exports.readFile = (path, opts, cb) => {
   setImmediate(() => callback(err, buf));
 };
 
-exports.readFileSync = (path, opts) => {
+exports.readFileImplSync = (path, opts) => {
   const [err, buf] = readFileImpl('readFileSync', path, opts);
   if (err) {
     throw err;
@@ -108,10 +108,11 @@ exports.readFileSync = (path, opts) => {
   return buf;
 };
 
-// exports.readdir = fsmod.readdir;
+exports.readFile = fsmod.readFile;
+exports.readFileSync = (path, data) => console.warn('Not implemented!');//eslint-disable-line
 
-/* eslint no-unused-vars:0 */
+exports.writeFile = fsmod.writeFile;
+exports.writeFileSync = (path, data) => console.warn('Not implemented!');//eslint-disable-line
 
-exports.writeFile = (path, data, cb) => console.warn('Not implemented!');
-
-exports.writeFileSync = (path, data) => console.warn('Not implemented!');
+exports.readdir = fsmod.readdir;
+exports.mkdir = fsmod.mkdir;
