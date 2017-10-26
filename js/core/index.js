@@ -41,8 +41,7 @@ class Runtime {
       net,
       stdio,
       speaker,
-      storage: new Storage,
-      //fs,
+      globalStorage: new Storage,
       machine: {
         reboot: __SYSCALL.reboot,
         shutdown: () => __SYSCALL.acpiEnterSleepState(5),
