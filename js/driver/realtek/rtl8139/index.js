@@ -5,6 +5,8 @@ const { MACAddress, Interface } = runtime.net;
 const Buffer = require('buffer').Buffer;
 
 const BUFFER_SIZE = 8192 + 16;
+const FULL_BUFFER_SIZE = BUFFER_SIZE + 1500;
+const TX_BUFFER_SIZE = 256 * 1024;
 
 class RTL8139 {
   constructor() {
@@ -48,19 +50,23 @@ class RTL8139 {
     this.cmd.write8(0x10);
     while ((this.cmd.read8() & 0x10) !== 0);
 
+    // Create a memory page
+    const mempage = __SYSCALL.allocDMA();
+    const mempageBuf = new Buffer(mempage.buffer);
+
     // Initialize RX buffer
-    const rxbuf = __SYSCALL.allocDMA();
-    this.rbstart.write32(rxbuf.address);
-    this.rxBuffer = new Buffer(rxbuf.buffer);
+    this.rbstart.write32(mempage.address);
+    this.rxBuffer = mempageBuf.slice(0, FULL_BUFFER_SIZE);
 
     // Initialize TX buffers
+    let offset = FULL_BUFFER_SIZE;
     this.txBuffers = [];
     for (let i = 0; i < 4; i++) {
       const buf = {};
-      const txbuf = __SYSCALL.allocDMA();
-      buf.address = txbuf.address;
-      buf.buffer = new Buffer(txbuf.buffer);
+      buf.address = mempage.address + offset;
+      buf.buffer = mempageBuf.slice(offset, offset + TX_BUFFER_SIZE);
       this.txBuffers.push(buf);
+      offset += TX_BUFFER_SIZE;
     }
 
     // Enable TOK and ROK interrupts
@@ -104,6 +110,8 @@ class RTL8139 {
   ontransmit(u8header, u8data) {
     const iter = this.nextIter();
     let size = u8header.length;
+    console.log('Header size: ' + u8header.length);
+    console.log('Buffer size: ' + this.txBuffers[iter].buffer.length);
     this.txBuffers[iter].buffer.set(u8header);
     if (u8data) {
       size += u8data.length;
