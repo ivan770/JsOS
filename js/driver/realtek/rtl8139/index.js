@@ -13,6 +13,9 @@ class RTL8139 {
     this.ontransmit = this.ontransmit.bind(this);
     this.onIRQ = this.onIRQ.bind(this);
   }
+  static init(device) {
+    return new RTL8139().init(device);
+  }
   init(device) {
     // Initialize the PCI device
     this.irq = device.getIRQ();
@@ -157,4 +160,4 @@ class RTL8139 {
   }
 }
 
-runtime.pci.addDriver(0x10ec, 0x8139, new RTL8139);
+runtime.pci.addDriver(0x10ec, 0x8139, RTL8139);
