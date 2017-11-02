@@ -113,8 +113,6 @@ class RTL8139 {
   ontransmit(u8header, u8data) {
     const iter = this.nextIter();
     let size = u8header.length;
-    console.log('Header size: ' + u8header.length);
-    console.log('Buffer size: ' + this.txBuffers[iter].buffer.length);
     this.txBuffers[iter].buffer.set(u8header);
     if (u8data) {
       size += u8data.length;
@@ -146,7 +144,6 @@ class RTL8139 {
   onIRQ() {
     while (1) {
       const isr = this.isr.read16();
-      // console.log(`IRQ, ISR: ${isr}`);
       if (!isr) break;
       this.isr.write16(isr);
       this.irq.on(this.onIRQ);
