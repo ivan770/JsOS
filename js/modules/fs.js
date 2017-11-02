@@ -107,7 +107,6 @@ exports.readFileImplSync = (path, opts) => {
 
   return buf;
 };
-
 exports.readFile = fsmod.readFile;
 exports.readFileSync = (path, data) => console.warn('Not implemented!');//eslint-disable-line
 
