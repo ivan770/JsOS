@@ -65,7 +65,7 @@ function setupDeviceClassDriver(classId, subclassId, progIf, driver) {
     if (device.classId !== classId) {
       continue;
     }
-    if (device.subclass !== classId) {
+    if (device.subclass !== subclassId) {
       continue;
     }
 
