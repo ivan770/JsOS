@@ -268,6 +268,23 @@ const cmds = {
       });
     },
   },
+  wget: {
+    description: 'Print data from HTTP request',
+    usage: 'wget <url>',
+    run(args, f, result) {
+      const http = require('http');
+      http.get(args, (res) => {
+        res.setEncoding('utf8');
+        res.on('data', function (chunk) {
+          f.stdio.write(chunk);
+        });
+        res.on('end', () => {
+          f.stdio.writeLine('');
+          result(0);
+        });
+      });
+    },
+  },
   meminfo: {
     description: 'Information about RAM',
     usage: 'meminfo',

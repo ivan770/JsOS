@@ -4,8 +4,8 @@ const PciDevice = require('../../../core/pci/pci-device');
 const { MACAddress, Interface } = runtime.net;
 const Buffer = require('buffer').Buffer;
 
-const BUFFER_SIZE = 8192 + 16;
-const FULL_BUFFER_SIZE = BUFFER_SIZE + 1500;
+const RX_BUFFER_SIZE = 8192 + 16;
+const FULL_RX_BUFFER_SIZE = RX_BUFFER_SIZE + 1500;
 const TX_BUFFER_SIZE = 256 * 1024;
 
 class RTL8139 {
@@ -59,10 +59,10 @@ class RTL8139 {
 
     // Initialize RX buffer
     this.rbstart.write32(mempage.address);
-    this.rxBuffer = mempageBuf.slice(0, FULL_BUFFER_SIZE);
+    this.rxBuffer = mempageBuf.slice(0, FULL_RX_BUFFER_SIZE);
 
     // Initialize TX buffers
-    let offset = FULL_BUFFER_SIZE;
+    let offset = FULL_RX_BUFFER_SIZE;
     this.txBuffers = [];
     for (let i = 0; i < 4; i++) {
       const buf = {};
@@ -136,22 +136,22 @@ class RTL8139 {
     _buf.copy(buf);
     this.intf.receive(buf);
     this.resetReceivePointer();
-    if (this.recvPointer >= BUFFER_SIZE) this.recvPointer = 0;
+    if (this.recvPointer >= RX_BUFFER_SIZE) this.recvPointer = 0;
   }
   resetReceivePointer() {
     this.recvPointer = this.cbr.read16();
   }
   onIRQ() {
-    while (1) {
+    while (true) { // eslint-disable-line
       const isr = this.isr.read16();
       if (!isr) break;
       this.isr.write16(isr);
       this.irq.on(this.onIRQ);
-      if (isr & 0x2) {
-        this.resetReceivePointer();
-      }
       if (isr & 0x1) {
         this.onreceive();
+      }
+      if (isr & 0x2) {
+        this.resetReceivePointer();
       }
     }
   }

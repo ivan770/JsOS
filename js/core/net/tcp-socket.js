@@ -420,7 +420,7 @@ class TCPSocket {
       throw new Error('argument 0 is not a Uint8Array');
     }
     if (this._state !== STATE_ESTABLISHED && this._state !== STATE_CLOSE_WAIT) {
-      throw new Error('socket is not connected');
+      throw new Error(`socket is not connected, state: ${this._state}`);
     }
     this._bufferedAmount += u8.length;
     this._queueTx.push(u8);
