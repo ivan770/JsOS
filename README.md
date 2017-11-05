@@ -10,7 +10,7 @@ _WARNING: project is in development and not ready for production use._
 
 ### Ready ISO image
 
-[Download](https://github.com/PROPHESSOR/jsos/raw/master/JsOS.iso)
+[Download](https://github.com/PROPHESSOR/jsos/releases)
 
 ### System requirements
 
