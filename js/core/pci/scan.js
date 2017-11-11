@@ -16,6 +16,7 @@
 'use strict';
 
 const resources = require('../resources');
+const pciids = require('./pciids.json');
 const io = resources.ioRange;
 const irqRange = resources.irqRange;
 const memrange = resources.memoryRange;
@@ -580,8 +581,9 @@ class PciDevice {
       const classCode = pciAccessor.read(pciAccessor.fields().CLASS_CODE);
       return {
         classCode,
-        className: pciAccessor.read(pciAccessor.fields().SUBCLASS),
-        subclass: codeNameResolver.classCodeToName(classCode),
+        className: codeNameResolver.classCodeToName(classCode),
+        subclass: pciAccessor.read(pciAccessor.fields().SUBCLASS),
+        progIf: pciAccessor.read(pciAccessor.fields().PROG_IF),
       };
     };
 
@@ -901,7 +903,10 @@ pciManager.each((pciDevice) => {
 
   const pins = ['dont use', 'A', 'B', 'C', 'D'];
 
-  const info = `${address.bus.toString(16)}: ${address.slot.toString(16)}.${address.func} ${pciDevice.vendorId().toString(16)}: ${pciDevice.deviceId().toString(16)} ${classData.className} IRQ: ${vector} PIN: ${pins[devicePin]}`;
+  const devid_pair = `${pciDevice.vendorId().toString(16) }:${pciDevice.deviceId().toString(16)}`
+
+  const info = `${address.bus.toString(16)}:${address.slot.toString(16)}.${address.func} ${classData.className} [${devid_pair}] ${pciids[devid_pair]} (IRQ: ${vector} PIN: ${pins[devicePin]})`;
+
   debug(info);
 });
 
@@ -952,6 +957,9 @@ function listPciDevices() {
       vendorId: pciDevice.vendorId(),
       deviceId: pciDevice.deviceId(),
       className: classData.className,
+      classCode: classData.classCode,
+      subclass: classData.subclass,
+      progIf: classData.progIf,
       subsystemData,
       irqVector,
       pin: pins[devicePin],

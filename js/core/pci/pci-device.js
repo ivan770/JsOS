@@ -31,6 +31,9 @@ class PciDevice {
     this.vendorId = opts.vendorId;
     this.deviceId = opts.deviceId;
     this.pciAccessor = opts.pciAccessor;
+    this.classCode = opts.classCode;
+    this.subclass = opts.subclass;
+    this.progIf = opts.progIf;
     this.subsystem = opts.subsystemData;
     this.bars = opts.bars;
     this.irq = opts.irq;
