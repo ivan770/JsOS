@@ -1,70 +1,243 @@
-// Example application for JsOS
+// SpeakPlay for JsOS
 // By PROPHESSOR
 
 'use strict';
 
-// Key-notes
-const kn = {
-  z: 261, // C4
-  s: 277, // C#4
-  x: 293, // D4
-  d: 311, // D#4
-  c: 329, // E4
-  v: 349, // F4
-  g: 369, // F#4
-  b: 392, // G4
-  h: 415, // G#4
-  n: 440, // A4
-  j: 466, // A#4
-  m: 494, // H4
+const DURATION = 50;
+const MIN_OCTAVE = 1;
+const MAX_OCTAVE = 7;
 
-  ',': 523, // C5
-  l: 554, // C#5
-  '.': 587, // D5
-  ';': 622, // D#5
-  '/': 659, // E5
+const note = new class Note {
+  constructor() {
+    this.octave = 4;
+    this.duration = DURATION;
+  }
 
-  q: 523, // C5
-  // C#5
-  '2': 554, //eslint-disable-line
-  w: 587, // D5
-  // D#5
-  '3': 622, //eslint-disable-line
-  e: 659, // E5
-  r: 698, // F5
-  // F#5
-  '5': 739, //eslint-disable-line
-  t: 784, // G5
-  // G#5
-  '6': 830, //eslint-disable-line
-  y: 880, // A5
-  // A#5
-  '7': 932, //eslint-disable-line
-  u: 988, // H5
-  i: 1046, // C6
-  // C#6
-  '9': 1108, //eslint-disable-line
-  o: 1174, // D6
-  // D#6
-  '0': 1244, //eslint-disable-line
-  p: 1318, // E6
-  '[': 1396, // F6
-  '=': 1479, // F#6
-  ']': 1568, //G6
+  convert(note) {
+    return note * this.octaver;
+  }
+
+  upDuration() {
+    return (this.duration += 10);
+  }
+
+  downDuration() {
+    return this.duration === 10 ? this.duration : (this.duration -= 10);
+  }
+
+  upOctave() {
+    return this.octave === MAX_OCTAVE ? this.octave : ++this.octave;
+  }
+
+  downOctave() {
+    return this.octave === MIN_OCTAVE ? this.octave : --this.octave;
+  }
+
+
+  get octaver() {
+    return Math.pow(2, this.octave - 2);
+  }
+
+  get keynotes() {
+    return {
+      z: 'C',
+      s: 'CD',
+      x: 'D',
+      d: 'DD',
+      c: 'E',
+      v: 'F',
+      g: 'FD',
+      b: 'G',
+      h: 'GD',
+      n: 'A',
+      j: 'AD',
+      m: 'H',
+
+      ',': 'CP',
+      l: 'CDP',
+      '.': 'DP',
+      ';': 'DDP',
+      '/': 'EP',
+      q: 'CP',
+      '2': 'CDP', //eslint-disable-line
+      w: 'DP',
+      '3': 'DDP', //eslint-disable-line
+      e: 'EP',
+      r: 'FP',
+      '5': 'FDP', //eslint-disable-line
+      t: 'GP',
+      '6': 'GDP', //eslint-disable-line
+      y: 'AP',
+      '7': 'ADP', //eslint-disable-line
+      u: 'HP',
+      i: 'CPP',
+      '9': 'CDPP', //eslint-disable-line
+      o: 'DPP',
+      '0': 'DDPP', //eslint-disable-line
+      p: 'EPP',
+      '[': 'FPP',
+      '=': 'FDPP',
+      ']': 'GPP',
+    };
+  }
+
+  // [z - m]
+
+  get C() {
+    return this.convert(65);
+  }
+
+  get CD() {
+    return this.convert(69);
+  }
+
+  get D() {
+    return this.convert(73);
+  }
+  get DD() {
+    return this.convert(78);
+  }
+  get E() {
+    return this.convert(82);
+  }
+  get F() {
+    return this.convert(87);
+  }
+  get FD() {
+    return this.convert(92);
+  }
+
+  get G() {
+    return this.convert(98);
+  }
+
+  get GD() {
+    return this.convert(104);
+  }
+
+  get A() {
+    return this.convert(110);
+  }
+
+  get AD() {
+    return this.convert(116);
+  }
+
+  get H() {
+    return this.convert(123);
+  }
+
+  // [, - /] U [q - u]
+
+  get CP() {
+    return this.convert(131);
+  }
+
+  get CDP() {
+    return this.convert(139);
+  }
+
+  get DP() {
+    return this.convert(147);
+  }
+  get DDP() {
+    return this.convert(156);
+  }
+  get EP() {
+    return this.convert(165);
+  }
+  get FP() {
+    return this.convert(175);
+  }
+  get FDP() {
+    return this.convert(185);
+  }
+
+  get GP() {
+    return this.convert(196);
+  }
+
+  get GDP() {
+    return this.convert(208);
+  }
+
+  get AP() {
+    return this.convert(220);
+  }
+
+  get ADP() {
+    return this.convert(233);
+  }
+
+  get HP() {
+    return this.convert(247);
+  }
+
+  // [i - ]]
+
+  get CPP() {
+    return this.convert(262);
+  }
+
+  get CDPP() {
+    return this.convert(277);
+  }
+
+  get DPP() {
+    return this.convert(294);
+  }
+  get DDPP() {
+    return this.convert(311);
+  }
+  get EPP() {
+    return this.convert(330);
+  }
+  get FPP() {
+    return this.convert(349);
+  }
+  get FDPP() {
+    return this.convert(370);
+  }
+
+  get GPP() {
+    return this.convert(392);
+  }
+
 };
 
-/*
-73	ля5	A6	1760,00
-72	соль♯5 (ля♭5)	G♯6/A♭6	1661,22
-71	соль5	G6	1567,98
-70	фа♯5 (соль♭5)	F♯6/G♭6	1479,98
-69	фа5	F6	1396,91
-68	ми5	E6	1318,51
-67	ре♯5 (ми♭5)	D♯6/E♭6	1244,51
-66	ре5	D6	1174,66
-65	до♯5 (ре♭5)	C♯6/D♭6	1108,73 */
+class Interface {
+  // region eol
+// ######################################################################################
+  static render() {
+    io.write(` 
+ ##############################################################################
+ #                          SpeakPlay (c) PROPHESSOR 2017                     #
+ ##############################################################################
 
-const DURATION = 50;
+                                 Press F12 to exit
+
+
+
+
+
+
+
+DURATION: ${note.duration}
+OCTAVE: ${note.octave}
+
+
+
+
+
+
+
+
+
+`
+    );
+  }
+  // endregion eol
+}
 
 let io,
   kb,
@@ -84,11 +257,32 @@ function main(api, res) {
 }
 
 function keylog(key) {
-  if (key.type === 'f12') return stop();
-  if (kn[key.character]) {
-    $$.speaker.play(kn[key.character], DURATION);
+
+  switch (key.type) {
+    case 'f12':
+      stop();
+      break;
+    case 'kpup':
+      note.upOctave();
+      break;
+    case 'kpdown':
+      note.downOctave();
+      break;
+    case 'kpleft':
+      note.downDuration();
+      break;
+    case 'kpright':
+      note.upDuration();
+      break;
+    default:
+  }
+  if (note.keynotes[key.character]) {
+    $$.speaker.play(note[note.keynotes[key.character]], note.duration);
   }
   // io.writeLine(JSON.stringify(key));
+
+  Interface.render();
+
   return false;
 }
 
@@ -102,3 +296,43 @@ function stop() {
 exports.call = (cmd, args, api, res) => main(api, res);
 
 exports.commands = ['speakplay'];
+
+
+/*
+	440,000
+48	соль♯3 (ля♭3)	G♯4/A♭4	415,305
+47	соль3	G4	391,995
+46	фа♯3 (соль♭3)	F♯4/G♭4	369,994
+45	фа3	F4	349,228
+44	ми3	E4	329,628
+43	ре♯3 (ми♭3)	D♯4/E♭4	311,127
+42	ре3	D4	293,665
+41	до♯3 (ре♭3)	C♯4/D♭4	277,183
+40	до3	C4	261,626
+39	си2	B3	246,942
+38	ля♯2 (си♭2)	A♯3/B♭3	233,082
+37	ля2	A3	220,000
+36	соль♯2 (ля♭2)	G♯3/A♭3	207,652
+35	соль2	G3	195,998
+34	фа♯2 (соль♭2)	F♯3/G♭3	184,997
+33	фа2	F3	174,614
+32	ми2	E3	164,814
+31	ре♯2 (ми♭2)	D♯3/E♭3	155,563
+30	ре2	D3	146,832
+29	до♯2 (ре♭2)	C♯3/D♭3	138,591
+28	до2	C3	130,813
+27	си1	B2	123,471
+26	ля♯1 (си♭1)	A♯2/B♭2	116,541
+25	ля1	A2	110,000
+24	соль♯1 (ля♭1)	G♯2/A♭2	103,826
+23	соль1	G2	97,9989
+22	фа♯1 (соль♭ 1)	F♯2/G♭2	92,4986
+21	фа1	F2	87,3071
+20	ми1	E2	82,4069
+19	ре♯1 (ми♭1)	D♯2/E♭2	77,7817
+18	ре1	D2	73,4162
+17	до♯1 (ре♭1)	C♯2/D♭2	69,2957
+16	до1	C2	65,4064
+15	си0	B1	61,7354
+14	ля♯0 (си♭0)	A♯1/B♭1	58,2705
+*/
