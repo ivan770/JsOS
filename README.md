@@ -25,7 +25,7 @@ First thing is the command line tool `runtime-cli`, it will add `runtime` comman
 npm install runtime-cli -g
 ```
 
-Make sure QEMU is installed, it enables running applications locally.
+Make sure QEMU installed, it enables running applications locally.
 
 ```
 brew install qemu           # OSX
