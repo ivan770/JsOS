@@ -53,7 +53,7 @@ class Logger {
   log(data, options = {}) {
     let out = data;
     if (typeof options === 'object') { // It can be a number (0)/boolean (false)/string ('') etc.
-      if (options.level && this.levels.indexOf(options.level) < 0) return;
+      if (options.level && this.levels.indexOf(options.level) < 0) return this;
       out = !options.noconvert ? Logger.convert(data) : data;
     }
 
@@ -73,7 +73,7 @@ class Logger {
   warn(data, options = {}) {
     let out = data;
     if (typeof options === 'object') { // It can be a number (0)/boolean (false)/string ('') etc.
-      if (options.level && this.levels.indexOf(options.level) < 0) return;
+      if (options.level && this.levels.indexOf(options.level) < 0) return this;
       if (!options.noconvert) out = Logger.convert(data);
       out = `[WARN]: ${out}`;
     }
@@ -98,7 +98,7 @@ class Logger {
   error(data, options = {}) {
     let out = data;
     if (typeof options === 'object') { // It can be a number (0)/boolean (false)/string ('') etc.
-      if (options.level && this.levels.indexOf(options.level) < 0) return;
+      if (options.level && this.levels.indexOf(options.level) < 0) return this;
       if (!options.noconvert) out = Logger.convert(data);
       out = `[ERROR]: ${out}`;
     }
@@ -123,7 +123,7 @@ class Logger {
   info(data, options = {}) {
     let out = data;
     if (typeof options === 'object') { // It can be a number (0)/boolean (false)/string ('') etc.
-      if (options.level && this.levels.indexOf(options.level) < 0) return;
+      if (options.level && this.levels.indexOf(options.level) < 0) return this;
       if (!options.noconvert) out = Logger.convert(data);
       out = `[INFO]: ${out}`;
     }
@@ -148,7 +148,7 @@ class Logger {
   success(data, options = {}) {
     let out = data;
     if (typeof options === 'object') { // It can be a number (0)/boolean (false)/string ('') etc.
-      if (options.level && this.levels.indexOf(options.level) < 0) return;
+      if (options.level && this.levels.indexOf(options.level) < 0) return this;
       if (!options.noconvert) out = Logger.convert(data);
       out = `[SUCCESS]: ${out}`;
     }
@@ -164,7 +164,13 @@ class Logger {
   }
 
   setLevels(levels) {
-    this.levels = levels;
+    if (levels instanceof Array) {
+      this.levels = levels;
+    } else if (typeof levels === 'string') {
+      this.levels.push(levels);
+    } else {
+      this.log(new Error('Levels must be a Array or String'));
+    }
 
     return this;
   }
@@ -173,14 +179,14 @@ class Logger {
     const idx = this.levels.indexOf(level);
 
     if (idx >= 0) {
-      this.levels.splice(idx);
+      this.levels.splice(idx, 1);
     }
 
     return this;
   }
 
   setCallback(event, callback = () => {}) {
-    if (!this.callbacks[event]) return this.error(`[LOGGER]: Invalid event ${event}`, false);
+    if (!this.callbacks[event]) return this.log(new Error(`[LOGGER]: Invalid event ${event}`));
     this.callbacks[event] = callback;
 
     return this;

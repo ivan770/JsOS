@@ -27,6 +27,16 @@ const net = require('./net');
 const stdio = require('./stdio');
 const speaker = require('../driver/ibmpc/pcspeaker');
 const logger = new (require('../modules/logger'))(stdio);
+try {
+  logger.setLevels(require('../../package.json').logLevels);
+} catch (e) {
+  logger.log('Can\'t read logLevels from package.json');
+}
+
+/* Logger levels
+ * LineEditor - tty/line-editor.js - History and movement logs
+*/
+
 // const Storage = require('./storage');
 // const fs = require('./fs');
 

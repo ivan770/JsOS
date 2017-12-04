@@ -15,6 +15,9 @@
     "build-iso": "grub-mkrescue -o build.iso .",
     "build-kernel": "cmake ."
   },
+  "logLevels":[
+    "LineEditor"
+  ],
   "repository": {
     "type": "git",
     "url": "git@github.com:prophessor/jsos.git"
