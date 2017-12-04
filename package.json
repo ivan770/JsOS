@@ -16,7 +16,8 @@
     "build-kernel": "cmake ."
   },
   "logLevels":[
-    "LineEditor"
+    "LineEditor",
+    "Keyboard"
   ],
   "repository": {
     "type": "git",

@@ -195,4 +195,6 @@ class LineEditor {
   }
 }
 
+LineEditor.logger = logger; // FIXME: Точно костыль
+
 module.exports = LineEditor;
