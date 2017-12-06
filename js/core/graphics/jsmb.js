@@ -1,7 +1,7 @@
 /*
  * ================================//
  * Интерпретатор языка JsMobileBasic
- * ---v.Alpha 11 for JsOS Project---
+ * ---v.Alpha 10.2 for JsOS Project---
  * ~~~~~~~~~~by PROPHESSOR~~~~~~~~~~
  * ================================//
  */
@@ -555,7 +555,7 @@ const JsMB = {
     return str.length;
   },
   str(num) {
-    return num.toString;
+    return String(num);
   },
   val(str) {
     return Number(str);
@@ -573,7 +573,7 @@ const JsMB = {
     return String.fromCharCode(code);
   },
   asc(str) { // string to code
-    return str.charCode;
+    return str.charCode();
   },
   split(str, char) {
     return str.split(char);
@@ -587,10 +587,6 @@ const JsMB = {
   int: this.val,
   // Files
   saveData(filename, data, callback) {
-    $Init.File[0]();
-    $Init.NW[0]();
-    $Init.Path[0]();
-
     const file = `${filename}.json`;
     const filePath = $Path.join($NW.App.dataPath, file);
     data = toJSON(data);
@@ -608,7 +604,6 @@ const JsMB = {
   },
   readData(filename) {
     $Init.File[0]();
-    $Init.NW[0]();
     $Init.Path[0]();
 
     const file = `${filename}.json`;
@@ -644,8 +639,7 @@ const JsMB = {
   },
   // Menu
   menuAdd(name, title, onClick, type, fortype) {
-    $Init.NW[0]();
-    if (!$Init.NW[2]) {
+    if (true) {
       if ($Menu[name] == undefined) {
         $Menu[name] = new $NW.Menu();
       }
@@ -676,7 +670,7 @@ const JsMB = {
     return false;
   },
   menuShow(name, x, y) {
-    if (!$Init.NW[2]) {
+    if (true) {
       $Menu[name].popup(x, y);
       return true;
     }
@@ -684,8 +678,7 @@ const JsMB = {
     return false;
   },
   menuAddSeparator(name) {
-    $Init.NW[0]();
-    if (!$Init.NW[2]) {
+    if (true) {
       if ($Menu[name] == undefined) {
         $Menu[name] = new $NW.Menu();
       }
@@ -699,8 +692,7 @@ const JsMB = {
   },
   // Bar
   menuBarAdd(name, title, subMenu) {
-    $Init.NW[0]();
-    if (!$Init.NW[2]) {
+    if (true) {
       if ($Menu.$Bar[name] == undefined) {
         $Menu.$Bar[name] = new $NW.Menu({
           type: 'menubar',
@@ -717,7 +709,7 @@ const JsMB = {
     return false;
   },
   menuBarShow(name) {
-    if (!$Init.NW[2]) {
+    if (true) {
       $NW.Window.get().menu = $Menu.$Bar[name];
       return true;
     }
@@ -725,8 +717,7 @@ const JsMB = {
     return false;
   },
   getClipboard(type) {
-    $Init.NW[0]();
-    if (!$Init.NW[2]) {
+    if (true) {
       const clipboard = $NW.Clipboard.get();
       if (type == undefined) type = 'text';
       return clipboard.get(type);
@@ -735,8 +726,7 @@ const JsMB = {
     return false;
   },
   setClipboard(value, type) {
-    $Init.NW[0]();
-    if (!$Init.NW[2]) {
+    if (true) {
       const clipboard = $NW.Clipboard.get();
       if (type == undefined) type = 'text';
       clipboard.set(value, type);
@@ -746,8 +736,7 @@ const JsMB = {
     return false;
   },
   clearClipboard() {
-    $Init.NW[0]();
-    if (!$Init.NW[2]) {
+    if (true) {
       const clipboard = $NW.Clipboard.get();
       clipboard.clear();
       return true;
@@ -756,8 +745,7 @@ const JsMB = {
     return false;
   },
   menuTrayAdd(name, title, icon, menu) {
-    $Init.NW[0]();
-    if (!$Init.NW[2]) {
+    if (true) {
       const tray = new $NW.Tray({
         title,
         icon,
@@ -770,14 +758,12 @@ const JsMB = {
     return false;
   },
   exec(target) {
-    $Init.Proc[0]();
     if (!$Init.Proc[2]) {
       $Proc.execSync(target);
     }
     return true;
   },
   execFile(file, keys) {
-    $Init.Proc[0]();
     if (!$Init.Proc[2]) {
       if (typeof (keys) !== 'object') {
         console.warn('Второй аргумент функции execFile должен быть масивом!');
@@ -859,8 +845,7 @@ const JsMB = {
     return true;
   },
   fullScreen(mode) {
-    $Init.NW[0]();
-    if (!$Init.NW[2]) {
+    if (true) {
       if (mode) {
         var tmp = $NW.Window.get();
         tmp.enterFullscreen();
