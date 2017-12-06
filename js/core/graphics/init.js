@@ -1,10 +1,8 @@
 'use strict';
 
-/* global $$ */
-
 function init() {
   if (!$$.graphics.graphicsAvailable()) {
-    // throw new Error("Graphics unavailable");
+    console.log('Graphics unavailable');
     return false;
   }
 
@@ -12,10 +10,13 @@ function init() {
 
   debug($$.graphics.displayBuffer.length);
 
-  for (let i = 0; i < $$.graphics.displayBuffer.length; i++) {
-    $$.graphics.displayBuffer[i] = 0xff;
-  }
-  
+  $$.graphics.displayBuffer.fill(0xff);
+  $$.graphics.repaint();
+
+  // for (let i = 0; i < $$.graphics.displayBuffer.length; i++) {
+  //   $$.graphics.displayBuffer[i] = 0xff;
+  // }
+
   return true;
 }
 

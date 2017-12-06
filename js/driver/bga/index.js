@@ -27,7 +27,7 @@ if (bgaAvailable()) {
   const driver = {
     init(device) {
       const buf = new Uint8Array(device.bars[0].resource.buffer());
-      const renderer = new runtime.graphics.GraphicsRenderer('bga');
+      const renderer = new $$.graphics.GraphicsRenderer('bga');
       renderer.onenablegraphics = (width, height, bitDepth) => {
         writeBgaRegister(constants.VBE_DISPI_INDEX_ENABLE, constants.VBE_DISPI_DISABLED);
         writeBgaRegister(constants.VBE_DISPI_INDEX_XRES, width);
@@ -37,10 +37,10 @@ if (bgaAvailable()) {
       };
       renderer.ongetbuffer = () => buf;
       renderer.constants = constants;
-      runtime.graphics.addRenderer(renderer);
+      $$.graphics.addRenderer(renderer);
     },
     reset() {},
   };
 
-  runtime.pci.addDriver(0x1234, 0x1111, driver);
+  $$.pci.addDriver(0x1234, 0x1111, driver);
 }
