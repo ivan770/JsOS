@@ -17,6 +17,7 @@ function bgaAvailable() {
   const bgaVersion = readBgaRegister(constants.VBE_DISPI_INDEX_ID);
   for (const i of [0, 1, 2, 3, 4, 5]) {
     if (bgaVersion === constants[`VBE_DISPI_ID${i}`]) {
+      console.log(`BGA version: ${i}`);
       return true;
     }
   }
@@ -29,9 +30,9 @@ if (bgaAvailable()) {
       const buf = new Uint8Array(device.bars[0].resource.buffer());
       const renderer = new $$.graphics.GraphicsRenderer('bga');
       renderer.onenablegraphics = (width, height, bitDepth) => {
-        writeBgaRegister(constants.VBE_DISPI_INDEX_ENABLE, constants.VBE_DISPI_DISABLED);
-        writeBgaRegister(constants.VBE_DISPI_INDEX_XRES, width);
-        writeBgaRegister(constants.VBE_DISPI_INDEX_YRES, height);
+        // writeBgaRegister(constants.VBE_DISPI_INDEX_ENABLE, constants.VBE_DISPI_DISABLED);
+        // writeBgaRegister(constants.VBE_DISPI_INDEX_XRES, width);
+        // writeBgaRegister(constants.VBE_DISPI_INDEX_YRES, height);
         writeBgaRegister(constants.VBE_DISPI_INDEX_BPP, bitDepth);
         writeBgaRegister(constants.VBE_DISPI_INDEX_ENABLE, constants.VBE_DISPI_ENABLED | constants.VBE_DISPI_LFB_ENABLED);
       };

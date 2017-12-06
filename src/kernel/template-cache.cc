@@ -116,11 +116,15 @@ v8::Local<v8::Context> TemplateCache::NewContext() {
     SET_SYSCALL("getSystemResources", NativesObject::GetSystemResources);
     SET_SYSCALL("stopVideoLog", NativesObject::StopVideoLog);
     SET_SYSCALL("setTime", NativesObject::SetTime);
+    SET_SYSCALL("halt", NativesObject::Halt);
 
     // ACPI control bindings
     SET_SYSCALL("acpiGetPciDevices", NativesObject::AcpiGetPciDevices);
     SET_SYSCALL("acpiSystemReset", NativesObject::AcpiSystemReset);
     SET_SYSCALL("acpiEnterSleepState", NativesObject::AcpiEnterSleepState);
+
+    // VESA
+    SET_SYSCALL("vesaGetCInfo", NativesObject::VesaGetCInfo);
 
 #undef SET_SYSCALL
     global->Set(iv8_, "__SYSCALL", syscall);

@@ -553,6 +553,47 @@ NATIVE_FUNCTION(NativesObject, SetTime) {
   args.GetReturnValue().SetUndefined();
 }
 
+NATIVE_FUNCTION(NativesObject, VesaGetCInfo)
+{
+  PROLOGUE_NOTHIS;
+  struct VbeInfoBlock {
+    char VbeSignature[4];     // == "VESA"
+    uint16_t VbeVersion;      // == 0x0300 for VBE 3.0
+    uint16_t OemStringPtr[2]; // isa vbeFarPtr
+    uint8_t Capabilities[4];
+    uint16_t VideoModePtr[2]; // isa vbeFarPtr
+    uint16_t TotalMemory;     // as # of 64KB blocks
+  };
+
+  VbeInfoBlock *vib = new VbeInfoBlock;
+
+  /*__asm__(
+      "movw %%es, %%bx\n\t"
+      "movw $0, %%es\n\t"
+      "int $0x10\n\t"
+      "movw %%bx, %%es\n\t"
+      :
+      : "rdi"(vib), "ax"(0x4F00)
+      : "bx");*/
+
+  printf("%s", vib->VbeSignature);
+
+  delete vib;
+
+  args.GetReturnValue().SetUndefined();
+
+  // TODO:
+}
+
+NATIVE_FUNCTION(NativesObject, Halt)
+{
+  PROLOGUE_NOTHIS;
+  
+  Cpu::Halt();
+
+  args.GetReturnValue().SetUndefined();
+}
+
 NATIVE_FUNCTION(IoPortX64Object, Write8) {
   PROLOGUE;
   USEARG(0);

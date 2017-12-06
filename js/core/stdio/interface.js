@@ -24,6 +24,14 @@ class StdioInterface {
     this.onsetbackgroundcolor = () => {};
   }
 
+  get color() {
+    return this.getColor();
+  }
+
+  get bgcolor() {
+    return this.getBgColor();
+  }
+
   // stdout
   write(...text) {
     this.onwrite(text.join(' '));
@@ -52,6 +60,7 @@ class StdioInterface {
 
   readLine(cb) {
     let text = '';
+
     function addinput(char) {
       if (char !== '\n') {
         text += char;

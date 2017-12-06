@@ -256,6 +256,7 @@
     os: './modules/os.js',
     net: './modules/net.js',
     dns: './modules/dns.js',
+    http: 'http-node',
     punycode: 'punycode',
     querystring: 'querystring-es3',
     string_decoder: 'string_decoder',

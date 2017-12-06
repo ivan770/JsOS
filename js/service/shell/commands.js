@@ -29,6 +29,15 @@ const cmds = {
       return res(0);
     },
   },
+  suspend: {
+    description: 'Suspend the computer',
+    usage: 'suspend',
+    run(args, f, res) {
+      console.log('Suspending...');
+      $$.machine.suspend();
+      return res(0);
+    },
+  },
   reboot: {
     description: 'Reboot the computer',
     usage: 'reboot',
@@ -163,27 +172,126 @@ const cmds = {
   },
   listparts: {
     description: 'List HDD partitions',
-    usage: 'listparts',
-    run(args, f, res) {
-      const buf = $$.ata.read(0, 1).slice(0x1BE, 64);
-      for (let i = 0; i < 4; i++) {
-        if (buf[i * 16]) {
-          f.stdio.writeLine(`Partition ${i} exists on drive`);
-        } else {
-          f.stdio.writeLine(`Partition ${i} doesn't exist on drive`);
-        }
+    usage: 'listparts <device>',
+    run(_args, f, res) {
+      // debug(JSON.stringify($$.block.devices));
+      const args = _args.trim();
+      let iface;
+      for (const device of $$.block.devices) {
+        if (device.name === args) iface = device;
       }
-      return res(0);
+      if (!iface) return res(1);
+
+      iface.read(0, Buffer.allocUnsafe(512)).then(_buf => {
+        let firstsec;
+        const buf = _buf.slice(0x1BE, 0x1BE + 64);
+        for (let i = 0; i < 4; i++) {
+          console.log(buf[(i * 16) + 4]);
+          if (buf[(i * 16) + 4]) {
+            f.stdio.writeLine(`[${i}]:`);
+            f.stdio.writeLine(`  type: 0x${buf[(i * 16) + 4].toString(16)}`);
+            f.stdio.writeLine(`  size: ${buf.readUInt32LE((i * 16) + 0xC) / 1024 / 1024 * 512}M`);
+
+            firstsec = buf.readUInt32LE((i * 16) + 0x8);
+          }
+        }
+        console.log(firstsec);
+        return iface.read(firstsec, buf);
+      }).then(fsbuf => {
+        f.stdio.writeLine('  assumming that FS is FAT, header:');
+        f.stdio.writeLine(`    created with: ${fsbuf.toString('utf8', 3, 11)}`);
+        f.stdio.writeLine(`    bytes per sector: ${fsbuf.readUInt16LE(11)}`);
+        f.stdio.writeLine(`    sectors per cluster: ${fsbuf[13]}`);
+        f.stdio.writeLine(`    ${fsbuf.readUInt16LE(14)} sectors reserved`);
+        f.stdio.writeLine(`    ${fsbuf.readUInt16LE(22)} sectors per FAT`);
+        f.stdio.writeLine(`    ${fsbuf.toString('utf8', 54, 62)}`);
+        f.stdio.writeLine(`    rootdir cluster: ${fsbuf.readUInt16LE(512)}`);
+        res(0);
+      }).catch((err) => {
+        f.stdio.writeError(err);
+        res(1);
+      });
     },
   },
-  startx: {
-    description: 'Start graphics mode',
-    usage: 'startx',
+  ls: {
+    description: 'List files in directory',
+    usage: 'ls /<drive>/<partition>',
     run(args, f, res) {
-      if (!require('../../core/graphics/init')()) {
-        f.stdio.writeError("Graphics init error");
-        return res(1);
-      }
+      const fs = require('../../core/fs');
+      const filesize = require('../../utils/filesize');
+      fs.readdir(args, 'utf8', (err, list) => {
+        if (err) {
+          f.stdio.writeError(err);
+          return res(1);
+        }
+        for (const name of list) f.stdio.writeLine(`------ ${name}`);
+        res(0);
+      });
+      /* const fs = require('../../core/fs');
+      const device = fs.getDeviceByName(args[0]);
+      const partition = +(args[1][1]);
+      fs.getPartitions(device).then((parts) => parts[partition].getFilesystem())
+        .then(filesystem => {
+          return filesystem.getFileList();
+        }).then(fileList => {
+          for (const name of fileList) f.stdio.writeLine(name);
+          res(0);
+        });*/
+    },
+  },
+  cat: {
+    description: 'Show file contents',
+    usage: 'cat <file>',
+    run(args, f, res) {
+      const fs = require('../../core/fs');
+      fs.readFile(args, 'utf8', (err, data) => {
+        if (err) {
+          f.stdio.writeError(err);
+          return res(1);
+        }
+        f.stdio.write(data);
+        res(0);
+      });
+    },
+  },
+  mkdir: {
+    description: 'Make directory',
+    usage: 'mkdir <path>',
+    run(args, f, res) {
+      const fs = require('../../core/fs');
+      fs.mkdir(args, (err) => {
+        if (err) {
+          f.stdio.writeError(err);
+          return res(1);
+        }
+        res(0);
+      });
+    },
+  },
+  wget: {
+    description: 'Print data from HTTP request',
+    usage: 'wget <url>',
+    run(args, f, result) {
+      const http = require('http');
+      http.get(args, (res) => {
+        res.setEncoding('utf8');
+        res.on('data', (chunk) => {
+          f.stdio.write(chunk);
+        });
+        res.on('end', () => {
+          f.stdio.writeLine('');
+          result(0);
+        });
+      });
+    },
+  },
+  meminfo: {
+    description: 'Information about RAM',
+    usage: 'meminfo',
+    run(args, f, res) {
+      const info = __SYSCALL.memoryInfo();
+      f.stdio.writeLine(`MEM:  ${+((info.pmUsed / 1024 / 1024).toFixed(2))}M / ${+((info.pmTotal / 1024 / 1024).toFixed(2))}M`);
+      f.stdio.writeLine(`HEAP: ${+((info.heapUsed / 1024 / 1024).toFixed(2))}M / ${+((info.heapTotal / 1024 / 1024).toFixed(2))}M`);
       return res(0);
     },
   },

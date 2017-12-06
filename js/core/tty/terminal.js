@@ -16,6 +16,7 @@
 const keyboard = require('../keyboard');
 const printer = require('./printer');
 const LineEditor = require('./line-editor');
+const log = LineEditor.logger.log;
 
 exports.color = printer.color;
 exports.print = printer.print;
@@ -66,6 +67,7 @@ exports.readLine = (cb) => {
   isReading = true;
 
   function addinput(keyinfo) {
+    log(`Keyboard->${keyinfo.type}`, { level: 'Keyboard' });
     switch (keyinfo.type) {
       case 'kpleft':
         editor.moveCursorLeft();
@@ -123,8 +125,6 @@ exports.readLine = (cb) => {
         keyboard.onKeydown.remove(addinput);
         break;
       default:
-        debug(`Keyboard->${keyinfo.type}`);
-        break;
     }
   }
 

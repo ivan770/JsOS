@@ -71,11 +71,15 @@ public:
   DECLARE_NATIVE(GetSystemResources);  // Get low-level system resources
   DECLARE_NATIVE(StopVideoLog);        // Stop console redirection to display
   DECLARE_NATIVE(SetTime);             // Set time in V8 engine
+  DECLARE_NATIVE(Halt);                // Halt thread until interrupt
 
   // runtime.js syscalls: ACPI control bindings
   DECLARE_NATIVE(AcpiGetPciDevices);   // Get list of PCI devices
   DECLARE_NATIVE(AcpiSystemReset);     // Reset system using ACPI
   DECLARE_NATIVE(AcpiEnterSleepState); // Call ACPI to enter system into sleep state
+
+  // JsOS syscalls: VESA
+  DECLARE_NATIVE(VesaGetCInfo);        // Get controller info
 
   void ObjectInit(ExportBuilder obj) {}
   JsObjectWrapperBase* Clone() const {

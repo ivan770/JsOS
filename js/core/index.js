@@ -28,6 +28,19 @@ const stdio = require('./stdio');
 const speaker = require('../driver/ibmpc/pcspeaker');
 const ata = require('../driver/ata');
 const graphics = require('./graphics');
+const logger = new (require('../modules/logger'))(stdio);
+try {
+  logger.setLevels(require('../../package.json').logLevels);
+} catch (e) {
+  logger.log('Can\'t read logLevels from package.json');
+}
+
+/* Logger levels
+ * LineEditor - tty/line-editor.js - History and movement logs
+*/
+
+// const Storage = require('./storage');
+// const fs = require('./fs');
 
 class Runtime {
   constructor() {
@@ -43,9 +56,12 @@ class Runtime {
       speaker,
       ata,
       graphics,
+      logger,
+      // globalStorage: new Storage,
       machine: {
         reboot: __SYSCALL.reboot,
         shutdown: () => __SYSCALL.acpiEnterSleepState(5),
+        suspend: () => __SYSCALL.acpiEnterSleepState(3),
       },
     });
   }

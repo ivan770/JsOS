@@ -29,4 +29,4 @@ Make sure that:
  * you run `npm run lint` at the root of repository (you'll also need to have installed dependencies beforehand with `npm install`) and get rid of any lint before commiting.
  * the system can still boot up normally.
  * the new/fixed/changed feature/bug works.
- * the code is written in as much ES6 as possible and it conforms to the style guide found [here](https://github.com/airbnb/javascript) (with a [few exceptions](docs/code-style-exceptions.md)).
+ * the code written in as much ES6 as possible and it conforms to the style guide found [here](https://github.com/airbnb/javascript) (with a [few exceptions](docs/code-style-exceptions.md)).

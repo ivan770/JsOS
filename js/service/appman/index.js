@@ -66,6 +66,7 @@ class App {
     // FIXME: Похоже на костыль
     const _args = __args.split(/\s+/);
     const app = _args.shift();
+
     function isAppExist(x) { // FIXME: Точно костыль, но спать хочется
       return !!(PERSISTENCE.Apps[x]); // || PERSISTENCE.Apps._commands[app]);
     }
@@ -74,7 +75,14 @@ class App {
       return res('App doesn\'t exist!');
     }
     const args = _args.join(' ');
-    /* const callback =  */PERSISTENCE.Apps[app].run(app, args, f, res);
+    /* const callback =  */
+    try {
+      PERSISTENCE.Apps[app].run(app, args, f, res);
+    } catch (e) {
+      f.stdio.writeError(`App ${app} crashed!`);
+      console.error(e);
+      return res(1);
+    }
     // return res(callback);
     // return console.warn('Not implemented!');
   }
