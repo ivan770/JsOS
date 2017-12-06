@@ -30,9 +30,9 @@ if (bgaAvailable()) {
       const buf = new Uint8Array(device.bars[0].resource.buffer());
       const renderer = new $$.graphics.GraphicsRenderer('bga');
       renderer.onenablegraphics = (width, height, bitDepth) => {
-        // writeBgaRegister(constants.VBE_DISPI_INDEX_ENABLE, constants.VBE_DISPI_DISABLED);
-        // writeBgaRegister(constants.VBE_DISPI_INDEX_XRES, width);
-        // writeBgaRegister(constants.VBE_DISPI_INDEX_YRES, height);
+        writeBgaRegister(constants.VBE_DISPI_INDEX_ENABLE, constants.VBE_DISPI_DISABLED);
+        writeBgaRegister(constants.VBE_DISPI_INDEX_XRES, width);
+        writeBgaRegister(constants.VBE_DISPI_INDEX_YRES, height);
         writeBgaRegister(constants.VBE_DISPI_INDEX_BPP, bitDepth);
         writeBgaRegister(constants.VBE_DISPI_INDEX_ENABLE, constants.VBE_DISPI_ENABLED | constants.VBE_DISPI_LFB_ENABLED);
       };

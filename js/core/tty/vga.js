@@ -83,6 +83,7 @@ function setCharXY(u8, x, y, char, fg, bg) {
 
   const offset = (y * w) + x;
   setCharOffset(u8, offset, char, fg >>> 0, bg >>> 0);
+
 }
 
 function testColor(value) {
@@ -171,6 +172,7 @@ exports.draw = (drawbuf) => {
       }
     }
   }
+  if (global.$$ && global.$$.graphics && global.$$.graphics.graphicsAvailable()) $$.graphics.repaint(); // TODO:
 };
 
 exports.allocBuffer = () => new VGABuffer();

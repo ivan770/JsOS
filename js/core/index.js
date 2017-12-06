@@ -26,7 +26,6 @@ const pci = require('./pci');
 const net = require('./net');
 const stdio = require('./stdio');
 const speaker = require('../driver/ibmpc/pcspeaker');
-const ata = require('../driver/ata');
 const graphics = require('./graphics');
 const logger = new (require('../modules/logger'))(stdio);
 try {
@@ -54,7 +53,6 @@ class Runtime {
       net,
       stdio,
       speaker,
-      ata,
       graphics,
       logger,
       // globalStorage: new Storage,
@@ -68,3 +66,7 @@ class Runtime {
 }
 
 global.runtime = global.$$ = module.exports = new Runtime();
+
+const ata = require('../driver/ata');
+
+global.$$.ata = ata; // FIXME:
