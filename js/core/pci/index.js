@@ -52,6 +52,28 @@ function setupDeviceDriver(vendorId, deviceId, driver) {
   }
 }
 
+function setupDeviceClassDriver(classId, subclassId, progIf, driver) {
+  assert(isint.uint8(classId));
+  assert(isint.uint8(subclassId));
+  assert(isint.uint8(progIf));
+
+  for (const device of deviceList) {
+    if (device.hasDriver()) continue;
+    if (device.progIf !== progIf) {
+      continue;
+    }
+    if (device.classId !== classId) {
+      continue;
+    }
+    if (device.subclass !== classId) {
+      continue;
+    }
+
+    device.setDriver(driver);
+  }
+}
+
 init();
 
-exports.addDriver = (vendorId, deviceId, opts) => setupDeviceDriver(vendorId, deviceId, opts);
+exports.addDriver = setupDeviceDriver;
+exports.addClassDriver = setupDeviceClassDriver;

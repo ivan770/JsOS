@@ -25,7 +25,7 @@ const fh = fontLib.height;
 
 const colorScheme = require('./colorscheme');
 
-const graphicsEnabled = false;
+let graphicsEnabled = false;
 
 const w = 80;
 const h = 25;
@@ -61,7 +61,7 @@ function getColor(fg, bg) {
   return (((bg & 0xF) << 4) + (fg & 0xF)) >>> 0;
 }
 
-function setCharOffset(u8, offset, char, fg, bg) {
+function setCharOffset(u8, offset, char, fg, bg, ivb) {
   if (offset < 0 || offset >= w * h) {
     throw new Error('vga error: offset is out of bounds');
   }
@@ -69,10 +69,11 @@ function setCharOffset(u8, offset, char, fg, bg) {
   /* eslint-disable no-param-reassign */
   u8[offset * 2] = char.charCodeAt(0);
   u8[(offset * 2) + 1] = getColor(fg, bg);
+  ivb[offset] = 1;
   /* eslint-enable no-param-reassign */
 }
 
-function setCharXY(u8, x, y, char, fg, bg) {
+function setCharXY(u8, x, y, char, fg, bg, ivb) {
   if (x < 0 || x >= w) {
     throw new Error('vga error: x is out of bounds');
   }
@@ -82,7 +83,7 @@ function setCharXY(u8, x, y, char, fg, bg) {
   }
 
   const offset = (y * w) + x;
-  setCharOffset(u8, offset, char, fg >>> 0, bg >>> 0);
+  setCharOffset(u8, offset, char, fg >>> 0, bg >>> 0, ivb);
 }
 
 function testColor(value) {
@@ -94,24 +95,25 @@ function testColor(value) {
 class VGABuffer {
   constructor() {
     this.b = new Uint8Array(len * 2);
+    this.ivb = new Uint8Array(len).fill(0);
   }
   setXY(x, y, char, fg, bg) {
     testInstance(this);
     testColor(fg);
     testColor(bg);
-    setCharXY(this.b, x, y, String(char), fg, bg);
+    setCharXY(this.b, x, y, String(char), fg, bg, this.ivb);
   }
   setOffset(offset, char, fg, bg) {
     testInstance(this);
     testColor(fg);
     testColor(bg);
-    setCharOffset(this.b, offset, String(char), fg, bg);
+    setCharOffset(this.b, offset, String(char), fg, bg, this.ivb);
   }
   clear(bg) {
     testInstance(this);
     testColor(bg);
     for (let i = 0; i < w * h; ++i) {
-      setCharOffset(this.b, i, ' ', bg, bg);
+      setCharOffset(this.b, i, ' ', bg, bg, this.ivb);
     }
   }
   scrollUp(bg) {
@@ -119,15 +121,15 @@ class VGABuffer {
     testColor(bg);
     this.b.set(this.b.subarray(w * 2, w * h * 2));
     for (let t = 0; t < w; ++t) {
-      setCharXY(this.b, t, h - 1, ' ', bg, bg);
+      setCharXY(this.b, t, h - 1, ' ', bg, bg, this.ivb);
     }
   }
-  scrollDown(bg) {
+  scrollDown(/* bg */) {
     // testInstance(this);
     // testColor(bg);
     // this.b.set(this.b.subarray(w * 2, w * h * 2));
     // for (let t = 0; t < w; ++t) {
-    //   setCharXY(this.b, t, h + 1, ' ', bg, bg);
+    //   setCharXY(this.b, t, h + 1, ' ', bg, bg, this.ivb);
     // }
     return debug('Not implemented!');
   }
@@ -143,26 +145,31 @@ exports.draw = (drawbuf) => {
   testInstance(drawbuf);
   if (!global.$$ || !global.$$.graphics || !global.$$.graphics.graphicsAvailable()) {
     vgaOld.draw(drawbuf);
+    // TODO: Сделать условие во время первой отрисовки
   } else {
     if (!graphicsEnabled) {
+      graphicsEnabled = true;
       $$.graphics.enableGraphics(640, 400, 24);
     }
     const dbuf = $$.graphics.displayBuffer;
     for (let x = 0; x < w; x++) {
       for (let y = 0; y < h; y++) {
+        // debug(drawbuf.ivb[(y * w) + x]);
+        if (!drawbuf.ivb[(y * w) + x]) continue;
+        drawbuf.ivb[(y * w) + x] = 0;
         const offset = ((y * w) + x) * 2;
         const colorByte = drawbuf.b[offset + 1];
         const bg = (colorByte >> 4) & 0xF;
         const fg = colorByte & 0xF;
         const charCode = drawbuf.b[offset];
         for (let fy = 0; fy < fh; fy++) {
-          const row = font[charCode * fh + fy];
+          const row = font[(charCode * fh) + fy];
           for (let fx = 0; fx < fw; fx++) {
             const state = (row >> (7 - fx)) & 1;
-            const px = x * fw + fx;
-            const py = y * fh + fy;
+            const px = (x * fw) + fx;
+            const py = (y * fh) + fy;
             // const dboffset = ((y * w * fh + fy) + x * fw * fx) * 3;
-            const dboffset = (px + py * w * fw) * 3;
+            const dboffset = (px + (py * w * fw)) * 3;
             dbuf[dboffset + 2] = (state ? colorScheme[fg] : colorScheme[bg])[0];// * 255;
             dbuf[dboffset + 1] = (state ? colorScheme[fg] : colorScheme[bg])[1];// * 255;
             dbuf[dboffset] = (state ? colorScheme[fg] : colorScheme[bg])[2];// * 255;
@@ -172,6 +179,7 @@ exports.draw = (drawbuf) => {
     }
     $$.graphics.flush();
   }
+  if (global.$$ && global.$$.graphics && global.$$.graphics.graphicsAvailable()) $$.graphics.repaint();
 };
 
 exports.allocBuffer = () => new VGABuffer();

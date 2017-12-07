@@ -51,7 +51,8 @@ require('./service/shell/commands');
 runtime.appman = require('./service/appman');
 
 require('./driver/virtio');
-debug('virtio Loaded!');
+require('./driver/ata');
+require('./driver/realtek/rtl8139');
 
 // Set time
 require('./core/cmos-time'); // load cmos

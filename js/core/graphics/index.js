@@ -12,7 +12,7 @@ module.exports = {
   },
 
   get displayBuffer() {
-    return secondBuffer; // renderers.getDefaultRenderer().displayBuffer;
+    return secondBuffer; // renderers.getDefaultRenderer().displayBuffer;//
   },
 
   get constants() {
@@ -26,13 +26,14 @@ module.exports = {
 
   enableGraphics(width, height, bitDepth) {
     secondBuffer = new Uint8Array(width * height * (bitDepth / 8));
+    secondBuffer.fill(0xff); // TODO: Это моя строчка)))
     const renderer = renderers.getDefaultRenderer();
     renderer.enableGraphics(width, height, bitDepth);
     screen[screenSymbols.reset]();
     screen[screenSymbols.init](width, height, bitDepth, renderer);
   },
 
-  flush() {
+  repaint() {
     const buf = renderers.getDefaultRenderer().displayBuffer;
     buf.set(secondBuffer);
   },
@@ -42,6 +43,13 @@ module.exports = {
     this.displayBuffer[dboffset + 2] = r;// * 255;
     this.displayBuffer[dboffset + 1] = g;// * 255;
     this.displayBuffer[dboffset] = b;// * 255;
+  },
+
+  fillScreen(r, g, b) {
+    const colorArray = [b, g, r];
+    const buf = Array(this.displayBuffer.length).map((_, i) => colorArray[i % 3]);
+    this.displayBuffer.set(buf);
+    this.repaint();
   },
 
 

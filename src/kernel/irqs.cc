@@ -148,7 +148,8 @@ EXPORT_EVENT void irq_handler_any(uint64_t number) {
   GLOBAL_platform()->HandleIRQ(irq_context, number & 0xff);
 }
 
-// TODO: fix this event
+#define IA32_APIC_BASE_MSR 0x1B
+
 EXPORT_EVENT void irq_timer_event(void* rsp, void* rbp, void* rip) {
   rt::SystemContextTimerIRQ irq_context {};
   RT_ASSERT(GLOBAL_engines());
@@ -158,10 +159,11 @@ EXPORT_EVENT void irq_timer_event(void* rsp, void* rbp, void* rip) {
   state.rsp = rsp;
   state.rbp = rbp;
   state.rip = rip;
-  GLOBAL_platform()->profiler().MakeSample(irq_context, state);
+  //GLOBAL_platform()->profiler().MakeSample(irq_context, state);
 
-  // TODO: fix hardcoded apic base address
-  LocalApicRegisterAccessor registers((void*)0xfee00000);
+  CpuMSRValue msr = CpuPlatform::GetMSR(IA32_APIC_BASE_MSR);
+  void *addr = (void*)(((uint64_t)(msr.lo & 0xfffff000)) | (uint64_t)(((uint64_t)(msr.hi & 0x0f)) << 32));
+  LocalApicRegisterAccessor registers((void*)addr);
   registers.Write(LocalApicRegister::EOI, 0);
 }
 

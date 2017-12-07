@@ -30,7 +30,7 @@ rules:
   import/no-extraneous-dependencies: 0
   no-return-assign: 1
   new-cap: 1
-  no-console: 0
+  no-console: 1
   wrap-iife:
     - 2
     - 'inside'
@@ -39,10 +39,7 @@ rules:
     -
       functions: false
       classes: true
-  no-param-reassign:
-    - 2
-    -
-      props: false
+  no-param-reassign: 0
 
 parserOptions:
   ecmaVersion: 6

@@ -25,7 +25,7 @@ extern "C" {
   }
 
   void abort() {
-    GLOBAL_boot_services()->FatalError("abort() requested");
+    GLOBAL_boot_services()->FatalError("aborted");
   }
 
   size_t __stdio_read(FILE* f, unsigned char* buf, size_t len) {

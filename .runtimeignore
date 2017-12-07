@@ -14,6 +14,7 @@ LICENSE.isaac
 LICENSE
 /node_modules/util/test/
 /src
+/build
 /deps
 /tmp
 /scripts
