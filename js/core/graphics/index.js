@@ -26,7 +26,7 @@ module.exports = {
 
   enableGraphics(width, height, bitDepth) {
     secondBuffer = new Uint8Array(width * height * (bitDepth / 8));
-    secondBuffer.fill(0xff); // TODO: Это моя строчка)))
+    secondBuffer.fill(0xff);
     const renderer = renderers.getDefaultRenderer();
     renderer.enableGraphics(width, height, bitDepth);
     screen[screenSymbols.reset]();
