@@ -177,7 +177,6 @@ exports.draw = (drawbuf) => {
         }
       }
     }
-    $$.graphics.flush();
   }
   if (global.$$ && global.$$.graphics && global.$$.graphics.graphicsAvailable()) $$.graphics.repaint();
 };

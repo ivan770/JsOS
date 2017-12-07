@@ -220,10 +220,10 @@ const JsMB = {
     for (let x = 0; x < this.screenWidth(); x++) {
       for (let y = 0; y < this.screenHeight(); y++) {
         graphics.setPixel(x, y, ...$JsMobileBasic.background);
-        graphics.flush();
+        graphics.repaint();
       }
     }
-    graphics.flush();
+    graphics.repaint();
     // clearRect(0, 0, this.screenWidth(), screenHeight());
     // document.getElementById('p').innerHTML = '';
     return true;
@@ -232,10 +232,10 @@ const JsMB = {
     for (let x = 0; x < this.screenWidth(); x++) {
       for (let y = 0; y < this.screenHeight(); y++) {
         graphics.setPixel(x, y, ...color);
-        graphics.flush();
+        graphics.repaint();
       }
     }
-    graphics.flush();
+    graphics.repaint();
     return true;
   },
   drawRect(x, y, w, h) {
