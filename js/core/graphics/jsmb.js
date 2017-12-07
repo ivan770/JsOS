@@ -38,6 +38,8 @@ const $TMP = {
   bgcolor: [],
 };
 
+let ctx;
+
 // #region Init
 // var $Init = {
 //     _Support: function () {
@@ -217,27 +219,19 @@ const JsMB = {
     return true;
   },
   cls() {
-    for (let x = 0; x < this.screenWidth(); x++) {
-      for (let y = 0; y < this.screenHeight(); y++) {
-        graphics.setPixel(x, y, ...$JsMobileBasic.background);
-        graphics.repaint();
-      }
-    }
-    graphics.repaint();
-    // clearRect(0, 0, this.screenWidth(), screenHeight());
-    // document.getElementById('p').innerHTML = '';
+    graphics.fillScreen(...$JsMobileBasic.background);
     return true;
   },
   fillScreen(color) {
-    for (let x = 0; x < this.screenWidth(); x++) {
-      for (let y = 0; y < this.screenHeight(); y++) {
-        graphics.setPixel(x, y, ...color);
-        graphics.repaint();
-      }
-    }
-    graphics.repaint();
+    graphics.fillScreen(...color);
     return true;
   },
+  /* fillScreen(r, g, b, from = 0, to = graphics.displayBuffer.length) {
+    const colorArray = [b, g, r];
+    const buf = Array(to - from).map((_, i) => colorArray[i % 3]);
+    graphics.displayBuffer.set(buf, from, to);
+    graphics.repaint();
+  }, */
   drawRect(x, y, w, h) {
     ctx.strokeRect(x, y, w, h);
     return true;
