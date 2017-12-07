@@ -2,7 +2,7 @@
 
 function init() {
   if (!$$.graphics.graphicsAvailable()) {
-    console.log('Graphics unavailable');
+    $$.stdio.defaultStdio.writeError('Graphics unavailable');
     return false;
   }
 
@@ -11,7 +11,7 @@ function init() {
   debug($$.graphics.displayBuffer.length);
 
   $$.graphics.displayBuffer.fill(0xff);
-  $$.graphics.repaint();
+  setTimeout(() => $$.graphics.repaint(), 1000);
 
   // for (let i = 0; i < $$.graphics.displayBuffer.length; i++) {
   //   $$.graphics.displayBuffer[i] = 0xff;
