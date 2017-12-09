@@ -28,6 +28,7 @@ class Logger {
     this.warn = this.warn.bind(this);
     this.error = this.error.bind(this);
     this.info = this.info.bind(this);
+    this.success = this.success.bind(this);
     this.setLevels = this.setLevels.bind(this);
     this.removeLevel = this.removeLevel.bind(this);
     this.setCallback = this.setCallback.bind(this);
