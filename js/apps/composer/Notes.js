@@ -40,9 +40,28 @@ class Note {
   }
 
   parse(str) {
-    const regexp = /(\d)(\w)(\d)/;
+    const regexp = /(\d+)(\w)(\d)/;
     const [, duration, note, octave] = regexp.exec(str);
     return { duration, note, octave };
+  }
+
+  duration2ms(duration) {
+		// bpm   ¼	  1		 ½   ⅛  1/16
+		// 120	500	2000 1000	250	125
+    switch (Number(duration)) {
+      case 1:
+        return 2000;
+      case 2:
+        return 1000;
+      case 4:
+        return 500;
+      case 8:
+        return 250;
+      case 16:
+        return 125;
+      default:
+        return null;
+    }
   }
 
   get notes() {

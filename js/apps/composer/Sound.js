@@ -20,17 +20,23 @@ class Sound {
     let position = 0;
 
     const tick = () => {
-      const note = this.sound[position];
-      const noteData = Notes[Notes.keynotes[note]];
-      if (noteData) {
-        info(note, 0);
-        $$.speaker.play(noteData, Notes.duration);
+      const noteData = this.sound[position];
+      const { duration, note, octave } = Notes.parse(noteData);
+      Notes.setOctave(octave);
+      const NOTE = Notes[Notes.keynotes[note]];
+      const DURATION = Notes.duration2ms(duration);
+
+      if (!DURATION) return error(`Duration ${duration} isn't supported!`) ^ res(1);
+
+      if (note) {
+        info(`Note: ${note}, Duration: 1/${duration}, Octave: ${octave}`, 0);
+        $$.speaker.play(NOTE, DURATION);
       } else {
         return error(`I don't know note ${note}`) ^ res(1);
       }
       if (position < this.sound.length - 1) {
         position++;
-        setTimeout(tick, this.tick_duration);
+        setTimeout(tick, DURATION);
       } else {
         success('End!', 0);
         res(0);
