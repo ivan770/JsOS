@@ -1,13 +1,15 @@
 'use strict';
 
-const driverUtils = require('../../core/driver-utils');
+const Driver = require('../../');
+const driverUtils = require('../../../core/driver-utils');
 
 const ioPort43 = driverUtils.ioPort(0x43);
 const ioPort42 = driverUtils.ioPort(0x42);
 const ioPort61 = driverUtils.ioPort(0x61);
 
-class Speaker {
+class Speaker extends Driver {
   constructor() {
+    super('PCSpeaker', 'IBM', 'UsernameAK');
     debug('Speaker initialized!');
   }
 

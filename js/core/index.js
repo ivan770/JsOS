@@ -25,7 +25,7 @@ const ps2 = require('./ps2');
 const pci = require('./pci');
 const net = require('./net');
 const stdio = require('./stdio');
-const speaker = require('../driver/ibmpc/pcspeaker');
+const speaker = require('../driver').load('ibm/pcspeaker'); // require('../driver/ibmpc/pcspeaker');
 const logger = new (require('../modules/logger'))(stdio);
 try {
   logger.setLevels(require('../../package.json').logLevels);
