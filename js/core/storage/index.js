@@ -1,6 +1,6 @@
 'use strict';
 
-// const fs = require('../fs');
+const fs = require('../fs');
 
 const _path = Symbol('path');
 const _data = Symbol('data');

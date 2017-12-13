@@ -22,6 +22,7 @@ const runtime = require('../../core');
 const commands = new Map();
 const stdio = runtime.stdio.defaultStdio;
 const keyboard = require('../../core/keyboard');
+const mouse = require('../../core/mouse');
 
 exports.setCommand = (name, cb) => {
   assert(typeutils.isString(name));
@@ -50,6 +51,7 @@ exports.runCommand = (name, args, done) => {
   commands.get(name).run(stringargs, {
     stdio: opts.stdio,
     keyboard,
+    mouse,
   }, done);
 };
 
