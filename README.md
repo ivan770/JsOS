@@ -8,6 +8,8 @@ It tries to be compatible with npm module ecosystem and supports some of the Nod
 
 _WARNING: project is in development and not ready for production use._
 
+[Documentation in progress](https://github.com/PROPHESSOR/JsOS/wiki)
+
 ### Ready ISO image
 
 [Download](https://github.com/PROPHESSOR/jsos/releases)
