@@ -15,7 +15,7 @@
     "build-iso": "grub-mkrescue -o build.iso .",
     "build-kernel": "cmake ."
   },
-  "logLevels":[
+  "logLevels": [
     "LineEditor",
     "Keyboard"
   ],
