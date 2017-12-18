@@ -13,9 +13,7 @@
 // limitations under the License.
 'use strict';
 
-exports.Error = Error;
-
-class SystemError {
+class JsOSError {
   constructor(message, errcode, call) {
     let msg = '';
     if (errcode) msg += `${errcode}: `;
@@ -30,4 +28,32 @@ class SystemError {
   }
 }
 
-exports.SystemError = SystemError;
+class IOError extends JsOSError {
+  constructor(message, errcode, call) { // TODO: Normalize
+    const msg = `[IO Error]: ${message}`;
+    super(msg, errcode, call);
+  }
+}
+
+class WTFError extends JsOSError {
+  constructor(message, errcode, call) {
+    const msg = `[WTF Error]: ${message}\n We don't understand how it was happened...\n Write to us: github.com/PROPHESSOR/JsOS/issues`;
+    super(msg, errcode, call);
+  }
+}
+
+class FatalError extends JsOSError {
+  // constructor(message, )
+  constructor() {
+    // TODO: Write me...
+  }
+}
+
+module.exports = {
+  Error,
+  JsOSError,
+  SystemError: JsOSError,
+  IOError,
+  WTFError,
+  FatalError,
+};
