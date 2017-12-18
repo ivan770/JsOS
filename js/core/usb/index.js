@@ -15,23 +15,42 @@
 'use strict';
 
 const PciDevice = require('../pci/pci-device');
+const co = require('./constants');
+const DMAPool = require('../system/dma-pool');
+
+const FRAMELIST_SIZE = 1024 * 4;
+const MAX_QH = 8;
 
 class UHCIDriver {
   constructor() {
     '';
   }
+  initQHPool() {
+    for (let i = 0; i < MAX_QH; i++) {
+      this.qhPool[i] = {
+        transfer: 0,
+        
+      };
+    }
+  }
   init(device) {
     // Initialize the PCI device
     device.setPciCommandFlag(PciDevice.commandFlag.BusMaster);
+
     this.iobar = device.bars[4];
-    this.cmd = this.iobar.resource.offsetPort(0);
+    this.cmd = this.iobar.resource.offsetPort(co.REG_CMD);
+    this.intr = this.iobar.resource.offsetPort(co.REG_INTR);
+    this.frnum = this.iobar.resource.offsetPort(co.REG_FRNUM);
+    this.frbaseadd = this.iobar.resource.offsetPort(co.REG_FRBASEADD);
 
-    // Reset controller
-    this.cmd.write16(0x4);
-    while ((this.cmd.read16() & 0x4) !== 0);
+    this.dmaPool = new DMAPool();
+    this.frameList = this.dmaPool.allocBuffer(FRAMELIST_SIZE);
+    this.qhPool = [];
 
-    // Start controller
-    this.cmd.write16(0x1);
+    this.intr.write16(0);
+
+    this.frnum.write16(0);
+    this.frbaseadd.write16(this.frameList.address);
   }
   static init(device) {
     return new UHCIDriver().init(device);
