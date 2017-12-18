@@ -37,7 +37,9 @@ class IOError extends JsOSError {
 
 class WTFError extends JsOSError {
   constructor(message, errcode, call) {
-    const msg = `[WTF Error]: ${message}\n We don't understand how it was happened...\n Write to us: github.com/PROPHESSOR/JsOS/issues`;
+    const msg = `[WTF Error]: ${message}
+    We don't understand how it was happened...
+    Write to us: github.com/PROPHESSOR/JsOS/issues`;
     super(msg, errcode, call);
   }
 }
