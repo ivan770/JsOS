@@ -153,13 +153,15 @@ const driver = {
   init(device) {
     const irq = device.irq;
     const port = device.ioPort;
+    const sport = device.statusPort;
 
     function init() {
-      let v1 = port.read8();
-      let v2 = 0;
-      while (v1 !== v2) {
-        v2 = v1;
-        v1 = port.read8();
+      while (true) {
+        port.read8();
+        const status = sport.read8();
+        if (!(status & 0x1)) {
+          break;
+        }
       }
     }
 

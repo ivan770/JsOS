@@ -24,6 +24,7 @@ exports.setKeyboardDriver = (driver) => {
   driver.init({
     irq: driverUtils.irq(1),
     ioPort: driverUtils.ioPort(0x60),
+    statusPort: driverUtils.ioPort(0x64),
   });
 };
 
