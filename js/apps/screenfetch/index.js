@@ -65,7 +65,11 @@ const suffix = [
   () => undefined,
   () => undefined,
   () => undefined,
-  () => undefined,
+  () => `${
+            +((__SYSCALL.memoryInfo().pmUsed / 1024 / 1024).toFixed(2))
+          }M / ${
+            +((__SYSCALL.memoryInfo().pmTotal / 1024 / 1024).toFixed(2))
+          }M`,
   0,
   0,
   0,
