@@ -19,6 +19,7 @@ class Driver {
     try {
       return require(`./${name}`);
     } catch (e) {
+      debug(e);
       return e;
     }
   }

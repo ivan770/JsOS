@@ -155,7 +155,7 @@ const driver = {
     const port = device.ioPort;
     const sport = device.statusPort;
 
-    function init() {
+    function resetBuffer() {
       while (true) {
         port.read8();
         const status = sport.read8();
@@ -191,7 +191,7 @@ const driver = {
       escaped = false;
     });
 
-    init();
+    resetBuffer();
   },
   reset() {},
 };
