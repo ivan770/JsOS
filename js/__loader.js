@@ -267,6 +267,8 @@
     sys: 'util/util.js',
     util: 'util/util.js',
     http: './modules/http.js',
+    logger: './modules/logger.js',
+    errors: './modules/errors.js',
     /* eslint-enable camelcase */
   }, runtimePackagePath);
 
