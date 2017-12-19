@@ -155,7 +155,7 @@ const cmds = {
     run(_args, f, res) {
       const args = _args.split(/\s+/);
       const mode = args[0];
-      const frec = Number(args[1]) || 100;
+      const frec = Number(args[1]) || 1000;
       const duration = Number(args[2]) || 1000;
 
       if (mode === 'play') {
