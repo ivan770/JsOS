@@ -2,8 +2,9 @@
 
 const PciDevice = require('../../core/pci/pci-device');
 const Buffer = require('buffer').Buffer;
+const Driver = require('..');
 
-class ES1370 {
+class ES1370 extends Driver {
   constructor() {
     this.onIRQ = this.onIRQ.bind(this);
   }
@@ -42,4 +43,4 @@ class ES1370 {
   }
 }
 
-runtime.pci.addDriver(0x1274, 0x5000, ES1370);
+$$.pci.addDriver(0x1274, 0x5000, ES1370);
