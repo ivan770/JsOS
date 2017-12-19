@@ -52,6 +52,17 @@ class FatalError extends JsOSError {
   }
 }
 
+class TerminalError {
+  constructor(msg, errcode, call) {
+      const output = typeof $$ !== "undefined" ?
+        $$.stdio.defaultStdio.writeError :
+        debug;
+      output(`Error ${msg} ${errcode?'('+errcode+')':''} ${call?'['+call+']':''}`);
+    console.error(msg); //eslint-disable-line
+    console.error([errcode, call]); //eslint-disable-line
+  }
+}
+
 class Warning extends Error {
   constructor(msg, name) {
     super();
@@ -68,4 +79,5 @@ module.exports = {
   WTFError,
   FatalError,
   Warning,
+  TerminalError
 };
