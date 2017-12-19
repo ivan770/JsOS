@@ -14,6 +14,7 @@
 'use strict';
 
 const processor = require('./index.js');
+const { log, warn } = $$.logger;
 
 /* global $$ */
 
@@ -24,7 +25,7 @@ const cmds = {
     description: 'Shut down the computer',
     usage: 'shutdown',
     run(args, f, res) {
-      console.log('Shuting down...');
+      warn('Shuting down...');
       $$.machine.shutdown();
       return res(0);
     },
@@ -33,7 +34,7 @@ const cmds = {
     description: 'Suspend the computer',
     usage: 'suspend',
     run(args, f, res) {
-      console.log('Suspending...');
+      warn('Suspending...');
       $$.machine.suspend();
       return res(0);
     },
@@ -42,7 +43,7 @@ const cmds = {
     description: 'Reboot the computer',
     usage: 'reboot',
     run(args, f, res) {
-      console.log('Rebooting...');
+      warn('Rebooting...');
       $$.machine.reboot();
       return res(0);
     },
@@ -104,7 +105,7 @@ const cmds = {
           $.writeError('Error!');
           return cb(1);
         }
-        console.log(JSON.stringify(data));
+        log(JSON.stringify(data));
         if (data.results[0]) {
           $.setColor('green');
           $.writeLine('OK!');
@@ -186,16 +187,16 @@ const cmds = {
         let firstsec;
         const buf = _buf.slice(0x1BE, 0x1BE + 64);
         for (let i = 0; i < 4; i++) {
-          console.log(buf[(i * 16) + 4]);
+          log(buf[(i * 16) + 4]);
           if (buf[(i * 16) + 4]) {
             f.stdio.writeLine(`[${i}]:`);
             f.stdio.writeLine(`  type: 0x${buf[(i * 16) + 4].toString(16)}`);
-            f.stdio.writeLine(`  size: ${buf.readUInt32LE((i * 16) + 0xC) / 1024 / 1024 * 512}M`);
+            f.stdio.writeLine(`  size: ${buf.readUInt32LE((i * 16) + 0xC) / 1024 / 1024 * 512}M`); //eslint-disable-line
 
             firstsec = buf.readUInt32LE((i * 16) + 0x8);
           }
         }
-        console.log(firstsec);
+        log(firstsec);
         return iface.read(firstsec, buf);
       }).then(fsbuf => {
         f.stdio.writeLine('  assumming that FS is FAT, header:');
@@ -218,7 +219,7 @@ const cmds = {
     usage: 'ls /<drive>/<partition>',
     run(args, f, res) {
       const fs = require('../../core/fs');
-      const filesize = require('../../utils/filesize');
+      // const filesize = require('../../utils/filesize');
       fs.readdir(args, 'utf8', (err, list) => {
         if (err) {
           f.stdio.writeError(err);
@@ -275,7 +276,7 @@ const cmds = {
       const http = require('http');
       http.get(args, (res) => {
         res.setEncoding('utf8');
-        res.on('data', function (chunk) {
+        res.on('data', (chunk) => {
           f.stdio.write(chunk);
         });
         res.on('end', () => {
@@ -290,8 +291,16 @@ const cmds = {
     usage: 'meminfo',
     run(args, f, res) {
       const info = __SYSCALL.memoryInfo();
-      f.stdio.writeLine(`MEM:  ${+((info.pmUsed / 1024 / 1024).toFixed(2))}M / ${+((info.pmTotal / 1024 / 1024).toFixed(2))}M`);
-      f.stdio.writeLine(`HEAP: ${+((info.heapUsed / 1024 / 1024).toFixed(2))}M / ${+((info.heapTotal / 1024 / 1024).toFixed(2))}M`);
+      f.stdio.writeLine(`MEM:  ${
+          +((info.pmUsed / 1024 / 1024).toFixed(2))
+        }M / ${
+          +((info.pmTotal / 1024 / 1024).toFixed(2))
+        }M`);
+      f.stdio.writeLine(`HEAP: ${
+          +((info.heapUsed / 1024 / 1024).toFixed(2))
+        }M / ${
+          +((info.heapTotal / 1024 / 1024).toFixed(2))
+        }M`);
       return res(0);
     },
   },

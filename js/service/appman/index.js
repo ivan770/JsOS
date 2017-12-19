@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/* global $$ PERSISTENCE */
-
 'use strict';
 
 class App {
@@ -25,7 +23,7 @@ class App {
       run: this.run,
     });
     this.isAppExist = this.isAppExist.bind(this);
-    console.log(`PERSISTENCE: ${PERSISTENCE}`);
+    debug(`PERSISTENCE: ${PERSISTENCE}`);
   }
 
   install(name) {
@@ -80,7 +78,7 @@ class App {
       PERSISTENCE.Apps[app].run(app, args, f, res);
     } catch (e) {
       f.stdio.writeError(`App ${app} crashed!`);
-      console.error(e);
+      debug(e);
       return res(1);
     }
     // return res(callback);
