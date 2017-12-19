@@ -905,7 +905,7 @@ pciManager.each((pciDevice) => {
 
   const devid_pair = `${pciDevice.vendorId().toString(16) }:${pciDevice.deviceId().toString(16)}`
 
-  const info = `${address.bus.toString(16)}:${address.slot.toString(16)}.${address.func} ${classData.className} [${devid_pair}] ${pciids[devid_pair]} (IRQ: ${vector} PIN: ${pins[devicePin]})`;
+  const info = `${address.bus.toString(16)}:${address.slot.toString(16)}.${address.func} ${classData.className} [${devid_pair}] ${pciids[devid_pair]} (IRQ: ${vector} PIN: ${pins[devicePin]})`; //eslint-disable-line
 
   debug(info);
 });

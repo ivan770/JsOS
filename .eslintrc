@@ -1,6 +1,3 @@
-extends:
-  - airbnb-base
-
 globals:
   debug: true
   __SYSCALL: true
@@ -20,7 +17,7 @@ rules:
   max-len:
     - 1
     -
-      code: 100
+      code: 150
       tabWidth: 2
       ignoreComments: true
       ignoreUrls: true

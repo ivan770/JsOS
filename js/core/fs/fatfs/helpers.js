@@ -2,11 +2,11 @@ var S = require("./structs.js"),
     _xok = require('./xok');
 
 // flag for WORKAROUND: https://github.com/tessel/beta/issues/380
-exports.workaroundTessel380 = function () {
+exports.workaroundTessel380 = (function () {
     var b = Buffer([0]),
         s = b.slice(0);
     return ((s[0] = 0xFF) !== b[0]);
-}();
+})();
 
 
 // WORKAROUND: https://github.com/tessel/beta/issues/433

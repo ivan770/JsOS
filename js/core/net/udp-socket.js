@@ -49,7 +49,7 @@ class UDPSocket {
       viaIP = ip;
     } else {
       const routingEntry = route.lookup(ip);
-      if (!routingEntry) return console.log(`[UDP] no route to ${ip}`);
+      if (!routingEntry) return debug(`[UDP] no route to ${ip}`);
 
       viaIP = routingEntry.gateway;
       if (!intf) {

@@ -22,69 +22,6 @@ function rmFromArrayByVal(array, val) {
   if (i !== -1) array.splice(i, 1);
 }
 
-class Server extends EventEmitter {
-  constructor(opts, connectionListener, runtimeServer) {
-    super();
-    this._handle = runtimeServer || new runtime.net.TCPServerSocket();
-    this._connections = [];
-    this._handle.onconnect = (runtimeSocket) => {
-      const socket = new Socket(runtimeSocket);
-      this.emit('connection', socket);
-      socket.once('close', () => rmFromArrayByVal(this._connections, socket));
-      this._connections.push(socket);
-    }
-    this._handle.onclose = () => this.emit('close');
-    this._handle.onerror = (err) => {
-      this.emit('error', err);
-      this.close();
-    }
-    this._handle.onlisten = () => this.emit('listening');
-    if (connectionListener) this.on('connection', connectionListener);
-  }
-  address() {
-    return {
-      port: this._handle.localPort,
-      family: 'IPv4',
-      address: '127.0.0.1'
-    }
-  }
-  close(cb) {
-    if (cb) this.once('close', cb);
-    this._handle.close();
-  }
-  get connections() {
-    return this._connections.length;
-  }
-  getConnections(cb) {
-    if (cb) cb(null, this._connections.length);
-  }
-  listen(port, hostname, backlog, callback) {
-    let options = {};
-    if (typeof hostname === 'function') {
-      callback = hostname;
-      hostname = null;
-    }
-    if (typeof backlog === 'function') {
-      callback = backlog;
-      backlog = null;
-    }
-    if (typeof port === 'object') {
-      options = port;
-      port = options.port || null;
-    }
-    if (typeof port === 'function') {
-      callback = port;
-      port = null;
-    }
-    options.port = port;
-    if (callback) this.once('listening', callback);
-    this._handle.listen(options.port);
-  }
-
-  // ref and unref do nothing, since runtime isn't a process
-  ref() {}
-  unref() {}
-}
 
 class Socket extends Duplex {
   constructor(optsOpt, runtimeSocketOpt) {
@@ -188,9 +125,9 @@ class Socket extends Duplex {
     callback(null);
   }
 }
-/*
+
 class Server extends EventEmitter {
-  constructor(runtimeServer) {
+  constructor(opts, connectionListener, runtimeServer) {
     super();
     this._handle = runtimeServer || new runtime.net.TCPServerSocket();
     this._connections = [];
@@ -206,6 +143,7 @@ class Server extends EventEmitter {
       this.close();
     };
     this._handle.onlisten = () => this.emit('listening');
+    if (connectionListener) this.on('connection', connectionListener);
   }
   address() {
     return {
@@ -215,23 +153,17 @@ class Server extends EventEmitter {
     };
   }
   close(cb) {
-    this.once('close', cb);
+    if (cb) this.once('close', cb);
     this._handle.close();
   }
   get connections() {
     return this._connections.length;
   }
   getConnections(cb) {
-    if (cb) {
-      cb(null, this._connections.length);
-    }
+    if (cb) cb(null, this._connections.length);
   }
-  listen(portOpt, hostnameOpt, backlogOpt, callbackOpt) {
+  listen(port, hostname, backlog, callback) {
     let options = {};
-    let port = portOpt;
-    let hostname = hostnameOpt;
-    let backlog = backlogOpt;
-    let callback = callbackOpt;
     if (typeof hostname === 'function') {
       callback = hostname;
       hostname = null;
@@ -249,7 +181,7 @@ class Server extends EventEmitter {
       port = null;
     }
     options.port = port;
-    this.once('listening', callback);
+    if (callback) this.once('listening', callback);
     this._handle.listen(options.port);
   }
 
@@ -257,7 +189,7 @@ class Server extends EventEmitter {
   ref() {}
   unref() {}
 }
- */
+
 exports.Socket = Socket;
 exports.Server = Server;
 

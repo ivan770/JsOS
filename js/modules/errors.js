@@ -48,6 +48,15 @@ class FatalError extends JsOSError {
   // constructor(message, )
   constructor() {
     // TODO: Write me...
+    super("FatalError... But this error doesn't implemented...");
+  }
+}
+
+class Warning extends Error {
+  constructor(msg, name) {
+    super();
+    this.name = name;
+    this.message = msg;
   }
 }
 
@@ -58,4 +67,5 @@ module.exports = {
   IOError,
   WTFError,
   FatalError,
+  Warning,
 };

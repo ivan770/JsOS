@@ -14,14 +14,7 @@
 'use strict';
 
 const EventEmitter = require('events');
-
-class Warning extends Error {
-  constructor(msg, name) {
-    super();
-    this.name = name;
-    this.message = msg;
-  }
-}
+const { Warning } = require('./errors');
 
 class Process extends EventEmitter {
   constructor() {
@@ -51,7 +44,8 @@ class Process extends EventEmitter {
         if (this.listenerCount('warning') !== 0) {
           return this.emit('warning', msg);
         }
-        console.error(`(runtime) ${msg.name}${msg.message ? `: ${msg.message}` : ''}`);
+        console.error(`(jsos) ${msg.name}${msg.message ? `: ${msg.message}` : ''}`); //eslint-disable-line
+        // Because this module loads before logger and this message is important
       },
       env: {},
       execArgv: [],

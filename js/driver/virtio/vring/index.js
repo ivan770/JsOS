@@ -108,7 +108,12 @@ class VRing {
       }
     }
 
-    const first = this.descriptorTable.placeBuffers(pageSplitBuffers, lengths, isWriteOnly, isWriteOnlyArray);
+    const first = this.descriptorTable.placeBuffers(
+      pageSplitBuffers,
+      lengths,
+      isWriteOnly,
+      isWriteOnlyArray
+    );
     if (first < 0) {
       debug('virtio: no descriptors\n');
       return false;

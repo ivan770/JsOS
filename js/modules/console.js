@@ -17,6 +17,8 @@ const util = require('util');
 const stream = require('stream');
 const printer = require('../core/tty/printer');
 
+/* eslint-disable no-console */
+
 class Console {
   constructor(stdout, stderr) {
     if (!stdout || (!(stdout instanceof stream.Writable) && !(stdout instanceof stream.Duplex))) {
@@ -69,15 +71,15 @@ class Console {
   warn(...data) {
     this.error(...data);
   }
-	print(...data){
-		printer.print(...data);
-		this.log(...data);
-	}
-	printDir(obj, optsOpt){
-		const opts = optsOpt;
+  print(...data) {
+    printer.print(...data);
+    this.log(...data);
+  }
+  printDir(obj, optsOpt) {
+    const opts = optsOpt;
     opts.customInspect = true;
     this.print(util.inspect(obj, opts));
-	}
+  }
 }
 
 global.console = new Console(process.stdout, process.stderr);

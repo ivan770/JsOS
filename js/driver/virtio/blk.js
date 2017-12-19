@@ -76,12 +76,20 @@ function initializeBlockDevice(pciDevice) {
     read(sector, data) {
       return new Promise((resolve, reject) => {
         if (sector > totalSectorCount) {
-          reject(new RangeError(`sector ${sector} out of bounds (max ${totalSectorCount}, non-inclusive)`));
+          reject(
+            new RangeError(
+              `sector ${sector} out of bounds (max ${totalSectorCount}, non-inclusive)`
+            )
+          );
           return;
         }
         const status = new Uint8Array(1);
         promiseQueue.push([resolve, reject, VIRTIO_BLK_T_IN, data, status]);
-        reqQueue.placeBuffers([buildHeader(VIRTIO_BLK_T_IN, sector), data, status], false, [false, true, true]);
+        reqQueue.placeBuffers(
+          [buildHeader(VIRTIO_BLK_T_IN, sector), data, status],
+          false,
+          [false, true, true]
+        );
 
         if (reqQueue.isNotificationNeeded()) {
           dev.queueNotify(QUEUE_ID_REQ);
@@ -92,7 +100,11 @@ function initializeBlockDevice(pciDevice) {
       return new Promise((resolve, reject) => {
         const status = new Uint8Array(1);
         promiseQueue.push([resolve, reject, VIRTIO_BLK_T_OUT, data, status]);
-        reqQueue.placeBuffers([buildHeader(VIRTIO_BLK_T_OUT, sector), data, status], false, [false, false, true]);
+        reqQueue.placeBuffers(
+          [buildHeader(VIRTIO_BLK_T_OUT, sector), data, status],
+          false,
+          [false, false, true]
+        );
 
         if (reqQueue.isNotificationNeeded()) {
           dev.queueNotify(QUEUE_ID_REQ);

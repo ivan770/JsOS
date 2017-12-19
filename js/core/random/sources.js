@@ -22,7 +22,7 @@ exports.addEntropySource = (source) => {
 
   source.getBytes(new Uint8Array(8), (u8) => {
     isaac.seed(u8);
-    console.log(`[random] using entropy source ${source.getName()}`);
+    debug(`[random] using entropy source ${source.getName()}`);
   });
 
   // Set this source as the default one

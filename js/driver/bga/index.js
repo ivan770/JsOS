@@ -38,7 +38,8 @@ if (bgaAvailable()) {
         writeBgaRegister(constants.VBE_DISPI_INDEX_X_OFFSET, 0);
         writeBgaRegister(constants.VBE_DISPI_INDEX_Y_OFFSET, height);
         writeBgaRegister(constants.VBE_DISPI_INDEX_BPP, bitDepth);
-        writeBgaRegister(constants.VBE_DISPI_INDEX_ENABLE, constants.VBE_DISPI_ENABLED | constants.VBE_DISPI_LFB_ENABLED);
+        writeBgaRegister(constants.VBE_DISPI_INDEX_ENABLE, constants.VBE_DISPI_ENABLED
+          | constants.VBE_DISPI_LFB_ENABLED);
       };
       renderer.ongetbuffer = () => buf;
       renderer.constants = constants;

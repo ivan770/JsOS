@@ -147,11 +147,13 @@ class LineEditor {
   }
 
   writeHistory(cmd) {
-    if (cmd === PERSISTENCE.Editor.history[PERSISTENCE.Editor.historyPosition - 1] || cmd.trim() === '') return log('Don\'t write to history because repeation or empty', { level: 'LineEditor' });
+    if (cmd === PERSISTENCE.Editor.history[PERSISTENCE.Editor.historyPosition - 1]
+      || cmd.trim() === '')
+      return log('Don\'t write to history because repeation or empty', { level: 'LineEditor' });
     PERSISTENCE.Editor.history.push(cmd);
     // PERSISTENCE.Editor.historyPosition++;
     PERSISTENCE.Editor.historyPosition = PERSISTENCE.Editor.history.length;
-    log(`Editor->writeHistory(${cmd}) ==> ${JSON.stringify(PERSISTENCE.Editor.history)} [${typeof(PERSISTENCE.Editor.history)}]`, { level: 'LineEditor' });
+    log(`Editor->writeHistory(${cmd}) ==> ${JSON.stringify(PERSISTENCE.Editor.history)} [${typeof(PERSISTENCE.Editor.history)}]`, { level: 'LineEditor' }); //eslint-disable-line
   }
 
   previous() {

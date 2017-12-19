@@ -13,6 +13,7 @@
 // limitations under the License.
 
 'use strict';
+/* eslint-disable no-console */
 
 const packagejson = require('../package.json');
 require('module-singleton')(packagejson);

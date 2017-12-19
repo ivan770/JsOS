@@ -1,4 +1,4 @@
-// Copyright 2015-present runtime.js project authors
+// Copyright 2015-present $$.js project authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,7 +13,9 @@
 // limitations under the License.
 'use strict';
 
-const { SystemError } = require('./errors');
+const {
+  SystemError,
+} = require('./errors');
 
 const names = [
   'NODATA',
@@ -48,7 +50,7 @@ const servers = [
 ];
 
 function throwIPv6Err(cb) {
-  const err = new SystemError('runtime doesn\'t support IPv6', exports.BADFAMILY);
+  const err = new SystemError('JsOS doesn\'t support IPv6', exports.BADFAMILY);
   if (cb) {
     return cb(err);
   }
@@ -81,7 +83,7 @@ function lookup(hostname, opts, cb) {
     }
     return;
   }
-  runtime.dns.resolve(hostname, {
+  $$.dns.resolve(hostname, {
     query: opts.query,
   }, (err, data) => {
     if (err) {
@@ -94,22 +96,8 @@ function lookup(hostname, opts, cb) {
     for (const i of [...data.results.keys()]) {
       const res = data.results[i];
       if (!opts.all && i === 0) {
-        var addr = res.address.join('.');
+        const addr = res.address.join('.');
         if (cb) cb(null, addr, 4);
-        return;
-      } else {
-        switch (res.record) {
-          case 'A':
-            if (opts.addrOnly) {
-              ret.push(res.address.join('.'));
-            } else {
-              ret.push({
-                address: res.address.join('.'),
-                family: 4
-              });
-            }
-            break;
-        }
         return;
       }
       switch (res.record) {
@@ -126,10 +114,11 @@ function lookup(hostname, opts, cb) {
         default:
           break;
       }
+      return;
     }
     if (ret.length === 0) {
       if (cb) {
-        cb(new SystemError('dns query failed', exports.NODATA, 'runtime.dns.resolve'), null);
+        cb(new SystemError('dns query failed', exports.NODATA, '$$.dns.resolve'), null);
       }
       return;
     }
