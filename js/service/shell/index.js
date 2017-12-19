@@ -54,11 +54,16 @@ exports.runCommand = (name, args, done) => {
 
   const stringargs = opts.args.join(' ');
   opts.stdio = opts.stdio || runtime.stdio.defaultStdio;
-  commands.get(name).run(stringargs, {
-    stdio: opts.stdio,
-    keyboard,
-    mouse,
-  }, done);
+  try{
+    commands.get(name).run(stringargs, {
+      stdio: opts.stdio,
+      keyboard,
+      mouse,
+    }, done);
+  }catch(e){
+    new (require('errors').TerminalError)(`Command ${name} crashed!`);
+    debug(e);
+  }
 };
 
 function prompt() {
