@@ -27,7 +27,7 @@ Object.assign(exports, {
   freemem: mem,
   totalmem: mem,
   homedir: () => '/',
-  hostname: () => 'runtime',
+  hostname: () => 'JsOS',
   loadavg: () => [0, 0, 0],
   networkInterfaces() {
     const ret = {};
@@ -46,5 +46,5 @@ Object.assign(exports, {
   release: () => __SYSCALL.version().kernel,
   uptime: process.uptime,
   tmpdir: () => '/tmp',
-  type: () => 'runtime',
+  type: () => 'os',
 });

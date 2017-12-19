@@ -3,6 +3,9 @@
 */
 
 'use strict';
+
+const os = require('os');
+
 let io;
 
 // 38->
@@ -51,10 +54,10 @@ const root = [
 ];
 
 const suffix = [
-  () => 'User@JsOS',
+  () => `User@${os.hostname()}`,
   () => `JsOS version ${require('../../../package.json').version}`,
-  () => undefined,
-  () => Date.now(),
+  () => `JsOS kernel version ${os.release()} ${os.arch()} (${os.endianness()})`,
+  () => os.uptime(),
   () => PERSISTENCE.Apps._commands.length,
   () => 'JsOS-Shell',
   () => `${80}x${25}`,
