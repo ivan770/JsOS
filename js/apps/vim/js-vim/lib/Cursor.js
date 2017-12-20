@@ -64,9 +64,9 @@ Cursor.prototype.position = function (pos) {
     this.char(pos.char);
   }
   return {
-    line: this.line(),
-    char: this.char(),
-    col: this.col(),
+    'line': this.line(),
+    'char': this.char(),
+    'col': this.col()
   };
 };
 

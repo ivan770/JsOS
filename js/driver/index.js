@@ -1,6 +1,6 @@
 'use strict';
 
-const { log } = console; // FIXME: $$.logger;
+const {log} = console; // FIXME: $$.logger;
 
 class Driver {
   constructor(name, vendor = 'vendor', author = 'author') {

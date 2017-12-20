@@ -2,6 +2,7 @@
  * Composer
  * Copyright (c) 2017 PROPHESSOR
 */
+
 'use strict';
 
 const DURATION = 50;
@@ -42,7 +43,12 @@ class Note {
   parse(str) {
     const regexp = /(\d+)(\w)(\d)/;
     const [, duration, note, octave] = regexp.exec(str);
-    return { duration, note, octave };
+
+    return {
+duration,
+note,
+octave
+};
   }
 
   duration2ms(duration) {
@@ -74,18 +80,18 @@ class Note {
 
   get keynotes() {
     return {
-      C: 'C',
-      c: 'CD',
-      D: 'D',
-      d: 'DD',
-      E: 'E',
-      F: 'F',
-      f: 'FD',
-      G: 'G',
-      g: 'GD',
-      A: 'A',
-      a: 'AD',
-      H: 'H',
+      'C': 'C',
+      'c': 'CD',
+      'D': 'D',
+      'd': 'DD',
+      'E': 'E',
+      'F': 'F',
+      'f': 'FD',
+      'G': 'G',
+      'g': 'GD',
+      'A': 'A',
+      'a': 'AD',
+      'H': 'H'
     };
   }
 

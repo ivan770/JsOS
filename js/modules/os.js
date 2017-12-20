@@ -11,6 +11,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+
 'use strict';
 
 const interfaces = require('../core/net/interfaces');
@@ -20,31 +21,34 @@ function mem() {
 }
 
 Object.assign(exports, {
-  EOL: '\n',
-  arch: () => process.arch,
-  cpus: () => [],
-  endianness: () => 'LE',
-  freemem: mem,
-  totalmem: mem,
-  homedir: () => '/',
-  hostname: () => 'JsOS',
-  loadavg: () => [0, 0, 0],
+  'EOL': '\n',
+  'arch': () => process.arch,
+  'cpus': () => [],
+  'endianness': () => 'LE',
+  'freemem': mem,
+  'totalmem': mem,
+  'homedir': () => '/',
+  'hostname': () => 'JsOS',
+  'loadavg': () => [0, 0, 0],
   networkInterfaces() {
     const ret = {};
+
     for (const intf of interfaces.getAll()) {
-      ret[intf.name] = [{
-        address: intf.ipAddr.toString(),
-        netmask: intf.netmask.toString(),
-        family: 'IPv4',
-        mac: intf.macAddr.toString(),
-        internal: false, // since it's unknown whether it's internal, let's go with false by default
-      }];
+      ret[intf.name] = [
+{
+        'address': intf.ipAddr.toString(),
+        'netmask': intf.netmask.toString(),
+        'family': 'IPv4',
+        'mac': intf.macAddr.toString(),
+        'internal': false // since it's unknown whether it's internal, let's go with false by default
+      }
+];
     }
     return ret;
   },
-  platform: () => process.platform,
-  release: () => __SYSCALL.version().kernel,
-  uptime: process.uptime,
-  tmpdir: () => '/tmp',
-  type: () => 'os',
+  'platform': () => process.platform,
+  'release': () => __SYSCALL.version().kernel,
+  'uptime': process.uptime,
+  'tmpdir': () => '/tmp',
+  'type': () => 'os'
 });

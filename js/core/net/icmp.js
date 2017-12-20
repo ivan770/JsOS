@@ -25,6 +25,7 @@ function handleEchoRequest(intf, srcIP, u8, headerOffset) {
   }
 
   const routingEntry = route.lookup(srcIP);
+
   if (!routingEntry) {
     debug(`[ICMP] no route for ICMP reply to ${srcIP}`);
     return;
@@ -43,6 +44,7 @@ function handleEchoReply(intf, srcIP, u8, headerOffset) {
   const id = icmpHeader.getEchoRequestIdentifier(u8, headerOffset);
   const seq = icmpHeader.getEchoRequestSequence(u8, headerOffset);
   const ping = Ping._receiveLookup(id);
+
   if (ping) {
     ping._receive(srcIP, seq, u8, headerOffset + icmpHeader.headerLength);
   }
@@ -61,6 +63,6 @@ exports.receive = (intf, srcIP, destIP, u8, headerOffset) => {
 
   if (type === icmpHeader.ICMP_TYPE_ECHO_REPLY) {
     handleEchoReply(intf, srcIP, u8, headerOffset);
-    return;
+
   }
 };

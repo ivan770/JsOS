@@ -18,20 +18,21 @@ class Brainfuck {
 
   get ops() {
     const self = this;
+
     return {
-      '+': function () {
+      '+' () {
         self._data[self._ptr] = self._data[self._ptr] || 0;
         self._data[self._ptr]++;
         self.debug('+', self._data[self._ptr], self._ptr);
       },
 
-      '-': function () {
+      '-' () {
         self._data[self._ptr] = self._data[self._ptr] || 0;
         self._data[self._ptr]--;
         self.debug('-', self._data[self._ptr], self._ptr);
       },
 
-      '<': function () {
+      '<' () {
         self._ptr--;
         if (self._ptr < 0) {
           self._ptr = 0; // Don't allow pointer to leave data array
@@ -39,24 +40,26 @@ class Brainfuck {
         self.debug('<', self._ptr);
       },
 
-      '>': function () {
+      '>' () {
         self._ptr++;
         self.debug('>', self._ptr);
       },
 
-      '.': function () {
+      '.' () {
         const c = String.fromCharCode(self._data[self._ptr]);
+
         self._output.push(c);
         self.debug('.', c, self._data[self._ptr]);
       },
 
-      ',': function () {
+      ',' () {
         const c = self._input.shift();
+
         if (typeof c === 'string') {
           self._data[self._ptr] = c.charCodeAt(0);
         }
         self.debug(',', c, self._data[self._ptr]);
-      },
+      }
     };
   }
 
@@ -85,6 +88,7 @@ class Brainfuck {
 
   program(nodes) {
     const self = this;
+
     return function (inputString) {
       self._output = [];
       self._data = [];
@@ -103,6 +107,7 @@ class Brainfuck {
 
   loop(nodes) {
     const self = this;
+
     return function () {
       let loopCounter = 0;
 

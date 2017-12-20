@@ -11,6 +11,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+
 'use strict';
 
 const EventEmitter = require('events');
@@ -19,6 +20,7 @@ const dns = require('dns');
 
 function rmFromArrayByVal(array, val) {
   const i = array.indexOf(val);
+
   if (i !== -1) array.splice(i, 1);
 }
 
@@ -28,12 +30,13 @@ class Socket extends Duplex {
     super();
     let opts = optsOpt;
     let runtimeSocket = runtimeSocketOpt;
+
     if (opts instanceof runtime.net.TCPSocket) {
       runtimeSocket = opts;
       opts = null;
     }
     this._handle = runtimeSocket || new runtime.net.TCPSocket();
-    this._handle.ondata = (u8) => this.push(new Buffer(u8));
+    this._handle.ondata = u8 => this.push(new Buffer(u8));
     this._handle.onopen = () => this.emit('connect');
     this._handle.onend = () => this.push(null);
     this._handle.onclose = () => this.emit('close', false);
@@ -43,9 +46,9 @@ class Socket extends Duplex {
   }
   address() {
     return {
-      port: null,
-      family: null,
-      address: null,
+      'port': null,
+      'family': null,
+      'address': null
     };
   }
   connect(portOpt, hostOpt, cbOpt) {
@@ -53,6 +56,7 @@ class Socket extends Duplex {
     let port = portOpt;
     let host = hostOpt;
     let cb = cbOpt;
+
     if (typeof port === 'object') {
       opts = port;
       port = opts.port || 80;
@@ -64,6 +68,7 @@ class Socket extends Duplex {
     }
     if (!port || typeof port === 'function' || port === null) {
       const err = new Error('Socket.connect: Must provide a port.');
+
       if (cb) {
         cb(err);
       }
@@ -118,6 +123,7 @@ class Socket extends Duplex {
   _read() {} // can't force a read. do nothing.
   _write(chunkOpt, encoding, callback) {
     let chunk = chunkOpt;
+
     if (!(chunk instanceof Buffer)) {
       chunk = new Buffer(chunk);
     }
@@ -133,6 +139,7 @@ class Server extends EventEmitter {
     this._connections = [];
     this._handle.onconnect = (runtimeSocket) => {
       const socket = new Socket(runtimeSocket);
+
       this.emit('connection', socket);
       socket.once('close', () => rmFromArrayByVal(this._connections, socket));
       this._connections.push(socket);
@@ -147,9 +154,9 @@ class Server extends EventEmitter {
   }
   address() {
     return {
-      port: this._handle.localPort,
-      family: 'IPv4',
-      address: '127.0.0.1',
+      'port': this._handle.localPort,
+      'family': 'IPv4',
+      'address': '127.0.0.1'
     };
   }
   close(cb) {
@@ -164,6 +171,7 @@ class Server extends EventEmitter {
   }
   listen(port, hostname, backlog, callback) {
     let options = {};
+
     if (typeof hostname === 'function') {
       callback = hostname;
       hostname = null;
@@ -195,6 +203,7 @@ exports.Server = Server;
 
 exports.createConnection = (port, host, cb) => {
   const socket = new Socket();
+
   socket.connect(port, host, cb);
   return socket;
 };
@@ -202,11 +211,13 @@ exports.createConnection = (port, host, cb) => {
 exports.createServer = (optsOpt = {}, cbOpt) => {
   let opts = optsOpt;
   let cb = cbOpt;
+
   if (typeof opts === 'function') {
     cb = opts;
     opts = {};
   }
   const server = new Server();
+
   if (cb) {
     server.on('connection', cb);
   }
@@ -215,6 +226,7 @@ exports.createServer = (optsOpt = {}, cbOpt) => {
 
 exports.isIPv4 = (ip) => {
   const arr = ip.split('.');
+
   if (arr.length !== 4) {
     return false;
   }
@@ -232,6 +244,7 @@ exports.isIPv6 = (ip) => {
     return false;
   }
   const arr = ip.split(':');
+
   if (arr.length !== 6) {
     return false;
   }

@@ -26,11 +26,13 @@ class PacketReader {
   }
   readUint16() {
     const value = this.view.getUint16(this.offset, false);
+
     this.offset += 2;
     return value;
   }
   readUint32() {
     const value = this.view.getUint32(this.offset, false);
+
     this.offset += 4;
     return value;
   }

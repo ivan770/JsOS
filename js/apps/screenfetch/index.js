@@ -28,7 +28,7 @@ const prefix = [
   '                                       ',
   '                                       ',
   '                                       ',
-  '                                       ',
+  '                                       '
 ];
 
 const root = [
@@ -50,7 +50,7 @@ const root = [
   0,
   0,
   0,
-  0,
+  0
 ];
 
 const suffix = [
@@ -69,14 +69,14 @@ const suffix = [
   () => undefined,
   () => undefined,
   () => `${
-            +((__SYSCALL.memoryInfo().pmUsed / 1024 / 1024).toFixed(2))
+            Number((__SYSCALL.memoryInfo().pmUsed / 1024 / 1024).toFixed(2))
           }M / ${
-            +((__SYSCALL.memoryInfo().pmTotal / 1024 / 1024).toFixed(2))
+            Number((__SYSCALL.memoryInfo().pmTotal / 1024 / 1024).toFixed(2))
           }M`,
   0,
   0,
   0,
-  0,
+  0
 ];
 
 function main(cmd, args, api, res) {

@@ -2,6 +2,7 @@
  * Copyright (c) 2017 PROPHESSOR
  * Based on https://raw.githubusercontent.com/charliesome/jsos/master/kernel/js/kernel/fs.js
  */
+
 'use strict';
 
 class Path {
@@ -16,6 +17,7 @@ class Path {
       path = path.substr(0, path.length - 1);
     }
     const parts = path.split('/');
+
     if (parts[0] && parts[0].length !== 0) {
       throw new Error('path provided is not absolute');
     }
@@ -57,6 +59,7 @@ class Path {
       return null;
     }
     const parts = this.parts.slice(prefix.length);
+
     return new Path(`/${parts.join('/')}`);
   }
 
@@ -87,12 +90,13 @@ class Filesystem {
     }
     this.mountpoints.push({
       path,
-      fs,
+      fs
     });
   }
 
   unmount(path) {
     const mountpoint = this.findMountpoint(path);
+
     for (let i = 0; i < this.mountpoints.length; i++) {
       if (this.mountpoints[i] === mountpoint) {
         if (typeof mountpoint.fs.close === 'function') {
@@ -107,6 +111,7 @@ class Filesystem {
 
   read(path) {
     const file = this.find(path);
+
     if (file === null || file.getType() !== 'file') {
       return null;
     }
@@ -116,6 +121,7 @@ class Filesystem {
   find(path) {
     path = new Path(path);
     const mountpoint = this.findMountpoint(path);
+
     if (mountpoint === null) {
       return null;
     }
@@ -125,6 +131,7 @@ class Filesystem {
   findMountpoint(path) {
     path = new Path(path);
     let bestMatch = null;
+
     for (let i = 0; i < this.mountpoints.length; i++) {
       if (bestMatch === null || this.mountpoints[i].path.length > bestMatch.path.length) {
         if (this.mountpoints[i].path.includes(path)) {
@@ -138,5 +145,5 @@ class Filesystem {
 
 module.exports = {
   Filesystem,
-  Path,
+  Path
 };

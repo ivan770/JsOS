@@ -1,4 +1,5 @@
 'use strict';
+
 //
 // this entire file feels extremly hackish, but whatever
 //
@@ -23,7 +24,7 @@ class IncomingMessage extends stream.Readable {
     this._ontimeout = () => null;
     this._server = server;
     if (!this._server) {
-      this._handle.ondata = (data) => this.push(new Buffer(data));
+      this._handle.ondata = data => this.push(new Buffer(data));
       this._handle.onend = () => this.push(null);
     }
   }
@@ -32,6 +33,7 @@ class IncomingMessage extends stream.Readable {
   }
   get headers() {
     const headers = {};
+
     for (const header of this._handle._headers) headers[header[0]] = header[1];
     return headers;
   }
@@ -43,6 +45,7 @@ class IncomingMessage extends stream.Readable {
   }
   get rawHeaders() {
     const headers = [];
+
     for (const header of this._handle._headers) headers.push(header[0], header[1]);
     return headers;
   }
@@ -86,6 +89,7 @@ class ClientRequest extends stream.Writable {
   _emitInterals() {
     this._resolved = true;
     let listener = null;
+
     while (listener = this._interalListeners.shift()) listener();
   }
   _write(chunk, encoding, callback) {
@@ -93,6 +97,7 @@ class ClientRequest extends stream.Writable {
       this._body += chunk;
       callback();
     };
+
     if (this._resolved) {
       cb();
     } else {
@@ -110,6 +115,7 @@ class ClientRequest extends stream.Writable {
       });
       this._handle.close();
     };
+
     if (this._resolved) {
       cb();
     } else {
@@ -118,6 +124,7 @@ class ClientRequest extends stream.Writable {
   }
   abort() {
     const cb = () => this._handle.close();
+
     if (this._resolved) {
       cb();
     } else {
@@ -204,14 +211,14 @@ class Server extends net.Server {
     super();
     this._handle2 = new eshttp.HttpServer();
     this.on('connection', (socket) => {
-      socket.on('data', (data) => this._handle2._dataHandler(socket._handle, data));
+      socket.on('data', data => this._handle2._dataHandler(socket._handle, data));
       socket.on('end', () => this._handle2._endHandler(socket._handle));
       socket.on('close', () => this._handle2._closeHandler(socket._handle));
       socket.on('error', () => null);
       this._handle2._connectionHandler(socket._handle);
     });
     this._handle2._handle = this._handle;
-    this._handle2.onrequest = (req) => this.emit(
+    this._handle2.onrequest = req => this.emit(
       'request',
       new IncomingMessage(true, req),
       new ServerResponse(req)
@@ -225,17 +232,20 @@ exports.ServerResponse = ServerResponse;
 exports.IncomingMessage = IncomingMessage;
 exports.createServer = (cb) => {
   const server = new Server();
+
   if (cb) server.on('request', cb);
   return server;
 };
 exports.request = (opt, cb) => {
   if (typeof opt === 'string') opt = url.parse(opt);
   const protocol = or(opt.protocol, 'http:');
+
   if (protocol !== 'http:')
     throw new Error(`Protocol "${protocol}" not supported. Expected "http:"`);
   let ip = or(opt.hostname, opt.host, 'localhost');
   const port = or(opt.port, 80);
   const req = new ClientRequest();
+
   req._headers = or(opt.headers, {});
   req._method = or(opt.method, 'GET');
   req._path = or(opt.path, '/');
@@ -243,6 +253,7 @@ exports.request = (opt, cb) => {
     req._handle = new eshttp.HttpClient(ip, port);
     req._emitInterals();
   };
+
   if (net.isIP(ip)) {
     onresolved();
   } else {

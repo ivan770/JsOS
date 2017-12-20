@@ -31,6 +31,7 @@
 
       function normalizePath(components) {
         const r = [];
+
         for (const p of components) {
           if (p === '') {
             if (r.length === 0) {
@@ -69,6 +70,7 @@
       function getPackageMain(packageJsonFile) {
         const json = readFileFn(packageJsonFile);
         let parsed = null;
+
         try {
           parsed = JSON.parse(json);
         } catch (e) {
@@ -88,18 +90,21 @@
       function loadAsDirectory(path, ignoreJson) {
         let mainFile = 'index';
         let dir = false;
+
         if (!ignoreJson && existsFileFn(`${path}/package.json`)) {
           mainFile = getPackageMain(`${path}/package.json`) || 'index';
           dir = true;
         }
 
         const normalizedPath = normalizePath(path.split('/').concat(mainFile.split('/')));
+
         if (!normalizedPath) {
           return null;
         }
 
         const s = normalizedPath.join('/');
         const res = loadAsFile(s);
+
         if (res) {
           return res;
         }
@@ -116,6 +121,7 @@
 
         while (count-- > 0) {
           let p = dirComponents.slice(0, count + 1);
+
           if (p.length === 0) {
             continue;
           }
@@ -128,12 +134,14 @@
           p = p.concat(parts);
 
           const normalizedPath = normalizePath(p);
+
           if (!normalizedPath) {
             continue;
           }
 
           const s = normalizedPath.join('/');
           const loadedPath = loadAsFile(s) || loadAsDirectory(s, false) || null;
+
           if (loadedPath) {
             return loadedPath;
           }
@@ -159,17 +167,19 @@
         if (firstPathComponent === '.' ||
           firstPathComponent === '..' ||
           firstPathComponent === '') {
-          const combinedPathComponents = (firstPathComponent === '') ?
-            pathComponents :
-            resolveFrom.concat(pathComponents);
+          const combinedPathComponents = (firstPathComponent === '')
+            ? pathComponents
+            : resolveFrom.concat(pathComponents);
 
           const normalizedPath = normalizePath(combinedPathComponents);
+
           if (!normalizedPath) {
             return null;
           }
 
           const pathStr = normalizedPath.join('/');
           const loadedPath = loadAsFile(pathStr) || loadAsDirectory(pathStr, false) || null;
+
           return loadedPath;
         }
 
@@ -187,6 +197,7 @@
         require(path) {
           let module = this;
           const resolvedPath = resolve(module, path);
+
           if (!resolvedPath) {
             throwError(new Error(`Cannot resolve module '${path}' from '${module.filename}'`));
           }
@@ -195,11 +206,13 @@
           const pathComponents = resolvedPath.split('/');
           const displayPath = resolvedPath;
           const cacheKey = pathComponents.join('/');
+
           if (cache[cacheKey]) {
             return cache[cacheKey].exports;
           }
 
           const currentModule = global.module;
+
           module = new Module(pathComponents);
           cache[cacheKey] = module;
           global.module = module;
@@ -209,6 +222,7 @@
           }
 
           const content = readFileFn(resolvedPath);
+
           if (!content) throwError(new Error(`Cannot load module '${resolvedPath}'`));
 
           if (endsWith(resolvedPath, '.json')) {
@@ -228,6 +242,7 @@
 
       this.require = (path) => {
         const rootModule = new Module(['', '']);
+
         global.module = rootModule;
         return rootModule.require(path);
       };
@@ -236,39 +251,42 @@
   // end
 
   const files = {};
+
   for (const file of __SYSCALL.initrdListFiles()) {
     files[file] = true;
   }
 
   function fileExists(path) {
-    return !!files[path];
+    return Boolean(files[path]);
   }
 
-  const runtimePackagePath = __SYSCALL.initrdGetKernelIndex().split('/').slice(0, -1).join('/');
+  const runtimePackagePath = __SYSCALL.initrdGetKernelIndex().split('/')
+.slice(0, -1)
+.join('/');
   const loader = new Loader(fileExists, __SYSCALL.initrdReadFile, __SYSCALL.eval, {
-    assert: 'assert',
-    events: 'events',
-    buffer: 'buffer',
-    process: './modules/process.js',
-    console: './modules/console.js',
-    constants: 'constants-browserify',
-    fs: './modules/fs.js',
-    os: './modules/os.js',
-    net: './modules/net.js',
-    dns: './modules/dns.js',
+    'assert': 'assert',
+    'events': 'events',
+    'buffer': 'buffer',
+    'process': './modules/process.js',
+    'console': './modules/console.js',
+    'constants': 'constants-browserify',
+    'fs': './modules/fs.js',
+    'os': './modules/os.js',
+    'net': './modules/net.js',
+    'dns': './modules/dns.js',
     // http: 'http-node',
-    punycode: 'punycode',
-    querystring: 'querystring-es3',
-    string_decoder: 'string_decoder',
-    path: 'path-browserify',
-    url: 'url',
-    stream: './modules/stream.js',
-    inherits: './modules/inherits.js',
-    sys: 'util/util.js',
-    util: 'util/util.js',
-    http: './modules/http.js',
-    logger: './modules/logger.js',
-    errors: './modules/errors.js',
+    'punycode': 'punycode',
+    'querystring': 'querystring-es3',
+    'string_decoder': 'string_decoder',
+    'path': 'path-browserify',
+    'url': 'url',
+    'stream': './modules/stream.js',
+    'inherits': './modules/inherits.js',
+    'sys': 'util/util.js',
+    'util': 'util/util.js',
+    'http': './modules/http.js',
+    'logger': './modules/logger.js',
+    'errors': './modules/errors.js'
     /* eslint-enable camelcase */
   }, runtimePackagePath);
 
@@ -277,6 +295,7 @@
   global.process = loader.require('process');
   global.Buffer = loader.require('buffer').Buffer;
   const stream = loader.require('stream');
+
   class StdoutStream extends stream.Writable {
     _write(chunk, encoding, callback) {
       __SYSCALL.write(String(chunk));

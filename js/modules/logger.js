@@ -39,7 +39,7 @@ class Logger {
       error() {},
       warn() {},
       info() {},
-      success() {},
+      success() {}
     };
   }
 
@@ -53,6 +53,7 @@ class Logger {
    */
   log(data, options = {}) {
     let out = data;
+
     if (typeof options === 'object') { // It can be a number (0)/boolean (false)/string ('') etc.
       if (options.level && this.levels.indexOf(options.level) < 0) return this;
       out = !options.noconvert ? Logger.convert(data) : data;
@@ -73,6 +74,7 @@ class Logger {
    */
   warn(data, options = {}) {
     let out = data;
+
     if (typeof options === 'object') { // It can be a number (0)/boolean (false)/string ('') etc.
       if (options.level && this.levels.indexOf(options.level) < 0) return this;
       if (!options.noconvert) out = Logger.convert(data);
@@ -80,6 +82,7 @@ class Logger {
     }
 
     const tmpcolor = io.color;
+
     io.setColor('yellow');
     io.writeLine(out);
     io.setColor(tmpcolor);
@@ -98,6 +101,7 @@ class Logger {
    */
   error(data, options = {}) {
     let out = data;
+
     if (typeof options === 'object') { // It can be a number (0)/boolean (false)/string ('') etc.
       if (options.level && this.levels.indexOf(options.level) < 0) return this;
       if (!options.noconvert) out = Logger.convert(data);
@@ -105,6 +109,7 @@ class Logger {
     }
 
     const tmpcolor = io.color;
+
     io.setColor('red');
     io.writeLine(out);
     io.setColor(tmpcolor);
@@ -123,6 +128,7 @@ class Logger {
    */
   info(data, options = {}) {
     let out = data;
+
     if (typeof options === 'object') { // It can be a number (0)/boolean (false)/string ('') etc.
       if (options.level && this.levels.indexOf(options.level) < 0) return this;
       if (!options.noconvert) out = Logger.convert(data);
@@ -130,6 +136,7 @@ class Logger {
     }
 
     const tmpcolor = io.color;
+
     io.setColor('cyan');
     io.writeLine(out);
     io.setColor(tmpcolor);
@@ -148,6 +155,7 @@ class Logger {
    */
   success(data, options = {}) {
     let out = data;
+
     if (typeof options === 'object') { // It can be a number (0)/boolean (false)/string ('') etc.
       if (options.level && this.levels.indexOf(options.level) < 0) return this;
       if (!options.noconvert) out = Logger.convert(data);
@@ -155,6 +163,7 @@ class Logger {
     }
 
     const tmpcolor = io.color;
+
     io.setColor('green');
     io.writeLine(out);
     io.setColor(tmpcolor);

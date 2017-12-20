@@ -2,6 +2,7 @@
 // By PROPHESSOR
 
 'use strict';
+
 let io,
   kb,
   ms,
@@ -25,6 +26,7 @@ function main(api, res) {
 
 function mouselog(key) {
   let type;
+
   switch (key) {
     case 0:
       type = 'Left button';

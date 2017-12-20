@@ -2,6 +2,7 @@
  * Composer for JsOS
  * Copyright (c) 2017 PROPHESSOR
 */
+
 'use strict';
 
 // const Cursor = require('./Cursor');
@@ -15,6 +16,7 @@ function main(api, res, args) {
   io.writeLine(`Playing: ${args}`);
 
   const sound = new Sound(args);
+
   sound.play(res);
 }
 

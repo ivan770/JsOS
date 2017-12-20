@@ -7,7 +7,7 @@ const mark = require('./mark');
 
 const Event = require('./Event');
 
-let Doc = function (obj) {
+const Doc = function (obj) {
   this.cursor = new Cursor();
   this.cursor.doc = this;
   this.cursor.on('change', () => {
@@ -17,11 +17,11 @@ let Doc = function (obj) {
   this._text = '';
   this._lines = [];
   this.undo.add({
-    text: '',
-    cursor: {
-      char: 0,
-      line: 0,
-    },
+    'text': '',
+    'cursor': {
+      'char': 0,
+      'line': 0
+    }
   });
   this._marks = {};
 
@@ -57,6 +57,7 @@ Doc.prototype.undo = new Undo();
 
 Doc.prototype.set = function (k, v) {
   let obj;
+
   if (v && typeof k === 'string') {
     obj = {};
     obj[k] = v;
@@ -109,6 +110,7 @@ Doc.prototype.getRange = function (range) {
 		// if more lines, add each with an \n before
     const middleLineCount = range[1].line - range[0].line;
     let ct = 1;
+
     while (ct < middleLineCount) {
       text = text.concat('\n').concat(this.line(range[0].line + ct));
       ct++;
@@ -116,6 +118,7 @@ Doc.prototype.getRange = function (range) {
 
 		// add the first bit of the last line
     const lastLine = this.line(range[1].line);
+
     text = text.concat('\n').concat(lastLine.substring(0, range[1].char));
   }
 
@@ -133,6 +136,7 @@ Doc.prototype.addMark = function (mk) {
   if (!mk) return;
   if (!('line' in mk && 'col' in mk)) throw 'bad mark.';
   const markId = (new Date().getTime() + Math.random()).toString(16);
+
   mk.id = markId;
   this._marks[mk.mark] = mk;
   if (mk.mark === '.') return;
@@ -143,6 +147,7 @@ Doc.prototype.getMark = function (index) {
   if (index === '.') return this._marks['.'];
   const markId = this._marks[index].id;
   let mark = false;
+
   _(this._lines).each((line, lineIndex) => {
     if (mark) return;
     if (line.marks && line.marks.length) {
@@ -183,6 +188,7 @@ Doc.prototype.insert = function (text) {
 
   let curLine = this.line();
   const lineBackup = mark(curLine, curLine.marks);
+
   curLine = curLine.substring(0, this.cursor.char());
   if (typeof text.marks !== 'undefined' && typeof curLine.marks === 'undefined') {
     curLine = mark(curLine);
@@ -192,6 +198,7 @@ Doc.prototype.insert = function (text) {
   if (text.toString() === '\n') {
     const curLineIndex = this.cursor.line();
     const lines = curLine.split('\n');
+
     this._lines[curLineIndex] = lines[0];
     this._lines.splice(curLineIndex + 1, 0, lines[1]);
     this.cursor.line(curLineIndex + 1);
@@ -203,12 +210,11 @@ Doc.prototype.insert = function (text) {
 
 	// Add mark
   const pos = this.cursor.position();
+
   pos.mark = '.';
   this.addMark(pos);
 
-  this.set({
-    text: this._lines.join('\n'),
-  });
+  this.set({'text': this._lines.join('\n')});
   this.trigger('change');
 };
 
@@ -249,9 +255,9 @@ Doc.prototype.remove = function (range) {
 	// if the last line is entirely selected, remove it.
 
 	// if the entire
-  const deleteLastLine = (!range[0].char // range opens at first character of a line
-		|| range[0].line < range[1].line) // or range opens above the line it ends on
-	&& range[1].char > this.line(range[1].line).length; // and range extends beyond the characters (into presumed \n)
+  const deleteLastLine = (!range[0].char || // range opens at first character of a line
+		range[0].line < range[1].line) && // or range opens above the line it ends on
+	range[1].char > this.line(range[1].line).length; // and range extends beyond the characters (into presumed \n)
 
 	// delete all lines in between if exist
   if (range[1].line > range[0].line) this._lines.splice(range[0].line + 1, (range[1].line - range[0].line));
@@ -267,13 +273,12 @@ Doc.prototype.remove = function (range) {
 
 	// Add mark
   const pos = this.cursor.position();
+
   pos.mark = '.';
   this.addMark(pos);
 
 
-  this.set({
-    text: this._lines.join('\n'),
-  });
+  this.set({'text': this._lines.join('\n')});
 };
 
 /* Finds the next instance of that exp, returning a range */
@@ -310,6 +315,7 @@ Doc.prototype.find = function (exp, opts) {
   const thisLine = this.line() + carriage;
 
   let tmpOffset = 0;
+
   if (offset) {
     tmpOffset = offset;
   } else if (wholeLine) {
@@ -334,22 +340,24 @@ Doc.prototype.find = function (exp, opts) {
 
   if (curIndex > -1) {
     return {
-      line: this.cursor.line(),
-      char: curIndex,
-      found: true,
+      'line': this.cursor.line(),
+      'char': curIndex,
+      'found': true
     };
   }
 
   if (range) {
 		// now check the rest. Decrement if this is a backwards search.
     let lineIndex = this.cursor.line() + (backwards ? -1 : 1);
+
     while (lineIndex < this._lines.length && lineIndex >= 0) {
       const foundAt = checkString(exp, this._lines[lineIndex] + carriage, 0, backwards);
+
       if (foundAt > -1) {
         return {
-          line: lineIndex,
-          char: foundAt,
-          found: true,
+          'line': lineIndex,
+          'char': foundAt,
+          'found': true
         };
       }
       lineIndex += (backwards ? -1 : 1);
@@ -358,21 +366,22 @@ Doc.prototype.find = function (exp, opts) {
 
 	// return the last character if not found.
   const result = backwards ? this.firstPosition() : this.lastPosition();
+
   result.found = false;
   return result;
 };
 
 Doc.prototype.lastPosition = function () {
   return {
-    line: this._lines.length - 1,
-    char: this._lines[this._lines.length - 1].length - 1,
+    'line': this._lines.length - 1,
+    'char': this._lines[this._lines.length - 1].length - 1
   };
 };
 
 Doc.prototype.firstPosition = function () {
   return {
-    line: 0,
-    char: 0,
+    'line': 0,
+    'char': 0
   };
 };
 
@@ -397,7 +406,8 @@ function checkString(exp, str, offset, backwards) {
 
   if (!test) return -1;
 
-  const result = !! test[1] ? test[1] : test[2];
+  const result = test[1] ? test[1] : test[2];
+
   if (backwards) {
 		// AND this match is not looking for the beginning of the line.
 		// TODO: make this check airtight, maybe faster.
@@ -413,6 +423,7 @@ function checkString(exp, str, offset, backwards) {
 Doc.prototype.checkString = checkString;
 
 let _selection = false;
+
 Doc.prototype.selection = function (range) {
 	// Reset if told
   if (range === 'reset') {
@@ -425,9 +436,10 @@ Doc.prototype.selection = function (range) {
   } else if (!_selection) { // Set as cursor position if none
     const pos = this.cursor.position();
     const end = {
-      line: pos.line,
-      char: pos.char + 1,
+      'line': pos.line,
+      'char': pos.char + 1
     };
+
     return [pos, end];
   }
   return _selection; // get
@@ -437,6 +449,7 @@ Doc.prototype.selection = function (range) {
 function isRange(range) {
   if (!('line' in range[0]) && _(range[0]).isArray()) {
     let areRanges = true;
+
     _.each(range, (subRange) => {
       if (!isRange(subRange)) areRanges = false;
     });
@@ -469,9 +482,9 @@ Doc.prototype.exec = function () {
 
 Doc.prototype.toJSON = function () {
   return {
-    text: this.text(),
-    cursor: this.cursor.position(),
-    selection: this.selection(),
+    'text': this.text(),
+    'cursor': this.cursor.position(),
+    'selection': this.selection()
   };
 };
 

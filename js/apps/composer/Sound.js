@@ -2,11 +2,12 @@
  * Composer
  * Copyright (c) 2017 PROPHESSOR
  */
+
 'use strict';
 
 const Notes = require('./Notes');
 
-const { info, error, success } = $$.logger;
+const {info, error, success} = $$.logger;
 
 class Sound {
   constructor(notelist) {
@@ -21,7 +22,8 @@ class Sound {
 
     const tick = () => {
       const noteData = this.sound[position];
-      const { duration, note, octave } = Notes.parse(noteData);
+      const {duration, note, octave} = Notes.parse(noteData);
+
       Notes.setOctave(octave);
       const NOTE = Notes[Notes.keynotes[note]];
       const DURATION = Notes.duration2ms(duration);
@@ -42,6 +44,7 @@ class Sound {
         res(0);
       }
     };
+
     tick();
   }
 

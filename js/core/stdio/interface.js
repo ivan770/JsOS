@@ -22,7 +22,7 @@ class StdioInterface {
     this.onwriteerror = () => {};
     this.onsetcolor = () => {};
     this.onsetbackgroundcolor = () => {};
-    
+
     this.write = this.write.bind(this);
     this.writeError = this.writeError.bind(this);
     this.writeLine = this.writeLine.bind(this);

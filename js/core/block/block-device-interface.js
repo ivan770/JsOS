@@ -77,5 +77,5 @@ class BlockDeviceInterface {
 
 module.exports = {
   BlockDeviceInterface,
-  setNameHandle,
+  setNameHandle
 };

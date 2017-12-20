@@ -11,6 +11,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+
 'use strict';
 
 const util = require('util');
@@ -40,11 +41,13 @@ class Console {
   }
   dir(obj, optsOpt = {}) {
     const opts = optsOpt;
+
     opts.customInspect = true;
     this._stdout.write(util.inspect(obj, opts));
   }
   error(...data) {
     const out = this._stderr || this._stdout;
+
     out.write(`${util.format(...data)}\n`);
   }
   log(...data) {
@@ -60,6 +63,7 @@ class Console {
   trace(...data) {
     let trace = (new Error()).stack;
     const arr = trace.split('\n');
+
     arr[0] = 'Trace';
     if (data.length > 0) arr[0] += `: ${util.format(...data)}`;
     trace = arr.join('\n');
@@ -77,6 +81,7 @@ class Console {
   }
   printDir(obj, optsOpt) {
     const opts = optsOpt;
+
     opts.customInspect = true;
     this.print(util.inspect(obj, opts));
   }
@@ -93,8 +98,9 @@ const bound = [
   'timeEnd',
   'trace',
   'info',
-  'warn',
+  'warn'
 ];
+
 for (const item of bound) {
   module.exports[item] = console[item].bind(console);
 }

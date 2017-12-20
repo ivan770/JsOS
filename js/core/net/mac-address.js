@@ -44,13 +44,16 @@ class MACAddress {
     }
 
     const p = str.trim().split(':');
+
     if (p.length !== 6) {
       return null;
     }
 
     const a = new Array(6);
+
     for (let i = 0; i < 6; ++i) {
       const v = parseInt(p[i], 16) | 0;
+
       if (v !== parseInt(p[i], 16) || v < 0 || v > 255) {
         return null;
       }

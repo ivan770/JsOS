@@ -17,6 +17,7 @@
 function checksum(u8, offset, len, extraSum) {
   const count = len >>> 1;
   let acc = (extraSum >>> 0);
+
   for (let i = 0; i < count; ++i) {
     acc += (u8[offset + (i * 2)] << 8) + u8[(offset + (i * 2)) + 1];
   }
@@ -35,6 +36,7 @@ module.exports = checksum;
 module.exports.buffer = (u8, offset, len) => {
   const count = len >>> 1;
   let acc = 0;
+
   for (let i = 0; i < count; ++i) {
     acc += (u8[offset + (i * 2)] << 8) + u8[(offset + (i * 2)) + 1];
   }
@@ -48,6 +50,7 @@ module.exports.buffer = (u8, offset, len) => {
 
 module.exports.result = (accOpt) => {
   let acc = (accOpt & 0xffff) + (accOpt >>> 16);
+
   acc += (acc >>> 16);
   return ((~acc) & 0xffff) >>> 0;
 };

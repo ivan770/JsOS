@@ -11,11 +11,10 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+
 'use strict';
 
-const {
-  SystemError,
-} = require('./errors');
+const {SystemError} = require('./errors');
 
 const names = [
   'NODATA',
@@ -41,16 +40,16 @@ const names = [
   'NOTINITIALIZED',
   'LOADIPHLPAPI',
   'ADDRGETNETWORKPARAMS',
-  'CANCELLED',
+  'CANCELLED'
 ];
+
 for (const name of names) exports[name] = `E${name}`;
 
-const servers = [
-  '8.8.8.8',
-];
+const servers = ['8.8.8.8'];
 
 function throwIPv6Err(cb) {
   const err = new SystemError('JsOS doesn\'t support IPv6', exports.BADFAMILY);
+
   if (cb) {
     return cb(err);
   }
@@ -74,18 +73,18 @@ function lookup(hostname, opts, cb) {
         }
       } else {
         if (cb) {
-          cb(null, [{
-            address: '127.0.0.1',
-            family: 4,
-          }]);
+          cb(null, [
+{
+            'address': '127.0.0.1',
+            'family': 4
+          }
+]);
         }
       }
     }
     return;
   }
-  $$.dns.resolve(hostname, {
-    query: opts.query,
-  }, (err, data) => {
+  $$.dns.resolve(hostname, {'query': opts.query}, (err, data) => {
     if (err) {
       if (cb) {
         cb(err, null, null);
@@ -93,10 +92,13 @@ function lookup(hostname, opts, cb) {
       return;
     }
     const ret = [];
+
     for (const i of [...data.results.keys()]) {
       const res = data.results[i];
+
       if (!opts.all && i === 0) {
         const addr = res.address.join('.');
+
         if (cb) cb(null, addr, 4);
         return;
       }
@@ -106,8 +108,8 @@ function lookup(hostname, opts, cb) {
             ret.push(res.address.join('.'));
           } else {
             ret.push({
-              address: res.address.join('.'),
-              family: 4,
+              'address': res.address.join('.'),
+              'family': 4
             });
           }
           break;
@@ -133,23 +135,22 @@ exports.getServers = () => servers;
 exports.lookup = (hostname, optsOpt, cbOpt) => {
   let opts = optsOpt;
   let cb = cbOpt;
+
   if (typeof opts === 'function') {
     cb = opts;
     opts = null;
   }
   if (typeof opts === 'undefined' || opts === null) opts = {};
   if (typeof opts === 'number' || opts instanceof Number) {
-    opts = {
-      family: opts,
-    };
+    opts = {'family': opts};
   }
 
   return lookup(hostname, opts, cb);
 };
 
 exports.resolve4 = (hostname, cb) => lookup(hostname, {
-  all: true,
-  addrOnly: true,
+  'all': true,
+  'addrOnly': true
 }, cb);
 
 exports.resolve6 = (hostname, cb) => throwIPv6Err(cb);
@@ -157,6 +158,7 @@ exports.resolve6 = (hostname, cb) => throwIPv6Err(cb);
 exports.resolve = (hostname, rrtypeOpt, cbOpt) => {
   let rrtype = rrtypeOpt;
   let cb = cbOpt;
+
   if (typeof rrtype === 'function') {
     cb = rrtype;
     rrtype = null;

@@ -17,10 +17,11 @@
 class App {
   constructor() {
     'do nothing';
+
     $$.shell.setCommand('start', {
-      description: 'Run the app',
-      usage: 'start <command> <arguments>',
-      run: this.run,
+      'description': 'Run the app',
+      'usage': 'start <command> <arguments>',
+      'run': this.run
     });
     this.isAppExist = this.isAppExist.bind(this);
     debug(`PERSISTENCE: ${PERSISTENCE}`);
@@ -35,13 +36,13 @@ class App {
       app = require(`../../apps/${name}`);
     } catch (e) {
       debug(e);
-      return !!$$.stdio.defaultStdio.writeError(`Unable to install app ${name}`);
+      return Boolean($$.stdio.defaultStdio.writeError(`Unable to install app ${name}`));
     }
 
     // Install app
     PERSISTENCE.Apps[name] = {
-      run: app.call,
-      commands: app.commands,
+      'run': app.call,
+      'commands': app.commands
     };
 
     // Create links
@@ -66,7 +67,7 @@ class App {
     const app = _args.shift();
 
     function isAppExist(x) { // FIXME: Точно костыль, но спать хочется
-      return !!(PERSISTENCE.Apps[x]); // || PERSISTENCE.Apps._commands[app]);
+      return Boolean(PERSISTENCE.Apps[x]); // || PERSISTENCE.Apps._commands[app]);
     }
     if (!isAppExist(app) || app === 0) {
       f.stdio.writeError(`App ${app} doesn't exist!`);
@@ -74,6 +75,7 @@ class App {
     }
     const args = _args.join(' ');
     /* const callback =  */
+
     try {
       PERSISTENCE.Apps[app].run(app, args, f, res);
     } catch (e) {
@@ -86,7 +88,7 @@ class App {
   }
 
   isAppExist(app) {
-    return !!(PERSISTENCE.Apps[app]); // || PERSISTENCE.Apps._commands[app]);
+    return Boolean(PERSISTENCE.Apps[app]); // || PERSISTENCE.Apps._commands[app]);
   }
 
   runByCmd(cmd) {
@@ -98,4 +100,4 @@ class App {
   }
 }
 
-module.exports = new App;
+module.exports = new App();

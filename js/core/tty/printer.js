@@ -13,8 +13,10 @@
 // limitations under the License.
 
 'use strict';
+
 const vga = require('./vga');
 const buffer = vga.allocBuffer();
+
 buffer.clear(vga.color.BLACK);
 
 let posCurrent = 0;
@@ -71,6 +73,7 @@ exports.print = (textOpt = '', repeat = 1, fg = vga.color.WHITE, bg = vga.color.
 exports.moveOffset = (offsetOpt) => {
   const offset = offsetOpt | 0;
   let newPos = posCurrent + offset;
+
   if (newPos < 0) {
     newPos = 0;
   }
@@ -85,6 +88,7 @@ exports.moveOffset = (offsetOpt) => {
 exports.moveTo = (xOpt, yOpt) => {
   let x = xOpt;
   let y = yOpt;
+
   if (x < 0) {
     x = 0;
   }

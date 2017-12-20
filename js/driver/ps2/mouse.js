@@ -19,13 +19,14 @@
 const runtime = require('../../core');
 
 const flags = {
-  middle: false,
-  right: false,
-  left: false,
+  'middle': false,
+  'right': false,
+  'left': false
 };
 
 function splitByte(byte) {
   const ret = [];
+
   for (let i = 7; i >= 0; i--) ret.push(byte & (1 << i) ? 1 : 0);
   return ret;
 }
@@ -33,18 +34,18 @@ function splitByte(byte) {
 function processPacket(packet) {
   const split = splitByte(packet[0]);
   const info = {
-    yOverflow: split[0],
-    xOverflow: split[1],
-    ySign: split[2],
-    xSign: split[3],
-    alwaysOne: split[4],
-    buttons: {
-      middle: split[5],
-      right: split[6],
-      left: split[7],
+    'yOverflow': split[0],
+    'xOverflow': split[1],
+    'ySign': split[2],
+    'xSign': split[3],
+    'alwaysOne': split[4],
+    'buttons': {
+      'middle': split[5],
+      'right': split[6],
+      'left': split[7]
     },
-    xOffset: packet[1],
-    yOffset: packet[2],
+    'xOffset': packet[1],
+    'yOffset': packet[2]
   };
 
   // just a sanity check:
@@ -85,8 +86,8 @@ function processPacket(packet) {
   if (info.xOffset !== 0 || info.yOffset !== 0) {
     setImmediate(() => {
       runtime.mouse.onMousemove.dispatch({
-        x: (info.xSign) ? (info.xOffset | 0xffffff00) : info.xOffset,
-        y: (info.ySign) ? (info.yOffset | 0xffffff00) : info.yOffset,
+        'x': (info.xSign) ? (info.xOffset | 0xffffff00) : info.xOffset,
+        'y': (info.ySign) ? (info.yOffset | 0xffffff00) : info.yOffset
       });
     });
   }
@@ -100,6 +101,7 @@ const driver = {
     function mouseWait(type) {
       return new Promise((outerResolve, outerReject) => {
         let maxIter = 1500;
+
         function loop() {
           return new Promise((resolve, reject) => {
             if (maxIter === 0) return resolve();
@@ -114,12 +116,14 @@ const driver = {
             }
             maxIter--;
             setImmediate(() => {
-              loop().then(resolve).catch(reject);
+              loop().then(resolve)
+.catch(reject);
             });
           });
         }
         setImmediate(() => {
-          loop().then(outerResolve).catch(outerReject);
+          loop().then(outerResolve)
+.catch(outerReject);
         });
       });
     }
@@ -129,7 +133,9 @@ const driver = {
         port64.write8(0xd4);
         return mouseWait(1);
       })
-      .then(() => { mainPort.write8(data); });
+      .then(() => {
+ mainPort.write8(data);
+});
     }
 
     function mouseRead() {
@@ -161,6 +167,7 @@ const driver = {
     .then(() => {
       let cycle = 0;
       let packet = [];
+
       irq.on(() => {
         if (cycle === 0) {
           packet = [];
@@ -182,7 +189,7 @@ const driver = {
     });
     /* eslint-enable newline-per-chained-call */
   },
-  reset() {},
+  reset() {}
 };
 
 runtime.ps2.setMouseDriver(driver);

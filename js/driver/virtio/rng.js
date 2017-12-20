@@ -13,6 +13,7 @@
 // limitations under the License.
 
 'use strict';
+
 const VirtioDevice = require('./device');
 const runtime = require('../../core');
 
@@ -24,6 +25,7 @@ function initializeRNGDevice(pciDevice) {
   const features = {};
 
   const dev = new VirtioDevice('rng', ioSpace, allocator);
+
   dev.setDriverAck();
 
   const driverFeatures = {};

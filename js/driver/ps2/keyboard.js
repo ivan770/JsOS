@@ -33,7 +33,7 @@ const controlKeys = [
   /* 0xC0 */ 0, 0, 0, 0, 0, 0, 0, 'home', 'up', 'pageup', 0, 'left', 0, 'right', 0, 'end',
   /* 0xD0 */ 'down', 'pagedown', 'insert', 'del', 0, 0, 0, 0, 0, 0, 0, 'leftsup', 'rightsup', 'menu', 0, 0,
   /* 0xE0 */ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-  /* 0xF0 */ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  /* 0xF0 */ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 ];
 
 const keymapNormal = [
@@ -41,7 +41,7 @@ const keymapNormal = [
   'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '[', ']', '\n', '', 'a', 's',
   'd', 'f', 'g', 'h', 'j', 'k', 'l', ';', '\'', '`', '', '\\', 'z', 'x', 'c', 'v',
   'b', 'n', 'm', ',', '.', '/', '', '', '', ' ', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
-  '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
+  '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''
 ];
 
 const keymapShift = [
@@ -49,7 +49,7 @@ const keymapShift = [
   'Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P', '{', '}', '\n', '', 'A', 'S',
   'D', 'F', 'G', 'H', 'J', 'K', 'L', ':', '"', '~', '', '|', 'Z', 'X', 'C', 'V',
   'B', 'N', 'M', '<', '>', '?', '', '', '', ' ', '', '', '', '', '', '', '', '', '', '',
-  '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
+  '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''
 ];
 
 const keymapCaps = [
@@ -57,26 +57,27 @@ const keymapCaps = [
   'Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P', '[', ']', '\n', '', 'A', 'S',
   'D', 'F', 'G', 'H', 'J', 'K', 'L', ';', '\'', '`', '', '\\', 'Z', 'X', 'C', 'V',
   'B', 'N', 'M', ',', '.', '/', '', '', '', ' ', '', '', '', '', '', '', '', '', '', '',
-  '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
+  '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''
 ];
 /* eslint-enable no-multi-spaces, max-len */
 
 const statuses = {
-  leftshift: false,
-  rightshift: false,
-  leftctrl: false,
-  rightctrl: false,
-  leftalt: false,
-  rightalt: false,
-  capslock: false,
-  numlock: false,
-  scrllock: false,
+  'leftshift': false,
+  'rightshift': false,
+  'leftctrl': false,
+  'rightctrl': false,
+  'leftalt': false,
+  'rightalt': false,
+  'capslock': false,
+  'numlock': false,
+  'scrllock': false
 };
 
 function keyEvent(codeOpt, isPressed) {
   let code = codeOpt;
   let cmd = controlKeys[code & 0xFF];
   let character = '';
+
   code &= 0x7F;
 
   if (cmd === 0) {
@@ -135,11 +136,11 @@ function keyEvent(codeOpt, isPressed) {
   }
 
   const keyinfo = {
-    type: cmd,
+    'type': cmd,
     character,
-    alt: statuses.leftalt || statuses.rightalt,
-    shift: statuses.leftshift || statuses.rightshift,
-    ctrl: statuses.leftctrl || statuses.rightctrl,
+    'alt': statuses.leftalt || statuses.rightalt,
+    'shift': statuses.leftshift || statuses.rightshift,
+    'ctrl': statuses.leftctrl || statuses.rightctrl
   };
 
   if (isPressed) {
@@ -159,6 +160,7 @@ const driver = {
       while (true) {
         port.read8();
         const status = sport.read8();
+
         if (!(status & 0x1)) {
           break;
         }
@@ -193,7 +195,7 @@ const driver = {
 
     init();
   },
-  reset() {},
+  reset() {}
 };
 
 runtime.ps2.setKeyboardDriver(driver);

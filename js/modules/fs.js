@@ -13,8 +13,9 @@
 // limitations under the License.
 
 'use strict';
+
 const typeutils = require('typeutils');
-const { SystemError } = require('./errors');
+const {SystemError} = require('./errors');
 const fsmod = require('../core/fs');
 
 function makeErrorNotFound(path, op) {
@@ -23,6 +24,7 @@ function makeErrorNotFound(path, op) {
 
 function normalizePath(components) {
   const r = [];
+
   for (const p of components) {
     if (p === '' || p === '.') {
       continue;
@@ -51,6 +53,7 @@ function toAbsolutePath(path) {
 
   const parts = path.split('/');
   const n = normalizePath(parts);
+
   if (!n) {
     return null;
   }
@@ -64,6 +67,7 @@ function readFileImpl(fnName, path, opts) {
   }
 
   let encoding = null;
+
   if (typeutils.isString(opts)) {
     encoding = opts;
   } else if (typeutils.isObject(opts)) {
@@ -71,11 +75,13 @@ function readFileImpl(fnName, path, opts) {
   }
 
   const absolute = toAbsolutePath(path);
+
   if (!absolute) {
     return [makeErrorNotFound(path, fnName), null];
   }
 
   const buf = __SYSCALL.initrdReadFileBuffer(absolute);
+
   if (!buf) {
     return [makeErrorNotFound(path, fnName), null];
   }
@@ -96,11 +102,13 @@ exports.readFileImpl = (path, opts, cb) => {
   }
 
   const [err, buf] = readFileImpl('readFile', path, opts);
+
   setImmediate(() => callback(err, buf));
 };
 
 exports.readFileImplSync = (path, opts) => {
   const [err, buf] = readFileImpl('readFileSync', path, opts);
+
   if (err) {
     throw err;
   }
