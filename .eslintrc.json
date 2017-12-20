@@ -103,12 +103,12 @@
 				"before": true
 			}
 		],
-		"line-comment-position": "error",
+		"line-comment-position": "off",
 		"linebreak-style": [
 			"error",
 			"unix"
 		],
-		"lines-around-comment": "error",
+		"lines-around-comment": "off",
 		"lines-around-directive": "error",
 		"max-depth": "error",
 		"max-len": [
@@ -140,8 +140,8 @@
 		"no-buffer-constructor": "error",
 		"no-caller": "error",
 		"no-catch-shadow": "error",
-		"no-confusing-arrow": "error",
-		"no-continue": "error",
+		"no-confusing-arrow": "warn",
+		"no-continue": "off",
 		"no-div-regex": "error",
 		"no-duplicate-imports": "error",
 		"no-else-return": "error",

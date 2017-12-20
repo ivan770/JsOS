@@ -1,2 +1,8 @@
 js/deps/
 js/modules/inherits.js
+js/apps/
+js/test/
+js/utils/
+node_modules/
+js/node_modules/
+js/*/node_modules/
