@@ -3,4 +3,5 @@ js/modules/inherits.js
 node_modules/
 */node_modules/
 js/*/node_modules/
-test/
+js/test/
+js/utils
