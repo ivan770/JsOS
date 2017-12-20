@@ -1,3 +1,6 @@
+/*
+ * Copyright (c) 2017 UsernameAK
+*/
 'use strict';
 
 const PciDevice = require('../../core/pci/pci-device');
@@ -8,11 +11,13 @@ class ES1370 extends Driver {
   constructor() {
     this.onIRQ = this.onIRQ.bind(this);
   }
+
   static init(device) {
     return new ES1370().init(device);
   }
+
   init(device) {
-    debug('Ensoinq Corp. AudioPCI ES1370 driver loading');
+    debug('Ensoinq Corp. AudioPCI ES1370 driver loading...');
     this.irq = device.getIRQ();
     device.setPciCommandFlag(PciDevice.commandFlag.BusMaster);
     device.getIRQ().on(this.onIRQ);
@@ -38,6 +43,7 @@ class ES1370 extends Driver {
     serialPort.write32(0x0020020C);
     cmdPort.write32(0x00000020);
   }
+
   onIRQ() {
     debug('ES1370 IRQ');
   }
