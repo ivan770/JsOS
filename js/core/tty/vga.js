@@ -30,6 +30,8 @@ let graphicsEnabled = false;
 const w = 80;
 const h = 25;
 const len = w * h;
+const prevState = new Uint8Array(len * 2);
+prevState.fill(0);
 /* const buf = driverUtils.physicalMemory(0xb8000, len * 2).buffer();
 const b = new Uint8Array(buf);*/
 
@@ -143,9 +145,10 @@ function testInstance(obj) {
 
 exports.draw = (drawbuf) => {
   testInstance(drawbuf);
-  if (!global.$$ || !global.$$.graphics || !global.$$.graphics.graphicsAvailable()) {
+  if (!(global.$$ && global.$$.graphics && global.$$.graphics.graphicsAvailable())) {
     vgaOld.draw(drawbuf);
     // TODO: Сделать условие во время первой отрисовки
+    prevState.set(drawbuf.b);
   } else {
     if (!graphicsEnabled) {
       graphicsEnabled = true;
@@ -157,11 +160,16 @@ exports.draw = (drawbuf) => {
         // debug(drawbuf.ivb[(y * w) + x]);
         if (!drawbuf.ivb[(y * w) + x]) continue;
         drawbuf.ivb[(y * w) + x] = 0;
+    // for (let y = 0; y < h; y++) {
+    //   for (let x = 0; x < w; x++) {
         const offset = ((y * w) + x) * 2;
         const colorByte = drawbuf.b[offset + 1];
         const bg = (colorByte >> 4) & 0xF;
         const fg = colorByte & 0xF;
         const charCode = drawbuf.b[offset];
+        // debug(prevState[offset]);
+        // debug(charCode);
+        // if(prevState[offset] != charCode && prevState[offset + 1] != colorByte) {
         for (let fy = 0; fy < fh; fy++) {
           const row = font[(charCode * fh) + fy];
           for (let fx = 0; fx < fw; fx++) {
@@ -175,8 +183,11 @@ exports.draw = (drawbuf) => {
             dbuf[dboffset] = (state ? colorScheme[fg] : colorScheme[bg])[2];// * 255;
           }
         }
+        // }
       }
     }
+    prevState.set(drawbuf.b);
+    $$.graphics.repaint();
   }
   if (global.$$ && global.$$.graphics && global.$$.graphics.graphicsAvailable()) $$.graphics.repaint();
 };

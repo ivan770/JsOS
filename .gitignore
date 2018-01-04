@@ -38,6 +38,6 @@ npm-debug.log
 # /runtimecorelib.json
 /cmake-build
 build.iso
-/.initrd
+.initrd
+etc/kernel.map
 /build
-/etc/kernel.map
