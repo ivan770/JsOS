@@ -315,6 +315,15 @@ const cmds = {
         }M`);
       return res(0);
     }
+  },
+  'jsmb': {
+    'description': 'Initialize global jsmb variable',
+    'usage': 'jsmb',
+    run(args, f, res) {
+      global.jsmb = require('../../core/graphics/jsmb-pseudo');
+      f.stdio.writeLine('JsMobileBasic initialized!');
+      return res(0);
+    }
   }
 };
 
