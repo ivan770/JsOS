@@ -13,7 +13,10 @@ let io, resp, kb;
 let page = 0;
 
 function draw() {
-  JsMB.cls();
+  JsMB
+    .cls()
+    .setColor(0xF)
+    .setBackColor(0x0);
   switch (page) {
     case 1:
       JsMB.fillScreen(0x2);
@@ -40,11 +43,18 @@ function draw() {
       break;
     case 5:
       JsMB
+        .drawLine(0, 0, scw, 0)
+        .setColor(0x4)
+        .setBackColor(0xF)
+        .drawString('LOL', (scw / 2) - 1, 0);
+      break;
+    case 6:
+      JsMB
         .fillScreen(0xC)
         .setColor(0xB)
         .drawCube(0, 0, scw - 5, sch - 5, 5);
       break;
-    case 6:
+    case 7:
       return exit();
     default:
       throw new (require('errors').WTFError)(`Page ${page} doesn't exist!`);

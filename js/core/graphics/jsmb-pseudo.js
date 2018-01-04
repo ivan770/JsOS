@@ -281,12 +281,12 @@ const JsMB = {
   drawPlot(x, y) {
     const plot = String.fromCharCode(this._plot);
 
-    x = Math.floor(JsMB.limit(x, 0, JsMB.screenWidth()));
-    y = Math.floor(JsMB.limit(y, 0, JsMB.screenHeight()));
+    x = Math.floor(this.limit(x, 0, this.screenWidth()));
+    y = Math.floor(this.limit(y, 0, this.screenHeight()));
 
     printer.moveTo(x, y);
     printer.print(plot, 1, $TMP.color, $TMP.bgcolor);
-    printer.moveTo(JsMB.screenWidth(), JsMB.screenHeight());
+    printer.moveTo(this.screenWidth(), this.screenHeight());
     return this;
   },
   clearRect(x, y, w, h) {
@@ -448,7 +448,12 @@ const JsMB = {
     return this;
   },
   drawString(text, x, y) {
-    ctx.fillText(text, x, y);
+    x = Math.floor(this.limit(x, 0, this.screenWidth()));
+    y = Math.floor(this.limit(y, 0, this.screenHeight()));
+
+    printer.moveTo(x, y);
+    printer.print(text, 1, $TMP.color, $TMP.bgcolor);
+    printer.moveTo(this.screenWidth(), this.screenHeight());
     return this;
   },
   setFontSize(size) {
