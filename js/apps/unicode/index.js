@@ -16,7 +16,7 @@ function main(api, res) {
   // io.writeLine('It works!!!');
 
   interval = setInterval(() => {
-    io.write(String.fromCharCode(i));
+    io.write(`${i}:${String.fromCharCode(i)} `);
     i++;
   }, 10);
   return res(0); // 1 = error
