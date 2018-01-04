@@ -15,6 +15,7 @@
 /* eslint-disable new-cap */
 
 'use strict';
+
 const assertError = require('assert-error');
 const typeutils = require('typeutils');
 const IP4Address = require('./ip4-address');
@@ -36,11 +37,11 @@ const {
   STATE_CLOSE_WAIT,
   STATE_CLOSING,
   STATE_LAST_ACK,
-  STATE_TIME_WAIT,
+  STATE_TIME_WAIT
 } = require('./tcp-socket-state');
 const connHash = require('./tcp-hash');
 const tcpStat = require('./tcp-stat');
-const { timeNow } = require('../../utils');
+const {timeNow} = require('../../utils');
 
 const ports = new PortAllocator();
 
@@ -139,6 +140,7 @@ class TCPSocket {
 
   open(ipOpt, port) {
     let ip = ipOpt;
+
     if (typeutils.isString(ip)) {
       ip = IP4Address.parse(ip);
     }
@@ -158,6 +160,7 @@ class TCPSocket {
 
   _listen(portOpt) {
     let port = portOpt;
+
     if (!port) {
       port = ports.allocEphemeral(this);
     } else {
@@ -176,6 +179,7 @@ class TCPSocket {
     tcpTimer.removeConnectionSocket(this);
     if (this._serverSocket) {
       const hash = connHash(this._destIP, this._destPort);
+
       this._serverSocket._connections.delete(hash);
     }
     this._transmitQueue = [];
@@ -197,11 +201,13 @@ class TCPSocket {
     }
 
     const routingEntry = route.lookup(this._destIP, intf);
+
     if (!routingEntry) {
       return false;
     }
 
     const viaIP = routingEntry.gateway;
+
     if (!intf) {
       intf = routingEntry.intf;
     }
@@ -236,6 +242,7 @@ class TCPSocket {
 
   _sendSYN(isAck) {
     let flags = tcpHeader.FLAG_SYN;
+
     if (isAck) {
       flags |= tcpHeader.FLAG_ACK;
     }
@@ -258,6 +265,7 @@ class TCPSocket {
     const end = SEQ_INC(this._transmitWindowEdge, this._transmitWindowSize);
     const spaceLeft = SEQ_OFFSET(end, this._transmitPosition);
     const spaceReserved = Math.min(spaceLeft, length, 536); /* TODO: move MSS (max segment size, data size) somewhere */
+
     this._transmitPosition = SEQ_INC(this._transmitPosition, spaceReserved);
     return spaceReserved;
   }
@@ -281,6 +289,7 @@ class TCPSocket {
 
     const leftEdge = edge;
     const rightEdge = SEQ_INC(edge, this._receiveWindowSize);
+
     if (leftEdge < rightEdge) {
       return seq >= leftEdge && seq < rightEdge;
     }
@@ -297,6 +306,7 @@ class TCPSocket {
       if (buf) {
         const length = buf.length;
         const reserved = this._allocTransmitPosition(length);
+
         debug('send at ', position, 'len', reserved);
         if (reserved === 0) {
           break;
@@ -420,7 +430,7 @@ class TCPSocket {
       throw new Error('argument 0 is not a Uint8Array');
     }
     if (this._state !== STATE_ESTABLISHED && this._state !== STATE_CLOSE_WAIT) {
-      throw new Error('socket is not connected');
+      throw new Error(`socket is not connected, state: ${this._state}`);
     }
     this._bufferedAmount += u8.length;
     this._queueTx.push(u8);
@@ -506,11 +516,13 @@ class TCPSocket {
 
     for (let j = 0; j < queueLength; ++j) {
       let iterRemoved = false;
+
       for (let i = 0; i < queueLength - removed; ++i) {
         const item = this._receiveQueue[i];
         const seqNumber = item[0];
         const length = item[1];
         let removeItem = false;
+
         if (length === 0) {
           continue;
         }
@@ -521,6 +533,7 @@ class TCPSocket {
         } else if (!this._receiveWindowIsWithin(seqNumber, lastAck)) {
           // order [ seqNumber -- lastAck -- seqNumberEnd ]
           const diff = ((lastAck - seqNumber) >>> 0);
+
           if (diff < length) {
             item[0] = SEQ_INC(seqNumber, diff);
             item[1] = length - diff;
@@ -537,6 +550,7 @@ class TCPSocket {
 
           if (i < queueLength - removed) {
             const t = this._receiveQueue[i];
+
             this._receiveQueue[i] = this._receiveQueue[queueLength - removed];
             this._receiveQueue[queueLength - removed] = t;
           }
@@ -554,6 +568,7 @@ class TCPSocket {
     if (removed > 0) {
       while (removed-- > 0) {
         const removedItem = this._receiveQueue.pop();
+
         if (removedItem[2] && this.ondata) {
           this._emitData(removedItem[2]);
         }
@@ -601,6 +616,7 @@ class TCPSocket {
         {
           const hash = connHash(srcIP, srcPort);
           let socket = this._connections.get(hash);
+
           if (socket) {
             socket._receive(u8, srcIP, srcPort, headerOffset);
             return;

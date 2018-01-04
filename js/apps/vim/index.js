@@ -7,15 +7,15 @@ let io;
 let res;
 
 const kbaliases = {
-  enter: '\n',
-  tab: '\t',
-  backspace: '\b',
-  space: ' ',
-  escape: 'esc',
-  kpup: 'k', // '↑'
-  kpdown: 'j', // '↓'
-  kpleft: 'h', // '←'
-  kpright: 'l', //'→'
+  'enter': '\n',
+  'tab': '\t',
+  'backspace': '\b',
+  'space': ' ',
+  'escape': 'esc',
+  'kpup': 'k', // '↑'
+  'kpdown': 'j', // '↓'
+  'kpleft': 'h', // '←'
+  'kpright': 'l' // '→'
 };
 
 function keyboard(key) {

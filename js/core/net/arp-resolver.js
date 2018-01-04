@@ -13,6 +13,7 @@
 // limitations under the License.
 
 'use strict';
+
 // const assert = require('assert');
 const MACAddress = require('./mac-address');
 const IP4Address = require('./ip4-address');

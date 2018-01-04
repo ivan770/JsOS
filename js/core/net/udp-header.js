@@ -13,6 +13,7 @@
 // limitations under the License.
 
 'use strict';
+
 const u8view = require('u8-view');
 
 exports.getSrcPort = (u8, headerOffset) => ((u8[headerOffset] << 8) + u8[headerOffset + 1]) >>> 0;

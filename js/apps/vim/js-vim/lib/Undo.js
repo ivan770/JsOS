@@ -1,4 +1,4 @@
-var Undo = module.exports = function() {
+const Undo = module.exports = function() {
 	this._history = [];
 	this.position = 0;
 };
@@ -11,10 +11,11 @@ var Undo = module.exports = function() {
  */
 Undo.prototype.add = function(ev) {
 
-	//Don't add additional identical states.
+	// Don't add additional identical states.
 	if (this.position && typeof ev !== 'string' && 'cursor' in ev && 'text' in ev) {
-		var current = this._history.slice(this.position - 1, this.position)[0];
-		var next = this._history.slice(this.position, this.position + 1);
+		const current = this._history.slice(this.position - 1, this.position)[0];
+		let next = this._history.slice(this.position, this.position + 1);
+
 		next = next.length ? next[0] : false;
 		if (areSame(ev, current) || (next && areSame(ev, next))) {
 			return;
@@ -35,7 +36,8 @@ function areSame(ev1, ev2) {
  */
 Undo.prototype.get = function(index) {
 	if (index < 0 || index >= this._history.length) return;
-	var state = this._history.slice(index, index + 1)[0];
+	const state = this._history.slice(index, index + 1)[0];
+
 	this.position = index;
 	return state;
 };

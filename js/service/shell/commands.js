@@ -11,63 +11,66 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+
 'use strict';
 
 const processor = require('./index.js');
+const {log, warn} = $$.logger;
 
 /* global $$ */
 
 debug('Loading commands...');
 
 const cmds = {
-  shutdown: {
-    description: 'Shut down the computer',
-    usage: 'shutdown',
+  'shutdown': {
+    'description': 'Shut down the computer',
+    'usage': 'shutdown',
     run(args, f, res) {
-      console.log('Shuting down...');
+      warn('Shuting down...');
       $$.machine.shutdown();
       return res(0);
-    },
+    }
   },
-  suspend: {
-    description: 'Suspend the computer',
-    usage: 'suspend',
+  'suspend': {
+    'description': 'Suspend the computer',
+    'usage': 'suspend',
     run(args, f, res) {
-      console.log('Suspending...');
+      warn('Suspending...');
       $$.machine.suspend();
       return res(0);
-    },
+    }
   },
-  reboot: {
-    description: 'Reboot the computer',
-    usage: 'reboot',
+  'reboot': {
+    'description': 'Reboot the computer',
+    'usage': 'reboot',
     run(args, f, res) {
-      console.log('Rebooting...');
+      warn('Rebooting...');
       $$.machine.reboot();
       return res(0);
-    },
+    }
   },
-  echo: {
-    description: 'Display text into the screen',
-    usage: 'echo <text>',
+  'echo': {
+    'description': 'Display text into the screen',
+    'usage': 'echo <text>',
     run(suffix, f, res) {
       f.stdio.onwrite(suffix);
       return res(0);
-    },
+    }
   },
-  clear: {
-    description: 'Clear the display',
-    usage: 'clear',
+  'clear': {
+    'description': 'Clear the display',
+    'usage': 'clear',
     run(a, f, res) {
       f.stdio.clear();
       return res(0);
-    },
+    }
   },
-  help: {
-    description: 'Show this message or show usage of the command =)',
-    usage: 'help <command>',
+  'help': {
+    'description': 'Show this message or show usage of the command =)',
+    'usage': 'help <command>',
     run(_args, f, res) {
       let args = _args.trim();
+
       if (!args) {
         f.stdio.writeLine('Commands list:');
         // let out = 'Commands list:\n';
@@ -85,14 +88,15 @@ const cmds = {
         f.stdio.write(processor.getUsage(args));
       }
       return res(0);
-    },
+    }
   },
-  dns: {
-    description: 'Get DNS namespace from url',
-    usage: 'dns <url>',
+  'dns': {
+    'description': 'Get DNS namespace from url',
+    'usage': 'dns <url>',
     run(_args, env, cb) {
       const $ = env.stdio;
       const args = _args.trim();
+
       if (!args) {
         $.writeError('You forgot to enter the URL');
         return cb(0);
@@ -104,7 +108,7 @@ const cmds = {
           $.writeError('Error!');
           return cb(1);
         }
-        console.log(JSON.stringify(data));
+        log(JSON.stringify(data));
         if (data.results[0]) {
           $.setColor('green');
           $.writeLine('OK!');
@@ -115,29 +119,29 @@ const cmds = {
         }
         cb(0);
       });
-    },
+    }
   },
-  time: {
-    description: 'Display the current time',
-    usage: 'time',
+  'time': {
+    'description': 'Display the current time',
+    'usage': 'time',
     run(a, f, res) {
       f.stdio.setColor('yellow');
-      f.stdio.writeLine(`${(new Date).toLocaleTimeString()}`);
+      f.stdio.writeLine(`${(new Date()).toLocaleTimeString()}`);
       return res(0);
-    },
+    }
   },
-  date: {
-    description: 'Display the current date',
-    usage: 'date',
+  'date': {
+    'description': 'Display the current date',
+    'usage': 'date',
     run(a, f, res) {
       f.stdio.setColor('yellow');
-      f.stdio.writeLine(`${(new Date).toDateString()}`);
+      f.stdio.writeLine(`${(new Date()).toDateString()}`);
       return res(0);
-    },
+    }
   },
-  install: {
-    description: 'Install the applications',
-    usage: 'install <app>',
+  'install': {
+    'description': 'Install the applications',
+    'usage': 'install <app>',
     run(app, f, res) {
       if ($$.appman.install(app.trim())) {
         f.stdio.setColor('green');
@@ -146,15 +150,15 @@ const cmds = {
       }
       f.stdio.writeError(`Error happened during ${app} installation`);
       return res(1);
-    },
+    }
   },
-  speaker: {
-    description: 'Beep',
-    usage: 'speaker <play/stop> <frecuency> <duration>',
+  'speaker': {
+    'description': 'Beep',
+    'usage': 'speaker <play/stop> <frecuency> <duration>',
     run(_args, f, res) {
       const args = _args.split(/\s+/);
       const mode = args[0];
-      const frec = Number(args[1]) || 100;
+      const frec = Number(args[1]) || 1000;
       const duration = Number(args[2]) || 1000;
 
       if (mode === 'play') {
@@ -168,36 +172,39 @@ const cmds = {
       }
       f.stdio.writeError('Use "play" or "stop"!');
       return res(1);
-    },
+    }
   },
-  listparts: {
-    description: 'List HDD partitions',
-    usage: 'listparts <device>',
+  'listparts': {
+    'description': 'List HDD partitions',
+    'usage': 'listparts <device>',
     run(_args, f, res) {
       // debug(JSON.stringify($$.block.devices));
       const args = _args.trim();
       let iface;
+
       for (const device of $$.block.devices) {
         if (device.name === args) iface = device;
       }
       if (!iface) return res(1);
 
-      iface.read(0, Buffer.allocUnsafe(512)).then(_buf => {
+      iface.read(0, Buffer.allocUnsafe(512)).then((_buf) => {
         let firstsec;
         const buf = _buf.slice(0x1BE, 0x1BE + 64);
+
         for (let i = 0; i < 4; i++) {
-          console.log(buf[(i * 16) + 4]);
+          log(buf[(i * 16) + 4]);
           if (buf[(i * 16) + 4]) {
             f.stdio.writeLine(`[${i}]:`);
             f.stdio.writeLine(`  type: 0x${buf[(i * 16) + 4].toString(16)}`);
-            f.stdio.writeLine(`  size: ${buf.readUInt32LE((i * 16) + 0xC) / 1024 / 1024 * 512}M`);
+            f.stdio.writeLine(`  size: ${buf.readUInt32LE((i * 16) + 0xC) / 1024 / 1024 * 512}M`); //eslint-disable-line
 
             firstsec = buf.readUInt32LE((i * 16) + 0x8);
           }
         }
-        console.log(firstsec);
+        log(firstsec);
         return iface.read(firstsec, buf);
-      }).then(fsbuf => {
+      })
+.then((fsbuf) => {
         f.stdio.writeLine('  assumming that FS is FAT, header:');
         f.stdio.writeLine(`    created with: ${fsbuf.toString('utf8', 3, 11)}`);
         f.stdio.writeLine(`    bytes per sector: ${fsbuf.readUInt16LE(11)}`);
@@ -207,18 +214,20 @@ const cmds = {
         f.stdio.writeLine(`    ${fsbuf.toString('utf8', 54, 62)}`);
         f.stdio.writeLine(`    rootdir cluster: ${fsbuf.readUInt16LE(512)}`);
         res(0);
-      }).catch((err) => {
+      })
+.catch((err) => {
         f.stdio.writeError(err);
         res(1);
       });
-    },
+    }
   },
-  ls: {
-    description: 'List files in directory',
-    usage: 'ls /<drive>/<partition>',
+  'ls': {
+    'description': 'List files in directory',
+    'usage': 'ls /<drive>/<partition>',
     run(args, f, res) {
       const fs = require('../../core/fs');
-      const filesize = require('../../utils/filesize');
+      // const filesize = require('../../utils/filesize');
+
       fs.readdir(args, 'utf8', (err, list) => {
         if (err) {
           f.stdio.writeError(err);
@@ -237,13 +246,14 @@ const cmds = {
           for (const name of fileList) f.stdio.writeLine(name);
           res(0);
         });*/
-    },
+    }
   },
-  cat: {
-    description: 'Show file contents',
-    usage: 'cat <file>',
+  'cat': {
+    'description': 'Show file contents',
+    'usage': 'cat <file>',
     run(args, f, res) {
       const fs = require('../../core/fs');
+
       fs.readFile(args, 'utf8', (err, data) => {
         if (err) {
           f.stdio.writeError(err);
@@ -252,13 +262,14 @@ const cmds = {
         f.stdio.write(data);
         res(0);
       });
-    },
+    }
   },
-  mkdir: {
-    description: 'Make directory',
-    usage: 'mkdir <path>',
+  'mkdir': {
+    'description': 'Make directory',
+    'usage': 'mkdir <path>',
     run(args, f, res) {
       const fs = require('../../core/fs');
+
       fs.mkdir(args, (err) => {
         if (err) {
           f.stdio.writeError(err);
@@ -266,18 +277,45 @@ const cmds = {
         }
         res(0);
       });
-    },
+    }
   },
-  meminfo: {
-    description: 'Information about RAM',
-    usage: 'meminfo',
+  'wget': {
+    'description': 'Print data from HTTP request',
+    'usage': 'wget <url>',
+    run(args, f, result) {
+      const http = require('http');
+
+      http.get(args, (res) => {
+        res.setEncoding('utf8');
+        res.on('data', (chunk) => {
+          f.stdio.write(chunk);
+        });
+        res.on('end', () => {
+          f.stdio.writeLine('');
+          result(0);
+        });
+      });
+    }
+  },
+  'meminfo': {
+    'description': 'Information about RAM',
+    'usage': 'meminfo',
     run(args, f, res) {
       const info = __SYSCALL.memoryInfo();
-      f.stdio.writeLine(`MEM:  ${+((info.pmUsed / 1024 / 1024).toFixed(2))}M / ${+((info.pmTotal / 1024 / 1024).toFixed(2))}M`);
-      f.stdio.writeLine(`HEAP: ${+((info.heapUsed / 1024 / 1024).toFixed(2))}M / ${+((info.heapTotal / 1024 / 1024).toFixed(2))}M`);
+
+      f.stdio.writeLine(`MEM:  ${
+          Number((info.pmUsed / 1024 / 1024).toFixed(2))
+        }M / ${
+          Number((info.pmTotal / 1024 / 1024).toFixed(2))
+        }M`);
+      f.stdio.writeLine(`HEAP: ${
+          Number((info.heapUsed / 1024 / 1024).toFixed(2))
+        }M / ${
+          Number((info.heapTotal / 1024 / 1024).toFixed(2))
+        }M`);
       return res(0);
-    },
-  },
+    }
+  }
 };
 
 /* eslint no-restricted-syntax:0, guard-for-in:0 */

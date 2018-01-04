@@ -1,4 +1,5 @@
 // Copyright 2014-present runtime.js project authors
+// Copyright 2017 JsOS project authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,7 +18,15 @@
 /* global PERSISTENCE */
 
 const printer = require('./printer');
+const logger = new (require('../../modules/logger'))({'defaultStdio': printer});// $$.logger.log;
+const log = logger.log;
 
+try {
+  logger.setLevels(require('../../../package.json').logLevels); // FIXME: Костыль, но без него никак
+} catch (e) {
+  log('Can\' t read logLevels from package.json');
+  log(e);
+}
 class LineEditor {
   constructor() {
     this.inputText = '';
@@ -35,6 +44,7 @@ class LineEditor {
 
   drawCursor() {
     let char = ' ';
+
     if (this.inputPosition < this.inputText.length) {
       char = this.inputText[this.inputPosition];
     }
@@ -45,6 +55,7 @@ class LineEditor {
 
   removeCursor() {
     let char = ' ';
+
     if (this.inputPosition < this.inputText.length) {
       char = this.inputText[this.inputPosition];
     }
@@ -60,6 +71,7 @@ class LineEditor {
       printer.print(char);
     } else {
       const rightSide = this.inputText.slice(this.inputPosition);
+
       this.inputText = this.inputText.slice(0, this.inputPosition) + char + rightSide;
       printer.print(char);
       for (const item of rightSide) {
@@ -79,6 +91,7 @@ class LineEditor {
         printer.moveOffset(-1);
       } else {
         const rightSide = this.inputText.slice(this.inputPosition);
+
         this.inputText = this.inputText.slice(0, this.inputPosition - 1) + rightSide;
         printer.moveOffset(-1);
         for (const item of rightSide) {
@@ -99,7 +112,7 @@ class LineEditor {
       this.removeChar();
       this.drawCursor();
     } else {
-      debug('Out of text ( > right )');
+      log('Out of text ( > right )', {'level': 'LineEditor'});
     }
   }
   moveCursorLeft() {
@@ -139,28 +152,32 @@ class LineEditor {
   }
 
   writeHistory(cmd) {
+    if (cmd === PERSISTENCE.Editor.history[PERSISTENCE.Editor.historyPosition - 1] ||
+      cmd.trim() === '')
+      return log('Don\'t write to history because repeation or empty', {'level': 'LineEditor'});
     PERSISTENCE.Editor.history.push(cmd);
-    PERSISTENCE.Editor.historyPosition++;
-    console.log(`Editor->writeHistory(${cmd}) ==> ${JSON.stringify(PERSISTENCE.Editor.history)} [${typeof(PERSISTENCE.Editor.history)}]`);
+    // PERSISTENCE.Editor.historyPosition++;
+    PERSISTENCE.Editor.historyPosition = PERSISTENCE.Editor.history.length;
+    log(`Editor->writeHistory(${cmd}) ==> ${JSON.stringify(PERSISTENCE.Editor.history)} [${typeof(PERSISTENCE.Editor.history)}]`, { level: 'LineEditor' }); //eslint-disable-line
   }
 
   previous() {
-    debug('Editor->previous()');
+    log('Editor->previous()', {'level': 'LineEditor'});
     if (PERSISTENCE.Editor.historyPosition > 0) {
       PERSISTENCE.Editor.historyPosition--;
       this.setInputBox(PERSISTENCE.Editor.history[PERSISTENCE.Editor.historyPosition] || '');
     } else {
-      debug('Out of array ( < 0 )');
+      log('Out of array ( < 0 )', {'level': 'LineEditor'});
     }
   }
 
   next() {
-    debug('Editor->next()');
+    log('Editor->next()', {'level': 'LineEditor'});
     if (PERSISTENCE.Editor.historyPosition < PERSISTENCE.Editor.history.length) {
       PERSISTENCE.Editor.historyPosition++;
       this.setInputBox(PERSISTENCE.Editor.history[PERSISTENCE.Editor.historyPosition] || '');
     } else {
-      debug('Out of array ( > max )');
+      log('Out of array ( > max )', {'level': 'LineEditor'});
     }
   }
 
@@ -184,5 +201,7 @@ class LineEditor {
     this.drawCursor();
   }
 }
+
+LineEditor.logger = logger; // FIXME: Точно костыль
 
 module.exports = LineEditor;

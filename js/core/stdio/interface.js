@@ -22,6 +22,23 @@ class StdioInterface {
     this.onwriteerror = () => {};
     this.onsetcolor = () => {};
     this.onsetbackgroundcolor = () => {};
+
+    this.write = this.write.bind(this);
+    this.writeError = this.writeError.bind(this);
+    this.writeLine = this.writeLine.bind(this);
+    this.setColor = this.setColor.bind(this);
+    this.setBackgroundColor = this.setBackgroundColor.bind(this);
+    this.clear = this.clear.bind(this);
+    this.read = this.read.bind(this);
+    this.readLine = this.readLine.bind(this);
+  }
+
+  get color() {
+    return this.getColor();
+  }
+
+  get bgcolor() {
+    return this.getBgColor();
   }
 
   // stdout
@@ -52,6 +69,7 @@ class StdioInterface {
 
   readLine(cb) {
     let text = '';
+
     function addinput(char) {
       if (char !== '\n') {
         text += char;

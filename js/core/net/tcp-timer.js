@@ -13,6 +13,7 @@
 // limitations under the License.
 
 'use strict';
+
 // const tcpSocketState = require('./tcp-socket-state');
 const connections = new Set();
 
@@ -29,5 +30,5 @@ function initTimeout() {
 
 initTimeout();
 
-exports.addConnectionSocket = (connSocket) => connections.add(connSocket);
-exports.removeConnectionSocket = (connSocket) => connections.delete(connSocket);
+exports.addConnectionSocket = connSocket => connections.add(connSocket);
+exports.removeConnectionSocket = connSocket => connections.delete(connSocket);

@@ -13,6 +13,7 @@
 // limitations under the License.
 
 'use strict';
+
 const assert = require('assert');
 const typeutils = require('typeutils');
 const isint = require('isint');
@@ -31,6 +32,9 @@ class PciDevice {
     this.vendorId = opts.vendorId;
     this.deviceId = opts.deviceId;
     this.pciAccessor = opts.pciAccessor;
+    this.classCode = opts.classCode;
+    this.subclass = opts.subclass;
+    this.progIf = opts.progIf;
     this.subsystem = opts.subsystemData;
     this.bars = opts.bars;
     this.irq = opts.irq;
@@ -47,6 +51,7 @@ class PciDevice {
   setPciCommandFlag(flag) {
     assert(Number.isInteger(flag) && flag >= 0 && flag < 16);
     let t = this.pciAccessor.read(this.pciAccessor.fields().COMMAND);
+
     t |= (1 << flag) >>> 0;
     this.pciAccessor.write(this.pciAccessor.fields().COMMAND, t);
   }
@@ -61,16 +66,16 @@ class PciDevice {
   }
   static get commandFlag() {
     return {
-      IOSpace: 0,
-      MemorySpace: 1,
-      BusMaster: 2,
-      SpecialCycles: 3,
-      MemoryWriteInvalidate: 4,
-      VGAPaletteSnoop: 5,
-      ParityError: 6,
-      SERR: 8,
-      BackToBack: 9,
-      InterruptDisable: 10,
+      'IOSpace': 0,
+      'MemorySpace': 1,
+      'BusMaster': 2,
+      'SpecialCycles': 3,
+      'MemoryWriteInvalidate': 4,
+      'VGAPaletteSnoop': 5,
+      'ParityError': 6,
+      'SERR': 8,
+      'BackToBack': 9,
+      'InterruptDisable': 10
     };
   }
 }

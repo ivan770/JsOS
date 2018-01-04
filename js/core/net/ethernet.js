@@ -13,6 +13,7 @@
 // limitations under the License.
 
 'use strict';
+
 // const assert = require('assert');
 const MACAddress = require('./mac-address');
 const u8view = require('u8-view');

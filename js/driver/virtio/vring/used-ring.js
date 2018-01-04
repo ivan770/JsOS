@@ -35,8 +35,8 @@ class UsedRing {
 
   readElement(index) {
     return {
-      id: this.ringElements[index * 2],
-      len: this.ringElements[(index * 2) + 1],
+      'id': this.ringElements[index * 2],
+      'len': this.ringElements[(index * 2) + 1]
     };
   }
 
@@ -46,6 +46,7 @@ class UsedRing {
 
   placeDescriptorAsDevice(index, bufferLength) {
     const used = (this.readIdx() & (this.ringSize - 1)) >>> 0;
+
     this.ringElements[index * 2] = used;
     this.ringElements[(index * 2) + 1] = bufferLength;
     ++this.ringData[INDEX_IDX];
@@ -58,6 +59,7 @@ class UsedRing {
   getUsedDescriptor() {
     const last = (this.lastUsedIndex & (this.ringSize - 1)) >>> 0;
     const descriptorData = this.readElement(last);
+
     this.lastUsedIndex = (this.lastUsedIndex + 1) & 0xffff;
     return descriptorData;
   }

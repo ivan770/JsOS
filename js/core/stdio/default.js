@@ -21,6 +21,9 @@ const defaultStdio = new StdioInterface();
 let fgcolor = tty.color.WHITE;
 let bgcolor = tty.color.BLACK;
 
+defaultStdio.getColor = () => fgcolor;
+defaultStdio.getBgColor = () => bgcolor;
+
 defaultStdio.onwrite = text => tty.print(text, 1, fgcolor, bgcolor);
 
 defaultStdio.onclear = tty.clear;

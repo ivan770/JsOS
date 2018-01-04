@@ -13,20 +13,21 @@
 // limitations under the License.
 
 'use strict';
+
 const assert = require('assert');
 const isDomain = require('./is-domain');
 const PacketReader = require('./packet-reader');
 const randomId = 0x3322;
 
 const queries = {
-  A: 0x01,
-  NS: 0x02,
-  CNAME: 0x05,
-  PTR: 0x0C,
-  MX: 0x0F,
-  SRV: 0x21,
-  SOA: 0x06,
-  TXT: 0x0A,
+  'A': 0x01,
+  'NS': 0x02,
+  'CNAME': 0x05,
+  'PTR': 0x0C,
+  'MX': 0x0F,
+  'SRV': 0x21,
+  'SOA': 0x06,
+  'TXT': 0x0A
 };
 
 exports.getQuery = (domain, query) => {
@@ -36,6 +37,7 @@ exports.getQuery = (domain, query) => {
   let bufferLength = 17;
 
   const labels = domain.split('.');
+
   for (const label of labels) {
     bufferLength += label.length + 1;
   }
@@ -78,6 +80,7 @@ function readHostname(reader) {
 
   for (let z = reader.getOffset(); z < reader.len; ++z) {
     const len = reader.readUint8();
+
     if (len === 0) {
       break;
     }
@@ -85,12 +88,14 @@ function readHostname(reader) {
     if (isPointer(len)) {
       const ptrOffset = ((len - POINTER_VALUE) << 8) + reader.readUint8();
       const pos = reader.getOffset();
+
       reader.setOffset(ptrOffset);
       labels = labels.concat(readHostname(reader));
       reader.setOffset(pos);
       break;
     } else {
       let label = '';
+
       for (let i = 0; i < len; ++i) {
         label += String.fromCharCode(reader.readUint8());
       }
@@ -124,6 +129,7 @@ exports.parseResponse = (u8) => {
 
   // Read question
   const hostname = readHostname(reader).join('.');
+
   reader.readUint16(); // skip type
   reader.readUint16(); // skip class
 
@@ -147,22 +153,22 @@ exports.parseResponse = (u8) => {
         }
 
         results.push({
-          hostname: host,
-          record: 'A',
-          address: [
+          'hostname': host,
+          'record': 'A',
+          'address': [
             reader.readUint8(),
             reader.readUint8(),
             reader.readUint8(),
-            reader.readUint8(),
+            reader.readUint8()
           ],
-          ttl,
+          ttl
         });
         break;
       case queries.CNAME: // CNAME record
         results.push({
-          hostname: host,
-          record: 'CNAME',
-          name: readHostname(reader).join('.'),
+          'hostname': host,
+          'record': 'CNAME',
+          'name': readHostname(reader).join('.')
         });
         break;
       default:
@@ -175,6 +181,6 @@ exports.parseResponse = (u8) => {
 
   return {
     hostname,
-    results,
+    results
   };
 };

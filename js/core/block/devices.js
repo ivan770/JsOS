@@ -14,7 +14,7 @@
 
 'use strict';
 
-const { setNameHandle } = require('./block-device-interface');
+const {setNameHandle} = require('./block-device-interface');
 const availableBuses = Object.create(null); // not using a Map because the buses should be easy to access directly
 const availableDevices = [];
 
@@ -22,6 +22,7 @@ module.exports = {
   registerDevice(device) {
     if (!availableBuses[device.bus]) availableBuses[device.bus] = [];
     const i = availableDevices.push(device) - 1;
+
     device[setNameHandle](`${device.bus}${i}`);
     availableBuses[device.bus].push(device);
 
@@ -32,5 +33,5 @@ module.exports = {
   },
   getBuses() {
     return availableBuses;
-  },
+  }
 };
