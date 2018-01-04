@@ -295,6 +295,15 @@ const cmds = {
       return res(0);
     },
   },
+  jsmb: {
+    description: 'Initialize global jsmb variable',
+    usage: 'jsmb',
+    run(args, f, res) {
+      global.jsmb = require('../../core/graphics/jsmb');
+      f.stdio.writeLine('JsMobileBasic initialized!');
+      return res(0);
+    },
+  },
 };
 
 /* eslint no-restricted-syntax:0, guard-for-in:0 */
