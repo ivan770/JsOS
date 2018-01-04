@@ -143,7 +143,7 @@ function testInstance(obj) {
 
 exports.draw = (drawbuf) => {
   testInstance(drawbuf);
-  if (!global.$$ || !global.$$.graphics || !global.$$.graphics.graphicsAvailable()) {
+  if (!(global.$$ && global.$$.graphics && global.$$.graphics.graphicsAvailable())) {
     vgaOld.draw(drawbuf);
     // TODO: Сделать условие во время первой отрисовки
   } else {
