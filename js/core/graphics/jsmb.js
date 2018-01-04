@@ -34,8 +34,8 @@ const $Config = {
 };
 
 const $TMP = {
-  color: 0xF,
-  bgcolor: 0x0,
+  color: [0xFF, 0xFF, 0xFF],
+  bgcolor: [0x0, 0x0, 0x0],
 };
 
 let ctx;
@@ -241,14 +241,17 @@ const JsMB = {
         this.drawPlot(i, j);
       }
     }
+    graphics.repaint();
     return this;
   },
   cls() {
     graphics.fillScreen(...$TMP.bgcolor);
+    graphics.repaint();
     return this;
   },
   fillScreen() {
     graphics.fillScreen(...$TMP.color);
+    graphics.repaint();
     return this;
   },
   /* fillScreen(r, g, b, from = 0, to = graphics.displayBuffer.length) {
@@ -269,6 +272,7 @@ const JsMB = {
       this.drawPlot(x, i);
       this.drawPlot(x + w, i);
     }
+    graphics.repaint();
     return this;
   },
 
@@ -277,8 +281,9 @@ const JsMB = {
    * @param  {number} y - y
    * @returns {bool} true
    */
-  drawPlot(x, y) {
+  drawPlot(x, y, norepaint = false) {
     graphics.setPixel(x, y, ...$TMP.color);
+    if (!norepaint) graphics.repaint();
     return this;
   },
   clearRect(x, y, w, h) {
@@ -342,6 +347,7 @@ const JsMB = {
         err += dx - (radius * 2);
       }
     }
+    graphics.repaint();
     return this;
   },
   fillArc(x0, y0, radius/* , startAngle, endAngle, counterClockwise */) {
@@ -375,6 +381,7 @@ const JsMB = {
         err += dx - (radius * 2);
       }
     }
+    graphics.repaint();
     return this;
   },
   fillRect4(x, y, x1, y1, x2, y2, x3, y3) {

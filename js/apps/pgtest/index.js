@@ -3,7 +3,7 @@
 
 'use strict';
 
-const JsMB = require('../../core/graphics/jsmb-pseudo');
+const JsMB = require('../../core/graphics/jsmb');
 
 const scw = JsMB.screenWidth();
 const sch = JsMB.screenHeight();
