@@ -11,31 +11,32 @@
 'use strict';
 
 const io = $$.stdio.defaultStdio;
-const graphics = require('.');// $$.graphics;
+// const graphics = $$.graphics;
+const printer = require('../tty/printer');
 
 const $JsMobileBasic = {
-  name: 'JsMobileBasic',
-  version: 'Alpha 11',
-  author: 'PROPHESSOR',
-  url: 'http://vk.com/JsMobileBasic',
+  'name': 'JsMobileBasic',
+  'version': 'Alpha 11',
+  'author': 'PROPHESSOR',
+  'url': 'http://vk.com/JsMobileBasic',
   // Mobile: $Config.Mobile,
-  Debug: true,
-  background: [0, 0, 0],
+  'Debug': true,
+  'background': [0, 0, 0]
   // canvas: document.getElementById('c'),
   // graphic: false
 };
 
 const $Config = {
-  type: 'graphic', // graphic/console/api
-  canvas_size: ['*', '*', false], // [x,y,вместить]
-  Debug_Mode: true,
-  name: 'Интерпретатор MobileBasic\'a',
-  fullscreen: false,
+  'type': 'graphic', // graphic/console/api
+  'canvas_size': ['*', '*', false], // [x,y,вместить]
+  'Debug_Mode': true,
+  'name': 'Интерпретатор MobileBasic\'a',
+  'fullscreen': false
 };
 
 const $TMP = {
-  color: 0xF,
-  bgcolor: 0x0,
+  'color': 0xF,
+  'bgcolor': 0x0
 };
 
 let ctx;
@@ -218,7 +219,7 @@ if (!$JsMobileBasic.Mobile) debug('// ======Initializeng interpreter======//', '
  */
 
 const JsMB = {
-  _plot: 219, // 249
+  '_plot': 219, // 249
 
   setColor(color) {
     // color="black"="rgb(0,0,0)"="rgba(0,0,0,1)"
@@ -244,11 +245,11 @@ const JsMB = {
     return this;
   },
   cls() {
-    graphics.fillScreen(...$TMP.bgcolor);
+    printer.clear();
     return this;
   },
-  fillScreen() {
-    graphics.fillScreen(...$TMP.color);
+  fillScreen(color) {
+    printer.fill(color);
     return this;
   },
   /* fillScreen(r, g, b, from = 0, to = graphics.displayBuffer.length) {
@@ -278,7 +279,14 @@ const JsMB = {
    * @returns {bool} true
    */
   drawPlot(x, y) {
-    graphics.setPixel(x, y, ...$TMP.color);
+    const plot = String.fromCharCode(this._plot);
+
+    x = Math.floor(this.limit(x, 0, this.screenWidth()));
+    y = Math.floor(this.limit(y, 0, this.screenHeight()));
+
+    printer.moveTo(x, y);
+    printer.print(plot, 1, $TMP.color, $TMP.bgcolor);
+    printer.moveTo(this.screenWidth(), this.screenHeight());
     return this;
   },
   clearRect(x, y, w, h) {
@@ -321,26 +329,26 @@ const JsMB = {
     let err = dx - (radius * 2);
 
     while (x >= y) {
-      this.drawPlot(x0 + x, y0 + y);
-      this.drawPlot(x0 + y, y0 + x);
-      this.drawPlot(x0 - y, y0 + x);
-      this.drawPlot(x0 - x, y0 + y);
-      this.drawPlot(x0 - x, y0 - y);
-      this.drawPlot(x0 - y, y0 - x);
-      this.drawPlot(x0 + y, y0 - x);
-      this.drawPlot(x0 + x, y0 - y);
+        this.drawPlot(x0 + x, y0 + y);
+        this.drawPlot(x0 + y, y0 + x);
+        this.drawPlot(x0 - y, y0 + x);
+        this.drawPlot(x0 - x, y0 + y);
+        this.drawPlot(x0 - x, y0 - y);
+        this.drawPlot(x0 - y, y0 - x);
+        this.drawPlot(x0 + y, y0 - x);
+        this.drawPlot(x0 + x, y0 - y);
 
-      if (err <= 0) {
-        y++;
-        err += dy;
-        dy += 2;
-      }
+        if (err <= 0) {
+            y++;
+            err += dy;
+            dy += 2;
+        }
 
-      if (err > 0) {
-        x--;
-        dx += 2;
-        err += dx - (radius * 2);
-      }
+        if (err > 0) {
+            x--;
+            dx += 2;
+            err += dx - (radius * 2);
+        }
     }
     return this;
   },
@@ -354,26 +362,26 @@ const JsMB = {
     let err = dx - (radius * 2);
 
     while (x >= y) {
-      this.drawLine(x0, y0, x0 + x, y0 + y);
-      this.drawLine(x0, y0, x0 + y, y0 + x);
-      this.drawLine(x0, y0, x0 - y, y0 + x);
-      this.drawLine(x0, y0, x0 - x, y0 + y);
-      this.drawLine(x0, y0, x0 - x, y0 - y);
-      this.drawLine(x0, y0, x0 - y, y0 - x);
-      this.drawLine(x0, y0, x0 + y, y0 - x);
-      this.drawLine(x0, y0, x0 + x, y0 - y);
+        this.drawLine(x0, y0, x0 + x, y0 + y);
+        this.drawLine(x0, y0, x0 + y, y0 + x);
+        this.drawLine(x0, y0, x0 - y, y0 + x);
+        this.drawLine(x0, y0, x0 - x, y0 + y);
+        this.drawLine(x0, y0, x0 - x, y0 - y);
+        this.drawLine(x0, y0, x0 - y, y0 - x);
+        this.drawLine(x0, y0, x0 + y, y0 - x);
+        this.drawLine(x0, y0, x0 + x, y0 - y);
 
-      if (err <= 0) {
-        y++;
-        err += dy;
-        dy += 2;
-      }
+        if (err <= 0) {
+            y++;
+            err += dy;
+            dy += 2;
+        }
 
-      if (err > 0) {
-        x--;
-        dx += 2;
-        err += dx - (radius * 2);
-      }
+        if (err > 0) {
+            x--;
+            dx += 2;
+            err += dx - (radius * 2);
+        }
     }
     return this;
   },
@@ -382,7 +390,7 @@ const JsMB = {
       [x, y],
       [x1, y1],
       [x2, y2],
-      [x3, y3],
+      [x3, y3]
     ];
 
     ctx.beginPath();
@@ -398,7 +406,7 @@ const JsMB = {
       [x, y],
       [x1, y1],
       [x2, y2],
-      [x3, y3],
+      [x3, y3]
     ];
 
     ctx.beginPath();
@@ -413,7 +421,7 @@ const JsMB = {
     const arr = [
       [x, y],
       [x1, y1],
-      [x2, y2],
+      [x2, y2]
     ];
 
     ctx.beginPath();
@@ -428,7 +436,7 @@ const JsMB = {
     const arr = [
       [x, y],
       [x1, y1],
-      [x2, y2],
+      [x2, y2]
     ];
 
     ctx.beginPath();
@@ -633,8 +641,8 @@ const JsMB = {
     }
     return variable;
   },
-  min: Math.min,
-  max: Math.max,
+  'min': Math.min,
+  'max': Math.max,
   // Strings
   len(str) {
     return str.length;
@@ -669,7 +677,7 @@ const JsMB = {
   float(str) {
     return parseFloat(str);
   },
-  int: this.val,
+  'int': this.val,
   // Files
   saveData(filename, data, callback) {
     const file = `${filename}.json`;
@@ -733,21 +741,21 @@ const JsMB = {
       switch (type) {
         case undefined:
           $Menu[name].append(new $NW.MenuItem({
-            label: title,
-            click: onClick,
+            'label': title,
+            'click': onClick
           }));
           break;
         case 'subMenu':
           $Menu[name].append(new $NW.MenuItem({
-            label: title,
-            submenu: fortype,
+            'label': title,
+            'submenu': fortype
           }));
           break;
         case 'checkbox':
           $Menu[name].append(new $NW.MenuItem({
-            label: title,
-            type: 'checkbox',
-            click: onClick,
+            'label': title,
+            'type': 'checkbox',
+            'click': onClick
           }));
           break;
       }
@@ -769,7 +777,7 @@ const JsMB = {
       if ($Menu[name] == undefined) {
         $Menu[name] = new $NW.Menu();
       }
-      $Menu[name].append(new $NW.MenuItem({ type: 'separator' }));
+      $Menu[name].append(new $NW.MenuItem({'type': 'separator'}));
       return this;
     }
     debug('Создание меню невозможно!');
@@ -780,13 +788,13 @@ const JsMB = {
     if (true) {
       if ($Menu.$Bar[name] == undefined) {
         $Menu.$Bar[name] = new $NW.Menu({
-          type: 'menubar',
-          title,
+          'type': 'menubar',
+          title
         });
       }
       $Menu.$Bar[name].append(new $NW.MenuItem({
-        label: title,
-        submenu: $Menu[subMenu],
+        'label': title,
+        'submenu': $Menu[subMenu]
       }));
       return this;
     }
@@ -837,7 +845,7 @@ const JsMB = {
       const tray = new $NW.Tray({
         title,
         icon,
-        alticon: icon,
+        'alticon': icon
       });
 
       tray.menu = $Menu[menu];
@@ -936,7 +944,7 @@ const JsMB = {
   },
   fullScreen(mode) {
     return this;
-  },
+  }
 
 };
 
