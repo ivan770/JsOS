@@ -198,10 +198,10 @@ if (!$JsMobileBasic.Mobile) debug('// ======Initializeng interpreter======//', '
 
 // Константы
 // #endregion Init
-const PI = Math.PI;
-const G = 9.8;
-const RAD2DEG = 180 / PI;
-const DEG2RAD = PI / 180;
+// const PI = Math.PI;
+// const G = 9.8;
+// const RAD2DEG = 180 / PI;
+// const DEG2RAD = PI / 180;
 
 const JsMB = {
   setColor(color) {
