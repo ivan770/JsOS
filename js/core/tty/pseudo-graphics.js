@@ -32,6 +32,7 @@ class Window extends EventListener {
     this.buttonoffset = 5;
 
     this.buttons = [];
+    this.btnselectposition = 0;
 
     this.render();
   }
@@ -51,18 +52,41 @@ class Window extends EventListener {
     if (!(button instanceof Button)) throw new TypeError();
 
     this.buttons.push(button);
-    const tmp = [
-      this.offsetx + this.buttonoffset,
-      this.offsety + this.height - Button.height - 3
-    ];
-
-    console.log(tmp);
 
     button.render(
-      tmp[0], tmp[1]
+      this.offsetx + this.buttonoffset,
+      this.offsety + this.height - Button.height - 3
     );
 
+    this.selectButton(0);
+
     this.buttonoffset += button.title.length + 5/* 3 */; // Button.width + 1;
+  }
+
+  // Navigation
+
+  nextButton() {
+    if (this.btnselectposition < this.buttons.length - 1) this.btnselectposition++;
+    this.selectButton();
+  }
+
+  prevButton() {
+    if (this.btnselectposition > 0) this.btnselectposition--;
+    this.selectButton();
+  }
+
+  selectButton(number = this.btnselectposition) {
+    this.unselectAll();
+    if (this.buttons[number]) {
+      this.btnselectposition = number;
+      this.buttons[number].hover(true);
+    }
+  }
+
+  unselectAll() {
+    for (const i of this.buttons) {
+      i.hover(false);
+    }
   }
 }
 
@@ -85,7 +109,7 @@ class Button extends EventListener {
     this.textcolor = textcolor;
     this.linecolor = linecolor;
     this.hovercolor = hovercolor;
-    this.tmpcolor = [];
+    this.tmpcolor = color;
     this.tempoffset = [0, 0];
   }
 
@@ -98,7 +122,6 @@ class Button extends EventListener {
 
     JsMB // TODO: Responsible buttons
       .setColor(this.color)
-      .setBackColor(this.color)
       .fillRect(offsetx, offsety, width, Button.height)
       // .setColor(this.linecolor)
       // .drawRect(offsetx, offsety, Button.width, Button.height)
@@ -109,10 +132,10 @@ class Button extends EventListener {
 
   hover(mode) {
     if (mode) {
-      this.tmpcolor.push(this.color);
+      this.tmpcolor = this.color;
       this.color = this.hovercolor;
     } else {
-      this.color = this.tmpcolor.pop();
+      this.color = this.tmpcolor;
     }
     this.render();
     this.emit('hover', mode);
