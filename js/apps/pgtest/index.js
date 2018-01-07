@@ -12,16 +12,28 @@ const sch = JsMB.screenHeight();
 let io, resp, kb, window;
 
 let page = 0;
+let demonstration = false;
 
 function draw() {
-  window = new UI.Window('Test');
+  window = new UI.Window('Pseudo-GUI Demonstration');
 
-  window.addButton(new UI.Button('OK'));
+  const startbtn = new UI.Button('Start');
 
-  window.addButton(new UI.Button('Cancel', 0x2));
+  startbtn.once('click', () => {
+    demonstration = true;
+    page++;
+    sdraw();
+  });
+  window.addButton(startbtn);
+
+  const exitbtn = new UI.Button('Exit', 0x4);
+
+  exitbtn.once('click', exit);
+  window.addButton(exitbtn);
 }
 
 function sdraw() {
+  if (!demonstration) return;
   JsMB
     .cls()
     .setColor(0xF)
@@ -68,8 +80,6 @@ function sdraw() {
     default:
       throw new (require('errors').WTFError)(`Page ${page} doesn't exist!`);
   }
-
-  return undefined;
 }
 
 function onKeyDown(key) {
@@ -77,19 +87,20 @@ function onKeyDown(key) {
     case 'f12':
       return exit();
     case 'kpleft':
-      window.prevButton();
+      if (!demonstration) return window.prevButton();
       break;
     case 'enter':
-      page++;
-      sdraw();
+      if (!demonstration) return window.pressButton();
       break;
     case 'kpright':
-      window.nextButton();
+      if (!demonstration) return window.nextButton();
       break;
     default:
-      draw();
+      if (!demonstration) return;
       break;
   }
+  page++;
+  sdraw();
 }
 
 function exit() {
@@ -107,6 +118,8 @@ function main(api, res) {
   kb.onKeydown.add(onKeyDown);
   io.setColor('yellow');
   io.writeLine('Press any button to start or F12 to exit!');
+  io.clear();
+  draw();
 }
 
 exports.call = (cmd, args, api, res) => main(api, res);
