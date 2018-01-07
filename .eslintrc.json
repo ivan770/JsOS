@@ -49,7 +49,7 @@
 		"callback-return": "error",
 		"camelcase": "error",
 		"capitalized-comments": "off",
-		"class-methods-use-this": "warn",
+		"class-methods-use-this": "off",
 		"comma-dangle": "error",
 		"comma-spacing": [
 			"error",
@@ -279,8 +279,8 @@
 			"last"
 		],
 		"sort-imports": "error",
-		"sort-keys": 0,
-		"sort-vars": "error",
+		"sort-keys": "off",
+		"sort-vars": "off",
 		"space-before-blocks": "error",
 		"space-before-function-paren": "off",
 		"space-in-parens": [
