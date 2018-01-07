@@ -1,208 +1,128 @@
-#!/usr/bin/env node
-
-// origin https://github.com/F1LT3R/axel
+/*
+ * Copyright (c) 2018 PROPHESSOR
+*/
 
 'use strict';
 
-const printer = require("./printer");
-const le = require("./line-editor");
-const ed = new le;
-// const ansi = require('ansi');
-// const cursor = ansi(process.stdout);
+/* eslint-disable no-use-before-define */
 
-// const stdo = process.stdout;
-const cols = printer.width;
-const rows = printer.height;
-let defaultChar = ' ';
+const JsMB = require('../graphics/jsmb-pseudo');
+const EventListener = require('events');
 
-const PI2 = Math.PI * 2;
+const scw = JsMB.screenWidth();
+const sch = JsMB.screenHeight();
 
-const color = {
-  fg: {
-    r: 255,
-    g: 255,
-    b: 255,
-  },
-  bg: {
-    r: 255,
-    g: 255,
-    b: 255,
-  },
-};
+class UI {
+  constructor () {
+    '';
+  }
+}
 
+class Window extends EventListener {
+  constructor (title, linecolor = 0xF, bgcolor = 0, width = scw, height = sch, offsetx = 0, offsety = 0) {
+    super();
+    this.title = title;
+    this.offsetx = offsetx;
+    this.offsety = offsety;
+    this.width = width;
+    this.height = height;
+    this.linecolor = linecolor;
+    this.bgcolor = bgcolor;
 
-var axel = {
+    this.buttonoffset = 5;
 
-  // Clears a block
-  scrub(x1, y1, w, h) {
-    // Turn off the color settings while we scrub
-    const oldBrush = this.defaultChar;
-    cursor.reset();
-    this.defaultChar = ' ';
+    this.buttons = [];
 
-    this.box(x1, y1, w, h);
+    this.render();
+  }
 
-    // Put the colors back after
-    cursor.fg.rgb(color.fg.r, color.fg.g, color.fg.b);
-    cursor.bg.rgb(color.bg.r, color.bg.g, color.bg.b);
-    this.defaultChar = oldBrush;
-  },
+  render() {
+    const offset = Math.floor(this.title.length / 2);
 
+    JsMB.fillScreen(this.bgcolor)
+      .setColor(this.linecolor)
+      .drawRect(this.offsetx, this.offsety, this.width, this.height)
+      .setColor(this.bgcolor)
+      .setBackColor(this.linecolor)
+      .drawString(this.title, (this.width / 2) - offset, 0);
+  }
 
-  clear() {
-    // console.log('\033[2J');
-    printer.clear();
-  },
+  addButton(button) {
+    if (!(button instanceof Button)) throw new TypeError();
 
+    this.buttons.push(button);
+    const tmp = [
+      this.offsetx + this.buttonoffset,
+      this.offsety + this.height - Button.height - 3
+    ];
 
-  // Changes the foreground character █ default is [space]
-  set brush(character) {
-    defaultChar = character || ' ';
-  },
+    console.log(tmp);
 
-  get brush() {
-    return defaultChar;
-  },
+    button.render(
+      tmp[0], tmp[1]
+    );
 
+    this.buttonoffset += button.title.length + 5/* 3 */; // Button.width + 1;
+  }
+}
 
-  cursorInterface: {
-    on() {
-      // cursor.show();
-      ed.drawCursor();
-    },
-    off() {
-      // cursor.hide();
-      ed.removeCursor();
-    },
+class Button extends EventListener {
+  constructor (title, color = 0xF, textcolor = 0, linecolor = 0xF, hovercolor = 0xA) {
+    super();
 
-    // Resets background & foreground colors
-    reset() {
-      // cursor.reset();
-      //TODO: Write me....
-    },
+    let props = null;
 
-    // Restores colors and places cursor after the graphics
-    // so that the drawing does not get drawn over when the
-    // program ends
-    restore() {
-      cursor.reset();
-      cursor.goto(axel.cols, axel.rows - 1);
-    },
-  },
-
-
-  get cursor() {
-    return this.cursorInterface;
-  },
-
-  get rows() {
-    return stdo.rows;
-  },
-
-  get cols() {
-    return stdo.columns;
-  },
-
-  goto(x, y) {
-    // cursor.goto(parseInt(x), parseInt(y));
-    printer.moveTo(x,y);
-  },
-
-  point(x, y, char) {
-    if (!(
-        x < 0 || y < 0 ||
-        x > stdo.columns || y > stdo.rows ||
-        x < 0 || y < 0 ||
-        x > stdo.columns || y > stdo.rows
-      )) {
-      // cursor.goto(parseInt(x), parseInt(y)).write(char || defaultChar);
-      this.goto(Number(x), Number(y));
-      ed.putChar(char || defaultChar);
-    }
-  },
-
-
-  // Get in interpolation point between two points at a given magnitude
-  lerp(p1, p2, m) {
-    return ((p2 - p1) * m) + p1;
-  },
-
-
-  circ(x, y, m) {
-    let res = m * PI2;
-    let i;
-
-    for (i = 0; i < res; i += 1) {
-      const loc = PI2 / res * i;
-      this.point(x + Math.sin(loc) * m, y + Math.cos(loc) * m / 2);
-    }
-  },
-
-
-  box(x1, y1, w, h) {
-    let line = '',
-      x,
-      y;
-
-    for (x = 0; x < w; x += 1) {
-      line += this.brush;
+    if (typeof color === 'object') {
+      props = color;
+      color = props.color || 0xF; // TODO: Упростить
+      textcolor = props.textcolor || 0;
+      linecolor = props.linecolor || 0;
+      hovercolor = props.hovercolor || 0xA;
     }
 
-    for (y = 0; y < h; y += 1) {
-      cursor.goto(x1, y1 + y).write(line);
+    this.title = title;
+    this.color = color;
+    this.textcolor = textcolor;
+    this.linecolor = linecolor;
+    this.hovercolor = hovercolor;
+    this.tmpcolor = [];
+    this.tempoffset = [0, 0];
+  }
+
+  render(offsetx, offsety) {
+    if (typeof offsetx !== 'number') [offsetx, offsety] = this.offset;
+    this.offset = [offsetx, offsety];
+
+    const width = this.title.length + 3;
+    const textoffset = 2;// Math.floor(width / 2) - (width % 2);
+
+    JsMB // TODO: Responsible buttons
+      .setColor(this.color)
+      .setBackColor(this.color)
+      .fillRect(offsetx, offsety, width, Button.height)
+      // .setColor(this.linecolor)
+      // .drawRect(offsetx, offsety, Button.width, Button.height)
+      .setColor(this.textcolor)
+      .setBackColor(this.color)
+      .drawString(this.title.slice(0, width - 2), offsetx + textoffset, offsety);
+  }
+
+  hover(mode) {
+    if (mode) {
+      this.tmpcolor.push(this.color);
+      this.color = this.hovercolor;
+    } else {
+      this.color = this.tmpcolor.pop();
     }
-  },
+    this.render();
+    this.emit('hover', mode);
+  }
+}
 
+Button.width = 10;
+Button.height = 0;
 
-  // Get the distance between two points
-  dist(x1, y1, x2, y2) {
-    return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
-  },
+UI.Window = Window;
+UI.Button = Button;
 
-
-  // Get all the points along a line and draw them
-  line(x1, y1, x2, y2) {
-    const D = this.dist(x1, y1, x2, y2) + 1;
-
-    // this.point(x1, y1);
-    for (let i = 0; i < D; i++) {
-      let m = 1 / D * i,
-        x = this.lerp(x1, x2, m),
-        y = this.lerp(y1, y2, m);
-      this.point(x, y);
-    }
-    // this.point(x2, y2);
-  },
-
-  color(hex, g, b, a) {
-    // if
-  },
-
-  text(x, y, text) {
-    cursor.goto(x, y).write(text);
-  },
-
-
-  // moveTo: function (x, y) {
-  //   cursor.moveTo()
-  // },
-
-
-  // Changes foreground color
-  fg(r, g, b) {
-    cursor.fg.rgb(r, g, b);
-  },
-
-  // Changes background color
-  bg(r, g, b) {
-    cursor.bg.rgb(r, g, b);
-  },
-
-  draw(cb) {
-    with (this) {
-      cb();
-    }
-  },
-};
-
-module.exports = axel;
+module.exports = UI;
