@@ -161,7 +161,7 @@
         }
 
         const pathComponents = path.split('/');
-        const firstPathComponent = pathComponents[0];
+        const [firstPathComponent] = pathComponents;
 
         // starts with ./ ../  or /
         if (firstPathComponent === '.' ||
@@ -194,7 +194,7 @@
           this.dirname = this.dirComponents.length > 1 ? this.dirComponents.join('/') : '/';
           this.exports = {};
         }
-        require(path) {
+        require(path, nocache = false) {
           let module = this;
           const resolvedPath = resolve(module, path);
 
@@ -207,7 +207,7 @@
           const displayPath = resolvedPath;
           const cacheKey = pathComponents.join('/');
 
-          if (cache[cacheKey]) {
+          if (cache[cacheKey] && !nocache) {
             return cache[cacheKey].exports;
           }
 
@@ -238,6 +238,9 @@
           global.module = currentModule;
           return module.exports;
         }
+        resolve(module = this, pathOpt) {
+          return resolve(module, pathOpt);
+        }
       }
 
       this.require = (path) => {
@@ -261,8 +264,8 @@
   }
 
   const runtimePackagePath = __SYSCALL.initrdGetKernelIndex().split('/')
-.slice(0, -1)
-.join('/');
+    .slice(0, -1)
+    .join('/');
   const loader = new Loader(fileExists, __SYSCALL.initrdReadFile, __SYSCALL.eval, {
     'assert': 'assert',
     'events': 'events',
