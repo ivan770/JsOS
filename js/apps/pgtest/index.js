@@ -4,15 +4,24 @@
 'use strict';
 
 const JsMB = require('../../core/graphics/jsmb-pseudo');
+const UI = require('../../core/tty/pseudo-graphics');
 
 const scw = JsMB.screenWidth();
 const sch = JsMB.screenHeight();
 
-let io, resp, kb;
+let io, resp, kb, window;
 
 let page = 0;
 
 function draw() {
+  window = new UI.Window('Test');
+
+  window.addButton(new UI.Button('OK'));
+
+  window.addButton(new UI.Button('Cancel', 0x2));
+}
+
+function sdraw() {
   JsMB
     .cls()
     .setColor(0xF)
@@ -64,9 +73,23 @@ function draw() {
 }
 
 function onKeyDown(key) {
-  if (key.type === 'f12') return exit();
-  page++;
-  return draw();
+  switch (key.type) {
+    case 'f12':
+      return exit();
+    case 'kpleft':
+      window.prevButton();
+      break;
+    case 'enter':
+      page++;
+      sdraw();
+      break;
+    case 'kpright':
+      window.nextButton();
+      break;
+    default:
+      draw();
+      break;
+  }
 }
 
 function exit() {
