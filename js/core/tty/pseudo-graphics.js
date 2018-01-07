@@ -7,7 +7,7 @@
 /* eslint-disable no-use-before-define */
 
 const JsMB = require('../graphics/jsmb-pseudo');
-const EventListener = require('events');
+const {EventEmitter} = require('events');
 
 const scw = JsMB.screenWidth();
 const sch = JsMB.screenHeight();
@@ -18,7 +18,7 @@ class UI {
   }
 }
 
-class Window extends EventListener {
+class Window extends EventEmitter {
   constructor (title, linecolor = 0xF, bgcolor = 0, width = scw, height = sch, offsetx = 0, offsety = 0) {
     super();
     this.title = title;
@@ -75,6 +75,10 @@ class Window extends EventListener {
     this.selectButton();
   }
 
+  pressButton() {
+    this.buttons[this.btnselectposition].click();
+  }
+
   selectButton(number = this.btnselectposition) {
     this.unselectAll();
     if (this.buttons[number]) {
@@ -90,7 +94,7 @@ class Window extends EventListener {
   }
 }
 
-class Button extends EventListener {
+class Button extends EventEmitter {
   constructor (title, color = 0xF, textcolor = 0, linecolor = 0xF, hovercolor = 0xA) {
     super();
 
@@ -139,6 +143,10 @@ class Button extends EventListener {
     }
     this.render();
     this.emit('hover', mode);
+  }
+
+  click(mode) {
+    this.emit('click', mode);
   }
 }
 
