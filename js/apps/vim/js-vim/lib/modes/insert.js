@@ -1,23 +1,24 @@
-var _ = require('underscore');
-var mark = require('../mark');
+const _ = require('underscore');
+const mark = require('../mark');
 
 module.exports = {
 
 	/* Any time you receive multiple keys in one go */
-	'/^((?!\b|esc)[\\w\\W][\\w\\W]+)$/': function(keys, vim) {
-		for (var i = 0; i < keys.length; i++) {
+	'/^((?!\b|esc)[\\w\\W][\\w\\W]+)$/'(keys, vim) {
+		for (let i = 0; i < keys.length; i++) {
 			this.exec(keys.substring(i, i + 1));
 		}
 	},
 
-	'/^((?!\b|esc|}).)$/': function(keys, vim, match) {
-		this.currentInsertedText += keys
+	'/^((?!\b|esc|}).)$/'(keys, vim, match) {
+		this.currentInsertedText += keys;
 		vim.insert(keys);
 	},
 
-	'/^}$/': function() {
+	'/^}$/'() {
 		if (this.rc.smartindent && this.curDoc._lines[this.curDoc.cursor.line()].match(/^\s*$/)) {
-			var ct = this.rc.tabstop;
+			let ct = this.rc.tabstop;
+
 			this.exec('esc');
 			while (ct--) {
 				this.exec('X');
@@ -28,21 +29,24 @@ module.exports = {
 
 	},
 
-	'/^(\r|\n)$/': function(keys) {
+	'/^(\r|\n)$/'(keys) {
 		this.currentInsertedText += keys;
 		if (!this.rc.smartindent || this.curDoc._lines[this.curDoc.cursor.line()].length === 0) {
 			this.insert('\n');
 		} else {
-			var thisLine = this.curDoc._lines[this.curDoc.cursor.line()];
-			var indent = thisLine.match(/{\s*(?:\/\/.*|\/\*.*\*\/\s*)?$/);
+			const thisLine = this.curDoc._lines[this.curDoc.cursor.line()];
+			const indent = thisLine.match(/{\s*(?:\/\/.*|\/\*.*\*\/\s*)?$/);
+
 			curChar = this.curDoc.cursor.char();
-			var currentText = this.currentInsertedText;
+			const currentText = this.currentInsertedText;
+
 			this.exec('esc');
 			this.exec('^');
 
-			//Assume you're indenting to the first non-blank char
-			var ct = this.curDoc.cursor.char();
-			//Unless it's all blank, then to zero.
+			// Assume you're indenting to the first non-blank char
+			let ct = this.curDoc.cursor.char();
+			// Unless it's all blank, then to zero.
+
 			if (thisLine.match(/^\s*$/)) {
 				ct = 0;
 			}
@@ -61,43 +65,46 @@ module.exports = {
 		}
 	},
 
-	'/^(\b)$/': function(keys, vim) {
+	'/^(\b)$/'(keys, vim) {
 		if (this.currentInsertedText.length) this.currentInsertedText = this.currentInsertedText.substring(0, this.currentInsertedText.length - 1);
-		var atZero = !vim.curDoc.cursor.char()
+		const atZero = !vim.curDoc.cursor.char();
+
 		vim.exec('esc');
 
-		//Only backspace if there's somewhere to go.
+		// Only backspace if there's somewhere to go.
 		if (atZero & !vim.curDoc.cursor.line()) return;
 
-		//Do a join if at the beginning (i.e., deleting a carriage return)		
+		// Do a join if at the beginning (i.e., deleting a carriage return)
 		if (atZero && vim.curDoc.cursor.line()) {
 			vim.exec('k');
 			vim.exec('J');
 			vim.exec('x');
 		} else {
-			//Otherwise just erase the character. This works because "esc" from insert decrements the cursor.
+			// Otherwise just erase the character. This works because "esc" from insert decrements the cursor.
 			vim.exec('x');
 		}
 		vim.exec('i');
 	},
-	'/^esc/': function(keys, vim) {
-		//Handle text
+	'/^esc/'(keys, vim) {
+		// Handle text
 
 		vim.mode('command');
 		vim.exec('h');
 
 		if (this.submode === 'block' & !this.currentInsertedText.match(/\n/)) {
 			this.submode = '';
-			var lastText = this.currentInsertedText;
-			//For each line that was a part of that block selection
-			var meaningfulSelection = this.lastSelection.slice(1);
+			const lastText = this.currentInsertedText;
+			// For each line that was a part of that block selection
+			const meaningfulSelection = this.lastSelection.slice(1);
+
 			_(meaningfulSelection).each(function(range) {
-				//Move to the beginning of the selection on that line
+				// Move to the beginning of the selection on that line
 				if (this.submodeVerb === 'I') {
 					this.curDoc.cursor.position(range[0]);
 					this.exec('i');
 				} else if (this.submodeVerb === 'A') {
-					var newPos = range[1];
+					const newPos = range[1];
+
 					newPos.char--;
 					newPos.col--;
 					this.curDoc.cursor.position(range[1]);
@@ -114,8 +121,7 @@ module.exports = {
 		this.currentInsertedText = this.currentInsertedText.substring(0, 0);
 
 
-
-	},
+	}
 
 
 };

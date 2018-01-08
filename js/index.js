@@ -14,7 +14,10 @@
 
 'use strict';
 
+/* eslint-disable no-console */
+
 const packagejson = require('../package.json');
+
 require('module-singleton')(packagejson);
 require('./version');
 
@@ -22,6 +25,7 @@ console.log(`JsOS runtime v${packagejson.version}`);
 console.log('Prepare to loading...');
 
 const isDebug = packagejson.runtimejs.debug;
+
 global.debug = isDebug ? console.log : () => {};
 
 require('./persistence');

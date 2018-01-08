@@ -45,7 +45,7 @@ EventEmitter.prototype.setMaxListeners = function(n) {
 };
 
 EventEmitter.prototype.emit = function(type) {
-  var er, handler, len, args, i, listeners;
+  let args, er, handler, i, len, listeners;
 
   if (!this._events)
     this._events = {};
@@ -59,7 +59,8 @@ EventEmitter.prototype.emit = function(type) {
         throw er; // Unhandled 'error' event
       } else {
         // At least give some kind of context to the user
-        var err = new Error('Uncaught, unspecified "error" event. (' + er + ')');
+        const err = new Error('Uncaught, unspecified "error" event. (' + er + ')');
+
         err.context = er;
         throw err;
       }
@@ -100,7 +101,7 @@ EventEmitter.prototype.emit = function(type) {
 };
 
 EventEmitter.prototype.addListener = function(type, listener) {
-  var m;
+  let m;
 
   if (!isFunction(listener))
     throw TypeError('listener must be a function');
@@ -112,8 +113,8 @@ EventEmitter.prototype.addListener = function(type, listener) {
   // adding it to the listeners, first emit "newListener".
   if (this._events.newListener)
     this.emit('newListener', type,
-              isFunction(listener.listener) ?
-              listener.listener : listener);
+              isFunction(listener.listener)
+              ? listener.listener : listener);
 
   if (!this._events[type])
     // Optimize the case of one listener. Don't need the extra array object.
@@ -155,7 +156,7 @@ EventEmitter.prototype.once = function(type, listener) {
   if (!isFunction(listener))
     throw TypeError('listener must be a function');
 
-  var fired = false;
+  let fired = false;
 
   function g() {
     this.removeListener(type, g);
@@ -174,7 +175,7 @@ EventEmitter.prototype.once = function(type, listener) {
 
 // emits a 'removeListener' event iff the listener was removed
 EventEmitter.prototype.removeListener = function(type, listener) {
-  var list, position, length, i;
+  let i, length, list, position;
 
   if (!isFunction(listener))
     throw TypeError('listener must be a function');
@@ -219,7 +220,7 @@ EventEmitter.prototype.removeListener = function(type, listener) {
 };
 
 EventEmitter.prototype.removeAllListeners = function(type) {
-  var key, listeners;
+  let key, listeners;
 
   if (!this._events)
     return this;
@@ -259,7 +260,8 @@ EventEmitter.prototype.removeAllListeners = function(type) {
 };
 
 EventEmitter.prototype.listeners = function(type) {
-  var ret;
+  let ret;
+
   if (!this._events || !this._events[type])
     ret = [];
   else if (isFunction(this._events[type]))
@@ -271,7 +273,7 @@ EventEmitter.prototype.listeners = function(type) {
 
 EventEmitter.prototype.listenerCount = function(type) {
   if (this._events) {
-    var evlistener = this._events[type];
+    const evlistener = this._events[type];
 
     if (isFunction(evlistener))
       return 1;

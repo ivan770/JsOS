@@ -13,6 +13,7 @@
 // limitations under the License.
 
 'use strict';
+
 const tcpHeader = require('./tcp-header');
 const TCPSocket = require('./tcp-socket');
 const tcpSocketState = require('./tcp-socket-state');

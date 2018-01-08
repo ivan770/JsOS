@@ -22,13 +22,16 @@ runtime.dns.resolve('pool.ntp.org', {}, (err, res) => {
   const rawip = res.results[0].address;
 
   const data = new Uint8Array(48);
+
   data[0] = 0x1B;
   let i;
+
   for (i = 1; i < 48; i++) {
     data[i] = 0;
   }
 
   const socket = new runtime.net.UDPSocket();
+
   socket.onmessage = (ip, port, u8) => {
     const offset = 40;
     let intpart = 0;

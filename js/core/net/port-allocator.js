@@ -20,6 +20,7 @@ const portUtils = require('./port-utils');
 
 const EPHEMERAL_PORT_FIRST = 49152;
 const EPHEMERAL_PORT_COUNT = 16000;
+
 assert(isint.uint16(EPHEMERAL_PORT_FIRST + EPHEMERAL_PORT_COUNT));
 
 class PortAllocator {
@@ -95,6 +96,7 @@ class PortAllocator {
 
     if (this.isEphemeralRange(port)) {
       const index = port - EPHEMERAL_PORT_FIRST;
+
       if (index >= this._sockets.length) {
         return;
       }
@@ -122,6 +124,7 @@ class PortAllocator {
 
     if (this.isEphemeralRange(port)) {
       const index = port - EPHEMERAL_PORT_FIRST;
+
       if (index >= this._sockets.length) {
         return null;
       }

@@ -18,7 +18,7 @@ const assert = require('assert');
 const DescriptorTable = require('./descriptor-table');
 const AvailableRing = require('./available-ring');
 const UsedRing = require('./used-ring');
-const { memoryBarrier } = require('../../../core/atomic');
+const {memoryBarrier} = require('../../../core/atomic');
 const SIZEOF_UINT16 = 2;
 
 class VRing {
@@ -33,6 +33,7 @@ class VRing {
     const offsetAvailableRing = DescriptorTable.getDescriptorSizeBytes() * ringSize;
     const offsetUsedRing = align(offsetAvailableRing + (SIZEOF_UINT16 * (3 + ringSize)));
     const ringSizeBytes = offsetUsedRing + align(UsedRing.getElementSize() * ringSize);
+
     this.ringSize = ringSize;
     this.address = baseAddress;
     this.size = ringSizeBytes;
@@ -53,6 +54,7 @@ class VRing {
 
       for (;;) {
         const u8 = this.getBuffer();
+
         if (u8 === null) {
           break;
         }
@@ -92,8 +94,10 @@ class VRing {
     // as its backing store
     const pageSplitBuffers = [];
     const lengths = [];
+
     for (const u8 of buffers) {
       const addr = __SYSCALL.bufferAddress(u8);
+
       if (addr[3] === 0) {
         pageSplitBuffers.push(u8);
         lengths.push(addr[0]);
@@ -108,7 +112,13 @@ class VRing {
       }
     }
 
-    const first = this.descriptorTable.placeBuffers(pageSplitBuffers, lengths, isWriteOnly, isWriteOnlyArray);
+    const first = this.descriptorTable.placeBuffers(
+      pageSplitBuffers,
+      lengths,
+      isWriteOnly,
+      isWriteOnlyArray
+    );
+
     if (first < 0) {
       debug('virtio: no descriptors\n');
       return false;
@@ -124,11 +134,13 @@ class VRing {
   }
   getBuffer() {
     const hasUnprocessed = this.usedRing.hasUnprocessedBuffers();
+
     if (!hasUnprocessed) {
       return null;
     }
 
     const used = this.usedRing.getUsedDescriptor();
+
     if (used === null) {
       return null;
     }

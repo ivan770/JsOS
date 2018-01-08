@@ -13,6 +13,7 @@
 // limitations under the License.
 
 'use strict';
+
 // const IP4Address = require('./ip4-address');
 const ip4header = require('./ip4-header');
 const ip4fragments = require('./ip4-fragments');
@@ -28,6 +29,7 @@ function handleReceive(intf, u8, headerOffset) {
   const srcIP = ip4header.getSrcIP(u8, headerOffset);
   const destIP = ip4header.getDestIP(u8, headerOffset);
   const nextOffset = headerOffset + headerLength;
+
   ip4receive(intf, srcIP, destIP, protocolId, u8, nextOffset);
 }
 

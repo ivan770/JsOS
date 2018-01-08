@@ -13,6 +13,7 @@
 // limitations under the License.
 
 'use strict';
+
 const IP4Address = require('./ip4-address');
 const checksum = require('./checksum');
 const u8view = require('u8-view');
@@ -38,9 +39,9 @@ exports.getProtocolId = (u8, headerOffset) => u8[headerOffset + 9];
 exports.getHeaderLength = (u8, headerOffset) => (u8[headerOffset] & 0xf) << 2;
 exports.getFragmentationData = (u8, headerOffset) => u8view.getUint16BE(u8, headerOffset + 6);
 exports.getIdentification = (u8, headerOffset) => u8view.getUint16BE(u8, headerOffset + 4);
-exports.fragmentationDataIsMoreFragments = (value) => !!((value >>> 13) & 0x1);
-exports.fragmentationDataIsDontFragment = (value) => !!((value >>> 14) & 0x1);
-exports.fragmentationDataOffset = (value) => (value & 0x1fff) * 8;
+exports.fragmentationDataIsMoreFragments = value => Boolean((value >>> 13) & 0x1);
+exports.fragmentationDataIsDontFragment = value => Boolean((value >>> 14) & 0x1);
+exports.fragmentationDataOffset = value => (value & 0x1fff) * 8;
 
 exports.minHeaderLength = minHeaderLength;
 

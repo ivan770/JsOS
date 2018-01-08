@@ -55,14 +55,17 @@ class IP4Address {
     }
 
     const p = str.trim().split('.');
+
     if (p.length !== 4) {
       return null;
     }
 
     const a = new Array(4);
+
     for (let i = 0; i < 4; ++i) {
       const v = p[i] | 0;
-      if (v !== +p[i] || v < 0 || v > 255) {
+
+      if (v !== Number(p[i]) || v < 0 || v > 255) {
         return null;
       }
       a[i] = v;

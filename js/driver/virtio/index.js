@@ -13,6 +13,7 @@
 // limitations under the License.
 
 'use strict';
+
 const virtioNet = require('./net');
 const virtioBlk = require('./blk');
 const virtioRNG = require('./rng');
@@ -37,7 +38,7 @@ const driver = {
 
     debug(`[virtio] unknown virtio device (subsystem id ${subsystemId})`);
   },
-  reset() {},
+  reset() {}
 };
 
 function testDeviceId(deviceId) {
