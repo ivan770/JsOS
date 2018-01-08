@@ -262,7 +262,7 @@
 		"prefer-reflect": "error",
 		"prefer-rest-params": "error",
 		"prefer-spread": "error",
-		"prefer-template": "off",
+		"prefer-template": "error",
 		"quote-props": "error",
 		"quotes": [
 			"error",

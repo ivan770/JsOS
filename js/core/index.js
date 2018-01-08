@@ -29,6 +29,7 @@ const net = require('./net');
 const stdio = require('./stdio');
 const speaker = require('../driver').load('ibm/pcspeaker'); // require('../driver/ibmpc/pcspeaker');
 const logger = new (require('../modules/logger'))(stdio);
+const usb = require('./usb');
 
 try {
   logger.setLevels(require('../../package.json').logLevels);
@@ -57,6 +58,7 @@ class Runtime {
       stdio,
       speaker,
       logger,
+      usb,
       // globalStorage: new Storage,
       'machine': {
         'reboot': __SYSCALL.reboot,
