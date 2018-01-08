@@ -21,16 +21,13 @@ const DMAPool = require('../system/dma-pool');
 const FRAMELIST_SIZE = 1024 * 4;
 const MAX_QH = 8;
 
-class UHCIDriver {
+class UHCIController {
   constructor() {
     '';
   }
   initQHPool() {
     for (let i = 0; i < MAX_QH; i++) {
-      this.qhPool[i] = {
-        transfer: 0,
-        
-      };
+      this.qhPool[i] = {'transfer': 0};
     }
   }
   init(device) {
@@ -53,8 +50,10 @@ class UHCIDriver {
     this.frbaseadd.write16(this.frameList.address);
   }
   static init(device) {
-    return new UHCIDriver().init(device);
+    return new UHCIController().init(device);
   }
 }
 
-$$.pci.addClassDriver(0x0C, 0x03, 0x00, UHCIDriver);
+$$.pci.addClassDriver(0x0C, 0x03, 0x00, UHCIController);
+
+module.exports = UHCIController;
