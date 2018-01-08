@@ -40,20 +40,27 @@ class UHCIController {
     this.frnum = this.iobar.resource.offsetPort(co.REG_FRNUM);
     this.frbaseadd = this.iobar.resource.offsetPort(co.REG_FRBASEADD);
 
-    this.dmaPool = new DMAPool();
+    /* this.dmaPool = new DMAPool();
     this.frameList = this.dmaPool.allocBuffer(FRAMELIST_SIZE);
     this.qhPool = [];
 
     this.intr.write16(0);
 
     this.frnum.write16(0);
-    this.frbaseadd.write16(this.frameList.address);
+    this.frbaseadd.write16(this.frameList.address);*/
+    this.cmd.write16(co.CMD_HCRESET);
+    while (this.cmd.read16() & co.CMD_HCRESET) __SYSCALL.halt();
+    this.cmd.write16(co.CMD_RS);
+    debug('USB INIT');
   }
   static init(device) {
     return new UHCIController().init(device);
   }
+
+  static load() {
+    return $$.pci.addClassDriver(0x0C, 0x03, 0x00, UHCIController);
+  }
 }
 
-$$.pci.addClassDriver(0x0C, 0x03, 0x00, UHCIController);
 
 module.exports = UHCIController;
