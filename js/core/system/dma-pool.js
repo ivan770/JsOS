@@ -1,5 +1,7 @@
 'use strict';
 
+const {Buffer} = require('buffer');
+
 class DMAPool {
   constructor() {
     this.poolDesc = __SYSCALL.allocDMA();
@@ -14,11 +16,12 @@ class DMAPool {
     }
     const buf = this.pool.slice(this.offset, this.offset + size);
     const addr = this.poolDesc.address + this.offset;
+
     this.offset += size;
     return {
-      buffer: buf,
-      address: addr,
-      size,
+      'buffer': buf,
+      'address': addr,
+      size
     };
   }
 }

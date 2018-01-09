@@ -9,7 +9,7 @@ module.exports = {
   'REG_SOFMOD': 0x0C, // Start of Frame Modify
   'REG_PORT1': 0x10, // Port 1 Status/Control
   'REG_PORT2': 0x12, // Port 2 Status/Control
-  'REG_LEGSUP': 0xc0, // Legacy Support,
+  'REG_LEGSUP': 0xc0, // Legacy Support
   'CMD_RS': (1 << 0), // Run/Stop
   'CMD_HCRESET': (1 << 1), // Host Controller Reset
   'CMD_GRESET': (1 << 2), // Global Reset
@@ -17,5 +17,7 @@ module.exports = {
   'CMD_FGR': (1 << 4), // Force Global Resume
   'CMD_SWDBG': (1 << 5), // Software Debug
   'CMD_CF': (1 << 6), // Configure Flag
-  'CMD_MAXP': (1 << 7) // Max Packet (0 = 32, 1 = 64)
+  'CMD_MAXP': (1 << 7), // Max Packet (0 = 32, 1 = 64)
+  'TD_PTR_TERMINATE': (1 << 0),
+  'TD_PTR_QH': (1 << 1)
 };
