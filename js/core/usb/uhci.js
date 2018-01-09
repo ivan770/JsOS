@@ -92,7 +92,9 @@ class UHCIController {
     for (let i = 0; i < this.qhPoolInfo.length; i++) {
       this.qhPoolInfo[i] = {
         'active': false,
-        'offset': i * QH_SIZE
+        'offset': i * QH_SIZE,
+        'next': this.qhPoolInfo[i],
+        'prev': this.qhPoolInfo[i]
       };
       this.qhPoolInfo[i].write = this.writeQH.bind(this, this.qhPoolInfo[i]);
       this.qhPoolInfo[i].read = this.readQH.bind(this, this.qhPoolInfo[i]);
