@@ -46,8 +46,8 @@ class UHCIController {
     for (let i = 0; i < this.qhPoolInfo.length; i++) {
       if (!this.qhPoolInfo[i].active) {
         this.qhPoolInfo[i].active = true;
+        return this.qhPoolInfo[i];
       }
-      return this.qhPoolInfo[i];
     }
     return null;
   }
