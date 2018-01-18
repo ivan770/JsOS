@@ -221,10 +221,10 @@
 			}
 		],
 		"import/no-extraneous-dependencies": 0,
-		"no-const-assign":"error",
+		"no-const-assign": "error",
 		"no-dupe-keys": "error",
-		"no-dupe-class-members":"error",
-		"no-empty":"off",
+		"no-dupe-class-members": "error",
+		"no-empty": "off",
 		"wrap-iife": [
 			"error",
 			"inside"
@@ -256,7 +256,11 @@
 		"padding-line-between-statements": "error",
 		"prefer-arrow-callback": "error",
 		"prefer-const": "error",
-		"prefer-destructuring": "error",
+		"prefer-destructuring": ["error", {
+			"object": true,
+			"array": true,
+			"enforceForRenamedProperties": true
+		}],
 		"prefer-numeric-literals": "error",
 		"prefer-promise-reject-errors": "error",
 		"prefer-reflect": "error",
