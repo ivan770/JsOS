@@ -239,6 +239,7 @@ const JsMB = {
     for (let i = x; i <= x + w; i++) {
       for (let j = y; j <= y + h; j++) {
         this.drawPlot(i, j, true);
+        graphics.repaint();
       }
     }
     graphics.repaint();
@@ -249,17 +250,13 @@ const JsMB = {
     graphics.repaint();
     return this;
   },
-  fillScreen() {
+  fillScreen(...color) {
+    if (color.length) this.setColor(...color);
+
     graphics.fillScreen(...$TMP.color);
     graphics.repaint();
     return this;
   },
-  /* fillScreen(r, g, b, from = 0, to = graphics.displayBuffer.length) {
-    const colorArray = [b, g, r];
-    const buf = Array(to - from).map((_, i) => colorArray[i % 3]);
-    graphics.displayBuffer.set(buf, from, to);
-    graphics.repaint();
-  }, */
   drawRect(x, y, w, h) {
     // =
     for (let i = x; i <= x + w; i++) {

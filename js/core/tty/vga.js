@@ -183,9 +183,12 @@ exports.draw = (drawbuf) => {
             const py = (y * fh) + fy;
             // const dboffset = ((y * w * fh + fy) + x * fw * fx) * 3;
             const dboffset = (px + (py * w * fw)) * 3;
-            dbuf[dboffset + 2] = (state ? colorScheme[fg] : colorScheme[bg])[0];// * 255;
-            dbuf[dboffset + 1] = (state ? colorScheme[fg] : colorScheme[bg])[1];// * 255;
-            dbuf[dboffset] = (state ? colorScheme[fg] : colorScheme[bg])[2];// * 255;
+            // dbuf[dboffset + 2] = (state ? colorScheme[fg] : colorScheme[bg])[0];// * 255;
+            // dbuf[dboffset + 1] = (state ? colorScheme[fg] : colorScheme[bg])[1];// * 255;
+            // dbuf[dboffset] = (state ? colorScheme[fg] : colorScheme[bg])[2];// * 255;
+            dbuf.setInt8(dboffset + 2, (state ? colorScheme[fg] : colorScheme[bg])[0]);
+            dbuf.setInt8(dboffset + 1, (state ? colorScheme[fg] : colorScheme[bg])[1]);
+            dbuf.setInt8(dboffset, (state ? colorScheme[fg] : colorScheme[bg])[2]);
           }
         }
         // }
