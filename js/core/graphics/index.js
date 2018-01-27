@@ -12,7 +12,7 @@ module.exports = {
   },
 
   get displayBuffer() {
-    return secondBuffer; // renderers.getDefaultRenderer().displayBuffer;//
+    return secondBuffer;
   },
 
   get constants() {
@@ -25,7 +25,7 @@ module.exports = {
   },
 
   enableGraphics(width, height, bitDepth) {
-    secondBuffer = new Uint8Array(width * height * (bitDepth / 8));
+    secondBuffer = new Array(width * height * (bitDepth / 8));
     secondBuffer.fill(0xff);
     const renderer = renderers.getDefaultRenderer();
     renderer.enableGraphics(width, height, bitDepth);
@@ -39,25 +39,15 @@ module.exports = {
   },
 
   setPixel(x, y, r, g, b) {
-    /* const dboffset = (x + (y * screen.width)) * 3;
-    this.displayBuffer[dboffset + 2] = r;// * 255;
-    this.displayBuffer[dboffset + 1] = g;// * 255;
-    this.displayBuffer[dboffset] = b;// * 255; */
-
-    const buf = Array.from(this.displayBuffer);// .map((_, i) => colorArray[i % 3]);
     const dboffset = (x + (y * screen.width)) * 3;
-    buf[dboffset + 2] = r;// * 255;
-    buf[dboffset + 1] = g;// * 255;
-    buf[dboffset] = b;// * 255;
-    this.displayBuffer.set(buf);
-    this.repaint();
+    secondBuffer[dboffset + 2] = r;
+    secondBuffer[dboffset + 1] = g;
+    secondBuffer[dboffset] = b;
   },
 
-  fillScreen(r, g, b, from = 0, to = this.displayBuffer.length) {
+  fillScreen(r = 0, g = 0, b = 0) {
     const colorArray = [b, g, r];
-    const buf = Array(to - from).map((_, i) => colorArray[i % 3]);
-    this.displayBuffer.set(buf, from, to);
-    this.repaint();
+    secondBuffer = Array(secondBuffer.length).map((_, i) => colorArray[i % 3]);
   },
 
 

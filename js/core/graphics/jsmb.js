@@ -235,10 +235,10 @@ const JsMB = {
     ctx.lineWidth = width;
     return this;
   },
-  fillRect(x, y, w, h) {
+  fillRect(x = 0, y = 0, w = this.screenWidth(), h = this.screenHeight()) {
     for (let i = x; i <= x + w; i++) {
       for (let j = y; j <= y + h; j++) {
-        this.drawPlot(i, j);
+        this.drawPlot(i, j, true);
       }
     }
     graphics.repaint();
@@ -903,10 +903,10 @@ const JsMB = {
   },
   // Getter
   screenWidth() {
-    return 80;
+    return 80 * 8;
   },
   screenHeight() {
-    return 25;
+    return 25 * 16;
   },
   getMouseX() {
     return $Mouse.x;
