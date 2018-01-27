@@ -97,20 +97,23 @@ function testColor(value) {
 class VGABuffer {
   constructor() {
     this.b = new Uint8Array(len * 2);
-    this.ivb = new Uint8Array(len).fill(0);
+    this.ivb = (new Uint8Array(len)).fill(0);
   }
+
   setXY(x, y, char, fg, bg) {
     testInstance(this);
     testColor(fg);
     testColor(bg);
     setCharXY(this.b, x, y, String(char), fg, bg, this.ivb);
   }
+
   setOffset(offset, char, fg, bg) {
     testInstance(this);
     testColor(fg);
     testColor(bg);
     setCharOffset(this.b, offset, String(char), fg, bg, this.ivb);
   }
+
   clear(bg) {
     testInstance(this);
     testColor(bg);
@@ -118,6 +121,7 @@ class VGABuffer {
       setCharOffset(this.b, i, ' ', bg, bg, this.ivb);
     }
   }
+
   scrollUp(bg) {
     testInstance(this);
     testColor(bg);
@@ -126,6 +130,7 @@ class VGABuffer {
       setCharXY(this.b, t, h - 1, ' ', bg, bg, this.ivb);
     }
   }
+
   scrollDown(/* bg */) {
     // testInstance(this);
     // testColor(bg);
@@ -195,4 +200,4 @@ exports.draw = (drawbuf) => {
 exports.allocBuffer = () => new VGABuffer();
 
 // Take ownership of the display
-__SYSCALL.stopVideoLog();
+// __SYSCALL.stopVideoLog();
