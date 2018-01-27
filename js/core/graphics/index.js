@@ -25,7 +25,7 @@ module.exports = {
   },
 
   enableGraphics(width, height, bitDepth) {
-    secondBuffer = new Array(width * height * (bitDepth / 8));
+    secondBuffer = new Uint8Array(width * height * (bitDepth / 8));
     secondBuffer.fill(0xff);
     const renderer = renderers.getDefaultRenderer();
     renderer.enableGraphics(width, height, bitDepth);
@@ -47,7 +47,7 @@ module.exports = {
 
   fillScreen(r = 0, g = 0, b = 0) {
     const colorArray = [b, g, r];
-    secondBuffer = Array(secondBuffer.length).map((_, i) => colorArray[i % 3]);
+    secondBuffer = (new Uint8Array(secondBuffer.length)).map((_, i) => colorArray[i % 3]);
   },
 
 
