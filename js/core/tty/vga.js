@@ -203,4 +203,4 @@ exports.draw = (drawbuf) => {
 exports.allocBuffer = () => new VGABuffer();
 
 // Take ownership of the display
-// __SYSCALL.stopVideoLog();
+__SYSCALL.stopVideoLog();
