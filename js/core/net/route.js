@@ -13,6 +13,7 @@
 // limitations under the License.
 
 'use strict';
+
 const IP4Address = require('./ip4-address');
 // const interfaces = require('./interfaces');
 const assert = require('assert');
@@ -42,6 +43,7 @@ exports.addDefault = (gateway, intf) => table.push(new Entry(IP4Address.ANY, IP4
 exports.lookup = (destIP, intf) => {
   let result = null;
   let maxMaskBits = 0;
+
   for (const entry of table) {
     if (intf && entry.intf !== intf) {
       continue;

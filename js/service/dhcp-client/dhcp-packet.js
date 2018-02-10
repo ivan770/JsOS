@@ -13,8 +13,9 @@
 // limitations under the License.
 
 'use strict';
+
 const u8view = require('u8-view');
-const { IP4Address } = require('../../core').net;
+const {IP4Address} = require('../../core').net;
 
 const OPERATION_REQUEST = 1;
 const OPERATION_RESPONSE = 2;
@@ -23,23 +24,25 @@ const OPTIONS_OFFSET = 28 + 16 + 192;
 const magicCookie = 0x63825363;
 
 exports.packetType = {
-  DISCOVER: 1,
-  OFFER: 2,
-  REQUEST: 3,
-  DECLINE: 4,
-  ACK: 5,
-  NAK: 6,
-  RELEASE: 7,
-  INFORM: 8,
+  'DISCOVER': 1,
+  'OFFER': 2,
+  'REQUEST': 3,
+  'DECLINE': 4,
+  'ACK': 5,
+  'NAK': 6,
+  'RELEASE': 7,
+  'INFORM': 8
 };
 
 exports.create = (type, srcMAC, options = []) => {
   let optionsLength = 8; // cookie (4b), type (3b) and 0xff (1b)
+
   for (const opt of options) {
     optionsLength += opt.bytes.length + 2;
   } // id (1b) and len (1b)
 
   const u8 = new Uint8Array(OPTIONS_OFFSET + optionsLength);
+
   u8[0] = OPERATION_REQUEST; // request
   u8[1] = 1; // over ethernet
   u8[2] = 6; // hw address 6 bytes
@@ -87,6 +90,7 @@ exports.isValidMagicCookie = u8 => magicCookie === u8view.getUint32BE(u8, OPTION
 
 exports.getOptions = (u8) => {
   const options = [];
+
   for (let i = OPTIONS_OFFSET + 4; i < u8.length; ++i) {
     const optId = u8[i++];
     const optLen = u8[i++];
@@ -99,13 +103,14 @@ exports.getOptions = (u8) => {
     }
 
     const bytes = [];
+
     for (let j = 0; j < optLen; ++j) {
       bytes.push(u8[i++]);
     }
 
     options.push({
-      id: optId,
-      bytes,
+      'id': optId,
+      bytes
     });
 
     --i;

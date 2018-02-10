@@ -13,6 +13,7 @@
 // limitations under the License.
 
 'use strict';
+
 const udpHeader = require('./udp-header');
 const UDPSocket = require('./udp-socket');
 // const portUtils = require('./port-utils');
@@ -25,14 +26,17 @@ function receive(intf, srcIP, destIP, u8, headerOffset) {
   const destPort = udpHeader.getDestPort(u8, headerOffset);
   const dataLength = udpHeader.getDataLength(u8, headerOffset) - udpHeader.headerLength;
   const dataOffset = headerOffset + udpHeader.headerLength;
+
   debug('recv UDP over IP4', srcPort, destPort, dataLength);
 
   const socket = UDPSocket.lookupReceive(destPort);
+
   if (!socket) {
     return;
   }
 
   const u8data = u8.subarray(dataOffset);
+
   if (socket.onmessage) setImmediate(() => socket.onmessage(srcIP, srcPort, u8data));
 }
 

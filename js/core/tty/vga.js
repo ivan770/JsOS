@@ -14,6 +14,8 @@
 
 'use strict';
 
+const driverUtils = require('../driver-utils');
+
 /* global $$ */
 
 const vgaOld = require('./vga-old');
@@ -31,6 +33,7 @@ const w = 80;
 const h = 25;
 const len = w * h;
 const prevState = new Uint8Array(len * 2);
+
 prevState.fill(0);
 /* const buf = driverUtils.physicalMemory(0xb8000, len * 2).buffer();
 const b = new Uint8Array(buf);*/
@@ -39,22 +42,22 @@ exports.WIDTH = w;
 exports.HEIGHT = h;
 
 const color = {
-  BLACK: 0,
-  BLUE: 1,
-  GREEN: 2,
-  CYAN: 3,
-  RED: 4,
-  MAGENTA: 5,
-  BROWN: 6,
-  LIGHTGRAY: 7,
-  DARKGRAY: 8,
-  LIGHTBLUE: 9,
-  LIGHTGREEN: 10,
-  LIGHTCYAN: 11,
-  LIGHTRED: 12,
-  LIGHTMAGENTA: 13,
-  YELLOW: 14,
-  WHITE: 15,
+  'BLACK': 0,
+  'BLUE': 1,
+  'GREEN': 2,
+  'CYAN': 3,
+  'RED': 4,
+  'MAGENTA': 5,
+  'BROWN': 6,
+  'LIGHTGRAY': 7,
+  'DARKGRAY': 8,
+  'LIGHTBLUE': 9,
+  'LIGHTGREEN': 10,
+  'LIGHTCYAN': 11,
+  'LIGHTRED': 12,
+  'LIGHTMAGENTA': 13,
+  'YELLOW': 14,
+  'WHITE': 15
 };
 
 exports.color = color;
@@ -85,6 +88,7 @@ function setCharXY(u8, x, y, char, fg, bg, ivb) {
   }
 
   const offset = (y * w) + x;
+
   setCharOffset(u8, offset, char, fg >>> 0, bg >>> 0, ivb);
 }
 
@@ -160,6 +164,7 @@ exports.draw = (drawbuf) => {
       $$.graphics.enableGraphics(640, 400, 24);
     }
     const dbuf = $$.graphics.displayBuffer;
+
     for (let x = 0; x < w; x++) {
       for (let y = 0; y < h; y++) {
         // debug(drawbuf.ivb[(y * w) + x]);
@@ -175,8 +180,10 @@ exports.draw = (drawbuf) => {
         // debug(prevState[offset]);
         // debug(charCode);
         // if(prevState[offset] != charCode && prevState[offset + 1] != colorByte) {
+
         for (let fy = 0; fy < fh; fy++) {
           const row = font[(charCode * fh) + fy];
+
           for (let fx = 0; fx < fw; fx++) {
             const state = (row >> (7 - fx)) & 1;
             const px = (x * fw) + fx;
@@ -186,6 +193,7 @@ exports.draw = (drawbuf) => {
             // dbuf[dboffset + 2] = (state ? colorScheme[fg] : colorScheme[bg])[0];// * 255;
             // dbuf[dboffset + 1] = (state ? colorScheme[fg] : colorScheme[bg])[1];// * 255;
             // dbuf[dboffset] = (state ? colorScheme[fg] : colorScheme[bg])[2];// * 255;
+
             dbuf.setInt8(dboffset + 2, (state ? colorScheme[fg] : colorScheme[bg])[0]);
             dbuf.setInt8(dboffset + 1, (state ? colorScheme[fg] : colorScheme[bg])[1]);
             dbuf.setInt8(dboffset, (state ? colorScheme[fg] : colorScheme[bg])[2]);

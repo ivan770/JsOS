@@ -13,6 +13,7 @@
 // limitations under the License.
 
 'use strict';
+
 const checksum = require('./checksum');
 const ethernet = require('./ethernet');
 const ip4header = require('./ip4-header');

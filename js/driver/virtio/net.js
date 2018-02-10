@@ -13,9 +13,10 @@
 // limitations under the License.
 
 'use strict';
+
 const VirtioDevice = require('./device');
 const runtime = require('../../core');
-const { MACAddress, Interface } = runtime.net;
+const {MACAddress, Interface} = runtime.net;
 
 const virtioHeader = (() => {
   const OFFSET_FLAGS = 0;
@@ -36,7 +37,7 @@ const virtioHeader = (() => {
       view.setUint16(offset + OFFSET_CSUM_START, opts.csumStart >>> 0, false);
       view.setUint16(offset + OFFSET_CSUM_OFFSET, opts.csumOffset >>> 0, false);
     },
-    length: 10,
+    'length': 10
   };
 })();
 
@@ -46,36 +47,37 @@ function initializeNetworkDevice(pciDevice) {
 
   const features = {
     // Device specific
-    VIRTIO_NET_F_CSUM: 0,
-    VIRTIO_NET_F_GUEST_CSUM: 1,
-    VIRTIO_NET_F_MAC: 5,
-    VIRTIO_NET_F_GSO: 6,
-    VIRTIO_NET_F_GUEST_TSO4: 7,
-    VIRTIO_NET_F_GUEST_TSO6: 8,
-    VIRTIO_NET_F_GUEST_ECN: 9,
-    VIRTIO_NET_F_GUEST_UFO: 10,
-    VIRTIO_NET_F_HOST_TSO4: 11,
-    VIRTIO_NET_F_HOST_TSO6: 12,
-    VIRTIO_NET_F_HOST_ECN: 13,
-    VIRTIO_NET_F_HOST_UFO: 14,
-    VIRTIO_NET_F_MRG_RXBUF: 15,
-    VIRTIO_NET_F_STATUS: 16,
-    VIRTIO_NET_F_CTRL_VQ: 17,
-    VIRTIO_NET_F_CTRL_RX: 18,
-    VIRTIO_NET_F_CTRL_VLAN: 19,
-    VIRTIO_NET_F_GUEST_ANNOUNCE: 21,
+    'VIRTIO_NET_F_CSUM': 0,
+    'VIRTIO_NET_F_GUEST_CSUM': 1,
+    'VIRTIO_NET_F_MAC': 5,
+    'VIRTIO_NET_F_GSO': 6,
+    'VIRTIO_NET_F_GUEST_TSO4': 7,
+    'VIRTIO_NET_F_GUEST_TSO6': 8,
+    'VIRTIO_NET_F_GUEST_ECN': 9,
+    'VIRTIO_NET_F_GUEST_UFO': 10,
+    'VIRTIO_NET_F_HOST_TSO4': 11,
+    'VIRTIO_NET_F_HOST_TSO6': 12,
+    'VIRTIO_NET_F_HOST_ECN': 13,
+    'VIRTIO_NET_F_HOST_UFO': 14,
+    'VIRTIO_NET_F_MRG_RXBUF': 15,
+    'VIRTIO_NET_F_STATUS': 16,
+    'VIRTIO_NET_F_CTRL_VQ': 17,
+    'VIRTIO_NET_F_CTRL_RX': 18,
+    'VIRTIO_NET_F_CTRL_VLAN': 19,
+    'VIRTIO_NET_F_GUEST_ANNOUNCE': 21,
 
     // VRing
-    VIRTIO_RING_F_NOTIFY_ON_EMPTY: 24,
-    VIRTIO_RING_F_EVENT_IDX: 29,
+    'VIRTIO_RING_F_NOTIFY_ON_EMPTY': 24,
+    'VIRTIO_RING_F_EVENT_IDX': 29
   };
 
   const dev = new VirtioDevice('net', ioSpace);
+
   dev.setDriverAck();
 
   const driverFeatures = {
-    VIRTIO_NET_F_MAC: true, // able to read MAC address
-    VIRTIO_NET_F_STATUS: true, // able to check network status
+    'VIRTIO_NET_F_MAC': true, // able to read MAC address
+    'VIRTIO_NET_F_STATUS': true // able to check network status
     // VIRTIO_RING_F_NOTIFY_ON_EMPTY: true
     // VIRTIO_NET_F_CSUM: true,   // checksum offload
     // VIRTIO_NET_F_GUEST_CSUM: true,   // ok without cksum
@@ -84,6 +86,7 @@ function initializeNetworkDevice(pciDevice) {
   };
 
   const deviceFeatures = dev.readDeviceFeatures(features);
+
   debug(JSON.stringify(deviceFeatures));
 
   if (deviceFeatures.VIRTIO_NET_F_GSO) {
@@ -108,6 +111,7 @@ function initializeNetworkDevice(pciDevice) {
 
   const recvQueue = dev.queueSetup(QUEUE_ID_RECV);
   const transmitQueue = dev.queueSetup(QUEUE_ID_TRANSMIT);
+
   transmitQueue.suppressUsedBuffers();
 
   function fillReceiveQueue() {
@@ -125,6 +129,7 @@ function initializeNetworkDevice(pciDevice) {
   const mac = new MACAddress(hwAddr[0], hwAddr[1], hwAddr[2],
   hwAddr[3], hwAddr[4], hwAddr[5]);
   const intf = new Interface(mac);
+
   intf.setBufferDataOffset(virtioHeader.length);
   intf.ontransmit = (u8headers, u8data) => {
     if (u8data) {

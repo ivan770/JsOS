@@ -1,10 +1,10 @@
-var _ = require('underscore'),
+let _ = require('underscore'),
 	Set = require('get-set');
 
-var mauve = require('../../mauve');
+const mauve = require('../../mauve');
 
-//var rainbow = require('./3rd/rainbow/js/rainbow.js');
-//require('./3rd/rainbow/js/language/javascript.js')(rainbow);
+// var rainbow = require('./3rd/rainbow/js/rainbow.js');
+// require('./3rd/rainbow/js/language/javascript.js')(rainbow);
 
 mauve.set({
 	'idle': '#0000ff',
@@ -12,7 +12,7 @@ mauve.set({
 	'cursor': '/#555',
 	'status': 'bold',
 	'entity.function': '#dc3',
-	'storage': "#21F",
+	'storage': '#21F',
 	'function.anonymous': '#1F1',
 	'selection': '#000/#fff'
 });
@@ -26,44 +26,43 @@ mauve.set({
 	Probably the optimal basis for view will be communication of diffs
 
 */
-var View = module.exports = function(obj) {
-	//Grab a handle
+const View = module.exports = function(obj) {
+	// Grab a handle
 	this.vim = obj.vim;
-	this.color = false;
+	this.color = true;
 
-	//Set dimensions, defaulting to 24 lines of 80 columns	
+	// Set dimensions, defaulting to 24 lines of 80 columns
 	this.lines = obj.lines || 24;
 	this.cols = obj.cols || 80;
 
-	//Array keeping track of which segment of the doc we are looking at.
+	// Array keeping track of which segment of the doc we are looking at.
 	this.lastVisibleLines = [0, 1];
 
 	this.vim.on('change', this.handleChange.bind(this));
 	this.idle = false;
-	this.vim.on('idle', function() {
+	this.vim.on('idle', () => {
 		this.idle = true;
 		this.handleChange.bind(this);
-	}.bind(this));
+	});
 
 
-
-	this.vim.on('change:status', function() {
+	this.vim.on('change:status', () => {
 		this.trigger('change');
-	}.bind(this));
+	});
 
-	//The status message;
+	// The status message;
 	this.status = '';
 
-	//An array of the text
+	// An array of the text
 	this.lineArray = [];
 
-	//The line that has focus. For now: line at bottom of screen
+	// The line that has focus. For now: line at bottom of screen
 	this.focus = 0;
 
 
 };
 
-//Inherit 'on', 'trigger'
+// Inherit 'on', 'trigger'
 View.prototype = new Set();
 
 /** Responds to vim changes
@@ -77,24 +76,26 @@ View.prototype.handleChange = function() {
 	this.trigger('change');
 	this.idle = false;
 };
-var renderCt = 0;
+let renderCt = 0;
 
 /* The basic status line */
 View.prototype.refreshStatusLine = function() {
 
-	//Some modes just show the name
+	// Some modes just show the name
 	if (this.notification) {
 		this.status = this.notification;
 		this.notification = false;
 		return this.status;
 	}
 	if ('insert,replace'.indexOf(this.vim.modeName) !== -1) {
-		var text = '-- ' + this.vim.modeName.toUpperCase() + ' --';
+		const text = '-- ' + this.vim.modeName.toUpperCase() + ' --';
+
 		this.status = this.color ? mauve(text).status : text;
 		return this.status;
 	}
-	var keys = this.vim.keyBuffer;
-	var firstKey = keys.substring(0, 1);
+	const keys = this.vim.keyBuffer;
+	const firstKey = keys.substring(0, 1);
+
 	if (firstKey === '/' || firstKey === '?' || firstKey === ':') {
 		return this.status = this.vim.keyBuffer;
 	}
@@ -103,10 +104,10 @@ View.prototype.refreshStatusLine = function() {
 };
 
 View.prototype.getText = function() {
-	var text = this.getArray().join('\n');
+	const text = this.getArray().join('\n');
 
-	//Do 
-	/*rainbow.color(text,'javascript', function(newText) {
+	// Do
+	/* rainbow.color(text,'javascript', function(newText) {
 		text = newText;
 	});*/
 
@@ -122,10 +123,10 @@ View.prototype.visibleLines = function() {
 	if (this.lastVisibleLines[1] < this.lines) {
 		this.lastVisibleLines[1] = this.lines;
 	}
-	//Lines we have
-	var totalLines = this.lines - 1
+	// Lines we have
+	const totalLines = this.lines - 1;
 
-	var cursorLine = this.vim.curDoc.cursor.line();
+	const cursorLine = this.vim.curDoc.cursor.line();
 
 	if (cursorLine >= this.lastVisibleLines[1]) {
 		this.lastVisibleLines = [cursorLine - totalLines + 1, cursorLine];
@@ -138,39 +139,43 @@ View.prototype.visibleLines = function() {
 
 View.prototype.getArray = function() {
 	renderCt++;
-	//Grab those that are relevant
-	var visibleLines = this.visibleLines();
+	// Grab those that are relevant
+	const visibleLines = this.visibleLines();
 
-	var textArray = this.vim.curDoc._lines.slice(visibleLines[0], visibleLines[1] + 1)
-	var noLines = false;
+	let textArray = this.vim.curDoc._lines.slice(visibleLines[0], visibleLines[1] + 1);
+	let noLines = false;
+
 	if (!textArray.length) {
 		this.notify = '--No lines in buffer';
 		noLines = true;
 	}
 
-	var cursor = noLines ? {
-		line: 0,
-		char: 0
+	const cursor = noLines ? {
+		'line': 0,
+		'char': 0
 	} : this.vim.curDoc.cursor.position();
 
-	var visibleCursorIndex = cursor.line - visibleLines[0];
-	var cursorLine = textArray[visibleCursorIndex];
+	const visibleCursorIndex = cursor.line - visibleLines[0];
+	let cursorLine = textArray[visibleCursorIndex];
+
 	if (!cursorLine) {
 		cursorLine = '';
 	}
 	cursorLine += ' ';
 
-	var selection = this.vim.curDoc.selection();
-	var newLines = [];
+	const selection = this.vim.curDoc.selection();
+	const newLines = [];
+
 	_(textArray).each(function(text, lineIndex) {
-		var newText = '';
+		let newText = '';
+
 		if (lineIndex === cursor.line && cursor.char >= text.length) {
 			text += ' ';
 		}
 		_(text).each(function(character, charIndex) {
 			newText += this.renderChar(character, {
-				line: lineIndex,
-				char: charIndex
+				'line': lineIndex,
+				'char': charIndex
 			}, cursor, selection);
 		}, this);
 		newLines[lineIndex] = newText;
@@ -178,28 +183,29 @@ View.prototype.getArray = function() {
 	textArray = newLines;
 
 
-	var lines = [];
+	const lines = [];
 
-	//Lines of the screen left to account for
-	var linesLeft = this.lines;
+	// Lines of the screen left to account for
+	let linesLeft = this.lines;
 
-	//Add status first
+	// Add status first
 	lines.unshift(this.status);
-	linesLeft--
+	linesLeft--;
 
 	while (linesLeft > 0) {
-		//Add the nearest text-line
+		// Add the nearest text-line
 		if (typeof textArray[linesLeft - 1] !== 'undefined') {
-			var textLine = textArray[linesLeft - 1];
+			const textLine = textArray[linesLeft - 1];
+
 			lines.unshift(this.renderLine(textLine, visibleLines[0] + linesLeft));
 		} else {
 			lines.splice(lines.length - 1, 0, !this.color ? '~' : mauve('~').idle);
 		}
-		//Shift ref to the text-line above that
+		// Shift ref to the text-line above that
 
-		//TODO incorporate wrapping lines
-		// If wrap, linesLeft-- 
-		//Record that we're one line shorter
+		// TODO incorporate wrapping lines
+		// If wrap, linesLeft--
+		// Record that we're one line shorter
 		// linesLeft -= Math.ceil(this.lines[i]/this.cols);
 		linesLeft--;
 	}
@@ -233,7 +239,8 @@ View.prototype.renderChar = function renderChar(character, position, cursor, sel
 	} else {
 		// A visual block selection
 		if (position.line < selection[0][0].line || position.line > selection[selection.length - 1][1].line) return character;
-		var result = false;
+		let result = false;
+
 		_(selection).find(function(range) {
 			if (range[0].line === position.line && (position.char >= range[0].char && position.char < range[1].char)) {
 				result = !this.color ? character : mauve(character).selection;
@@ -242,10 +249,10 @@ View.prototype.renderChar = function renderChar(character, position, cursor, sel
 		if (result) return character.selection;
 	}
 	return character;
-}
+};
 
 
-/** Return the difference between current and arg ref 
+/** Return the difference between current and arg ref
 
 	Making a decisioin here, let's let it collapse to "oh, this character changed..."
 		Because that's going to be the cheapest way for terminal to handle small changes
@@ -253,86 +260,96 @@ View.prototype.renderChar = function renderChar(character, position, cursor, sel
 */
 View.prototype.getPatch = function(ref) {
 	this.renderText();
-	//diff
-	var patch = [];
-	//current text
-	var text = this.getText();
-	if (!ref && ref !== '') throw "No reference to diff!";
+	// diff
+	const patch = [];
+	// current text
+	const text = this.getText();
+
+	if (!ref && ref !== '') throw 'No reference to diff!';
 	/* Why doing this so slowly? Well, the point is:
 		1) This is meant for diffing the current screen, so ~50 lines... not too expensive
-		2) A comprehensive diff will be useful to a display where changes are expensive (imagine... kindle)	
+		2) A comprehensive diff will be useful to a display where changes are expensive (imagine... kindle)
 	*/
-	//We need to definitely account for every refLine
-	var refLines = ref.split('\n');
+	// We need to definitely account for every refLine
+	const refLines = ref.split('\n');
+
 	while (refLines.length < 24) {
 		refLines.push('');
 	}
-	var textLines = text.split('\n');
+	const textLines = text.split('\n');
 
-	var lineIndex = 0
-	//Do the lines
-	_(refLines).each(function(line, i) {
-		//Get the general line changes
-		var diff = this.diffLine(line, textLines[i]);
-		_(diff).each(function(change) {
-			//Add the line number
+	let lineIndex = 0;
+	// Do the lines
+
+	_(refLines).each((line, i) => {
+		// Get the general line changes
+		const diff = this.diffLine(line, textLines[i]);
+
+		_(diff).each((change) => {
+			// Add the line number
 			change.line = i + 1;
-			//Push to the patch
+			// Push to the patch
 			patch.push(change);
 			lineIndex = i;
 		});
-	}.bind(this));
+	});
 
 	return patch;
 
 };
 
 View.prototype.diffLine = function(line1, line2) {
-	var diffs = []
-	//No changes
-	if (line1 === line2) return [];
-	//Clear the line
-	if (!line2 || !line2.length) return [{
-		from: 0,
-		to: line1.length - 1,
-		content: ''
-	}];
-	//Write the line
-	if (!line1 || !line1.length) return [{
-		from: 0,
-		to: line2.length - 1,
-		content: line2
-	}];
+	const diffs = [];
+	// No changes
 
-	var len = Math.max(line1.length, line2.length);
-	var diff = false;
+	if (line1 === line2) return [];
+	// Clear the line
+	if (!line2 || !line2.length) return [
+{
+		'from': 0,
+		'to': line1.length - 1,
+		'content': ''
+	}
+];
+	// Write the line
+	if (!line1 || !line1.length) return [
+{
+		'from': 0,
+		'to': line2.length - 1,
+		'content': line2
+	}
+];
+
+	const len = Math.max(line1.length, line2.length);
+	let diff = false;
+
 	for (var i = 0; i < len; i++) {
-		//If the same
+		// If the same
 		if (line1[i] === line2[i]) {
-			//And a diff had been started
+			// And a diff had been started
 			if (diff) {
-				//The diff is over, man
+				// The diff is over, man
 				diff.to = i;
 				diffs.push(diff);
 				diff = false;
 			}
-			//Otherwise, proceed.
+			// Otherwise, proceed.
 
-		} else { //There is a difference
-			//And it's not the first one
+		} else { // There is a difference
+			// And it's not the first one
 			if (diff) {
-				//Just add the different character
+				// Just add the different character
 				diff.content += line2[i] ? line2[i] : '';
-			} else { //But if it's the beginning of a diff
-				//Start it off.
+			} else { // But if it's the beginning of a diff
+				// Start it off.
 				diff = {
-					from: i,
-					content: line2[i] ? line2[i] : ''
+					'from': i,
+					'content': line2[i] ? line2[i] : ''
 				};
 			}
 		}
 	}
-	//What if the last line is different?
+	// What if the last line is different?
 	if (diff) {
 		diff.to = i;
 		diffs.push(diff);
@@ -342,7 +359,7 @@ View.prototype.diffLine = function(line1, line2) {
 };
 
 View.prototype.renderText = function() {
-	//Grab the text. Dumb... should be transferring arrays, or just referencing directly
+	// Grab the text. Dumb... should be transferring arrays, or just referencing directly
 	//	this.text = this.vim.text();
 };
 
@@ -352,12 +369,13 @@ View.prototype.renderText = function() {
 */
 
 View.prototype.renderLine = function(text, index, misc) {
-	//Create gutter
-	var gutter = '     ' + index + ' ';
+	// Create gutter
+	let gutter = '     ' + index + ' ';
+
 	while (gutter.length > 6) {
 		gutter = gutter.substring(1);
 	}
-	gutter = !this.color ? gutter : mauve(gutter).gutter
+	gutter = !this.color ? gutter : mauve(gutter).gutter;
 	return gutter + text;
 };
 
@@ -365,4 +383,4 @@ View.prototype.renderLine = function(text, index, misc) {
 View.prototype.notify = function(text) {
 	this.notification = text;
 	this.trigger('change:status');
-}
+};

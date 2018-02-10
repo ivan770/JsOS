@@ -13,6 +13,7 @@
 // limitations under the License.
 
 'use strict';
+
 const VRing = require('./vring');
 
 const DEVICE_STATUS_RESET = 0;
@@ -26,14 +27,14 @@ class VirtioDevice {
     this.io = ((ioSpaceResource) => {
       const ioPorts = {
         // Common
-        DEVICE_FEATURES: 0x00, // 32 bit r
-        GUEST_FEATURES: 0x04, // 32 bit r+w
-        QUEUE_ADDRESS: 0x08, // 32 bit r+w
-        QUEUE_SIZE: 0x0c, // 16 bit r
-        QUEUE_SELECT: 0x0e, // 16 bit r+w
-        QUEUE_NOTIFY: 0x10, // 16 bit r+w
-        DEVICE_STATUS: 0x12, //  8 bit r+w
-        ISR_STATUS: 0x13, //  8 bit r
+        'DEVICE_FEATURES': 0x00, // 32 bit r
+        'GUEST_FEATURES': 0x04, // 32 bit r+w
+        'QUEUE_ADDRESS': 0x08, // 32 bit r+w
+        'QUEUE_SIZE': 0x0c, // 16 bit r
+        'QUEUE_SELECT': 0x0e, // 16 bit r+w
+        'QUEUE_NOTIFY': 0x10, // 16 bit r+w
+        'DEVICE_STATUS': 0x12, //  8 bit r+w
+        'ISR_STATUS': 0x13 //  8 bit r
       };
 
       if (deviceType === 'net') {
@@ -59,8 +60,10 @@ class VirtioDevice {
       }
 
       const ports = {};
+
       for (const portName of Object.keys(ioPorts)) {
         const portOffset = ioPorts[portName];
+
         ports[portName] = ioSpaceResource.offsetPort(portOffset);
       }
 
@@ -74,6 +77,7 @@ class VirtioDevice {
 
     for (const feature of Object.keys(features)) {
       const mask = 1 << features[feature];
+
       if (deviceFeatures & mask) {
         result[feature] = true;
       }
@@ -93,6 +97,7 @@ class VirtioDevice {
       } // Device doesn't support required feature
 
       const mask = 1 << features[feature];
+
       value |= mask;
     }
 
@@ -103,6 +108,7 @@ class VirtioDevice {
     this.io.QUEUE_SELECT.write16(queueIndex >>> 0);
     const size = this.io.QUEUE_SIZE.read16();
     const ring = new VRing(this.mem, this.nextRingOffset, size);
+
     this.nextRingOffset += ring.size;
     this.io.QUEUE_ADDRESS.write32(ring.address >>> 12);
     return ring;
@@ -122,7 +128,7 @@ class VirtioDevice {
     return this.io.DEVICE_STATUS.write8(DEVICE_STATUS_RESET);
   }
   hasPendingIRQ() {
-    return !!(1 & this.io.ISR_STATUS.read8());
+    return Boolean(1 & this.io.ISR_STATUS.read8());
   }
     // [network device]
   netReadHWAddress() {
@@ -132,12 +138,12 @@ class VirtioDevice {
       this.io.NETWORK_DEVICE_MAC2.read8(),
       this.io.NETWORK_DEVICE_MAC3.read8(),
       this.io.NETWORK_DEVICE_MAC4.read8(),
-      this.io.NETWORK_DEVICE_MAC5.read8(),
+      this.io.NETWORK_DEVICE_MAC5.read8()
     ];
   }
     // [network device]
   netReadStatus() {
-    return !!(1 & this.io.NETWORK_DEVICE_STATUS.read16());
+    return Boolean(1 & this.io.NETWORK_DEVICE_STATUS.read16());
   }
 
     // [block device]

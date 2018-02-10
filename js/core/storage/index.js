@@ -1,13 +1,13 @@
 'use strict';
 
-// const fs = require('../fs');
+const fs = require('../fs');
 
 const _path = Symbol('path');
 const _data = Symbol('data');
 
 class Storage {
   constructor(path = null) {
-    this[_data] = new Map;
+    this[_data] = new Map();
     this.path = path;
   }
   get(name) {
@@ -18,6 +18,7 @@ class Storage {
   }
   save(callback) {
     const data = JSON.stringify([...this[_data]]);
+
     return fs.writeFile(this.path, data, 'utf8', callback || (() => {}));
   }
   load() {

@@ -91,7 +91,8 @@ if (!(registerB & 0x04)) {
   year = (year & 0x0F) + ((year >>> 4) * 10);
 }
 
-year = year + 2000;
+year += 2000;
 
 const utc = Date.UTC(year, month - 1, day, hour, minute, second, 0);
+
 __SYSCALL.setTime(utc * 1000);

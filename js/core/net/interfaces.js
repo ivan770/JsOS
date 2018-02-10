@@ -13,10 +13,11 @@
 // limitations under the License.
 
 'use strict';
+
 // const assert = require('assert');
 const intfs = [];
 
-exports.add = (intf) => intfs.push(intf);
+exports.add = intf => intfs.push(intf);
 exports.count = () => intfs.length;
 
 exports.getByName = (intfName) => {
@@ -29,5 +30,5 @@ exports.getByName = (intfName) => {
   return null;
 };
 
-exports.forEach = (fn) => intfs.forEach(fn);
+exports.forEach = fn => intfs.forEach(fn);
 exports.getAll = () => intfs;

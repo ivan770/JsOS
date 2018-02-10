@@ -13,6 +13,7 @@
 // limitations under the License.
 
 'use strict';
+
 const assert = require('assert');
 const MACAddress = require('./mac-address');
 const ARPResolver = require('./arp-resolver');
@@ -100,6 +101,7 @@ class Interface {
   sendIP4(viaIP, u8headers, u8data) {
     ++stat.transmitCount;
     let targetMAC;
+
     if (viaIP.isBroadcast()) {
       targetMAC = MACAddress.BROADCAST;
     } else if (this.arp) {

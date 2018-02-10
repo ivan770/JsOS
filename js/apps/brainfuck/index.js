@@ -9,6 +9,7 @@ let io;
 
 function main(_args, api, res) {
   const args = _args.split(/\s+/);
+
   io = api.stdio;
 
   if (!args[0]) {
@@ -24,6 +25,7 @@ function main(_args, api, res) {
 
 //   debugger;
   const bf = new Brainfuck(args[0], args[1]);
+
   io.setColor('green');
   io.writeLine(bf.parse(args[0])(args[1]));
 

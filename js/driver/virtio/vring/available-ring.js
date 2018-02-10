@@ -45,6 +45,7 @@ class AvailableRing {
 
   placeDescriptor(index) {
     const available = (this.readIdx() & (this.ringSize - 1)) >>> 0;
+
     this.setRing(available, index);
     this.incrementIdx();
   }

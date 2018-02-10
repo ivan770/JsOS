@@ -1,6 +1,6 @@
 module.exports = {
 
-	//generic
+	// generic
 	'keyword.operator': '#d7af5f',
 	'string': '#d7af5f',
 	'constant.character.escape': '#d7af5f',
@@ -12,10 +12,9 @@ module.exports = {
 	'function.call': '#d7af5f',
 	'storage.function': '#d7af5f',
 	'entity.name.function': '#d7af5f',
-	
 
 
-	//js specific
+	// js specific
 	'selector': '#d7af5f',
 	'support': '#d7af5f',
 	'support.property': '#d7af5f',
@@ -33,5 +32,5 @@ module.exports = {
 	'entity.function': '#d7af5f',
 	'keyword': '#d7af5f',
 	'function.anonymous': '#d7af5f',
-	'param': "#6B8E23"
-}
+	'param': '#6B8E23'
+};

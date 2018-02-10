@@ -11,17 +11,11 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+
 'use strict';
 
 const EventEmitter = require('events');
-
-class Warning extends Error {
-  constructor(msg, name) {
-    super();
-    this.name = name;
-    this.message = msg;
-  }
-}
+const {Warning} = require('./errors');
 
 class Process extends EventEmitter {
   constructor() {
@@ -30,36 +24,38 @@ class Process extends EventEmitter {
       abort() {
         throw new Error('abort()');
       },
-      arch: 'x64', // since runtime.js only runs in qemu-system-x86_64, it's an x64 system.
-      argv: [],
-      browser: true,
+      'arch': 'x64', // since runtime.js only runs in qemu-system-x86_64, it's an x64 system.
+      'argv': [],
+      'browser': true,
       binding(name) {
         throw new Error(`no such module: ${name}`);
       },
       chdir() {
         throw new Error('chdir is not supported');
       },
-      config: {},
-      connected: false,
-      cwd: () => '/',
+      'config': {},
+      'connected': false,
+      'cwd': () => '/',
       disconnect() {},
-      emitWarning: (msgOpt, name = 'Warning') => {
+      'emitWarning': (msgOpt, name = 'Warning') => {
         let msg = msgOpt;
+
         if (!(msg instanceof Error)) {
           msg = new Warning(msg, name);
         }
         if (this.listenerCount('warning') !== 0) {
           return this.emit('warning', msg);
         }
-        console.error(`(runtime) ${msg.name}${msg.message ? `: ${msg.message}` : ''}`);
+        console.error(`(jsos) ${msg.name}${msg.message ? `: ${msg.message}` : ''}`); //eslint-disable-line
+        // Because this module loads before logger and this message is important
       },
-      env: {},
-      execArgv: [],
-      execPath: '',
+      'env': {},
+      'execArgv': [],
+      'execPath': '',
       exit() {
         throw new Error('exit()');
       },
-      exitCode: 0,
+      'exitCode': 0,
       hrtime(prev) {
         const now = performance.now();
         const time = now / 1000;
@@ -78,27 +74,25 @@ class Process extends EventEmitter {
         return [seconds, nanoseconds];
       },
       kill() {},
-      mainModule: void 0,
-      memoryUsage: () => ({
-        rss: 0,
-        heapTotal: 0,
-        heapUsed: 0,
+      'mainModule': void 0,
+      'memoryUsage': () => ({
+        'rss': 0,
+        'heapTotal': 0,
+        'heapUsed': 0
       }),
-      nextTick: (fn, ...args) => setImmediate(() => fn(...args)),
-      pid: 1,
-      platform: 'jsos',
-      release: {
-        name: 'jsos',
-      },
-      send: void 0,
-      stderr: null,
-      stdin: null,
-      stdout: null,
-      title: '',
-      umask: () => 0,
-      uptime: () => Math.round(performance.now() / 1000),
-      version: require('../../package.json').version,
-      versions: {},
+      'nextTick': (fn, ...args) => setImmediate(() => fn(...args)),
+      'pid': 1,
+      'platform': 'jsos',
+      'release': {'name': 'jsos'},
+      'send': void 0,
+      'stderr': null,
+      'stdin': null,
+      'stdout': null,
+      'title': '',
+      'umask': () => 0,
+      'uptime': () => Math.round(performance.now() / 1000),
+      'version': require('../../package.json').version,
+      'versions': {}
     });
   }
 }

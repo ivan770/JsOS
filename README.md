@@ -8,9 +8,11 @@ It tries to be compatible with npm module ecosystem and supports some of the Nod
 
 _WARNING: project is in development and not ready for production use._
 
+[Documentation in progress](https://github.com/PROPHESSOR/JsOS/wiki)
+
 ### Ready ISO image
 
-[Download](https://github.com/PROPHESSOR/jsos/releases)
+[Download](https://github.com/PROPHESSOR/JsOS/releases)
 
 ### System requirements
 
@@ -19,10 +21,10 @@ RAM: >128MB
 
 ### Installation
 
-First thing is the command line tool `runtime-cli`, it will add `runtime` command to the shell. Type `runtime` to get full usage help.
+First thing is the command line tool `jsos-cli`, it will add `jsos` command to the shell. Type `jsos --help` to get full usage help.
 
 ```
-npm install runtime-cli -g
+npm i -g https://github.com/PROPHESSOR/jsos-cli
 ```
 
 Make sure QEMU installed, it enables running applications locally.
@@ -37,7 +39,7 @@ sudo apt-get install qemu   # Ubuntu
 Clone this repository and install dependencies:
 
 ```
-git clone https://github.com/prophessor/jsos.git JsOS
+git clone https://github.com/PROPHESSOR/JsOS.git
 cd JsOS
 npm i
 ```
@@ -45,7 +47,7 @@ npm i
 Run project locally in QEMU:
 
 ```
-runtime start
+jsos start
 ```
 
 That's it, operating system should start.
@@ -58,5 +60,9 @@ There are two main components: operating system kernel and a JavaScript code.
 The kernel is written in C++ and manages low-level resources like CPU and memory, runs JavaScript using embedded V8 engine. Library drives the entire system and manages hardware devices (usually virtualized by hypervisor). Some low-level code written in JS and compiled.
 
 License
+
+## I wanna help!
+[We will be grateful if you help we](https://github.com/PROPHESSOR/JsOS/issues?q=is%3Aissue+is%3Aopen+label%3A%22need+help%22)
+
 ----
 Apache License, Version 2.0

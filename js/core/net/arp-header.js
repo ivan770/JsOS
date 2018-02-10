@@ -13,6 +13,7 @@
 // limitations under the License.
 
 'use strict';
+
 const u8view = require('u8-view');
 const IP4Address = require('./ip4-address');
 const MACAddress = require('./mac-address');

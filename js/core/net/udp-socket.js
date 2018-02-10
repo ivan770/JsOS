@@ -13,6 +13,7 @@
 // limitations under the License.
 
 'use strict';
+
 const assertError = require('assert-error');
 const IP4Address = require('./ip4-address');
 const portUtils = require('./port-utils');
@@ -34,6 +35,7 @@ class UDPSocket {
 
   send(ipOpt, port, u8) {
     let ip = ipOpt;
+
     if (typeutils.isString(ip)) {
       ip = IP4Address.parse(ip);
     }
@@ -45,11 +47,13 @@ class UDPSocket {
     let intf = this._intf || null;
 
     let viaIP;
+
     if (ip.isBroadcast()) {
       viaIP = ip;
     } else {
       const routingEntry = route.lookup(ip);
-      if (!routingEntry) return console.log(`[UDP] no route to ${ip}`);
+
+      if (!routingEntry) return debug(`[UDP] no route to ${ip}`);
 
       viaIP = routingEntry.gateway;
       if (!intf) {

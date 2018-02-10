@@ -18,8 +18,9 @@
 /* global PERSISTENCE */
 
 const printer = require('./printer');
-const logger = new (require('../../modules/logger'))({ defaultStdio: printer });// $$.logger.log;
+const logger = new (require('../../modules/logger'))({'defaultStdio': printer});// $$.logger.log;
 const log = logger.log;
+
 try {
   logger.setLevels(require('../../../package.json').logLevels); // FIXME: Костыль, но без него никак
 } catch (e) {
@@ -43,6 +44,7 @@ class LineEditor {
 
   drawCursor() {
     let char = ' ';
+
     if (this.inputPosition < this.inputText.length) {
       char = this.inputText[this.inputPosition];
     }
@@ -53,6 +55,7 @@ class LineEditor {
 
   removeCursor() {
     let char = ' ';
+
     if (this.inputPosition < this.inputText.length) {
       char = this.inputText[this.inputPosition];
     }
@@ -68,6 +71,7 @@ class LineEditor {
       printer.print(char);
     } else {
       const rightSide = this.inputText.slice(this.inputPosition);
+
       this.inputText = this.inputText.slice(0, this.inputPosition) + char + rightSide;
       printer.print(char);
       for (const item of rightSide) {
@@ -87,6 +91,7 @@ class LineEditor {
         printer.moveOffset(-1);
       } else {
         const rightSide = this.inputText.slice(this.inputPosition);
+
         this.inputText = this.inputText.slice(0, this.inputPosition - 1) + rightSide;
         printer.moveOffset(-1);
         for (const item of rightSide) {
@@ -107,7 +112,7 @@ class LineEditor {
       this.removeChar();
       this.drawCursor();
     } else {
-      log('Out of text ( > right )', { level: 'LineEditor' });
+      log('Out of text ( > right )', {'level': 'LineEditor'});
     }
   }
   moveCursorLeft() {
@@ -147,30 +152,32 @@ class LineEditor {
   }
 
   writeHistory(cmd) {
-    if (cmd === PERSISTENCE.Editor.history[PERSISTENCE.Editor.historyPosition - 1] || cmd.trim() === '') return log('Don\'t write to history because repeation or empty', { level: 'LineEditor' });
+    if (cmd === PERSISTENCE.Editor.history[PERSISTENCE.Editor.historyPosition - 1] ||
+      cmd.trim() === '')
+      return log('Don\'t write to history because repeation or empty', {'level': 'LineEditor'});
     PERSISTENCE.Editor.history.push(cmd);
     // PERSISTENCE.Editor.historyPosition++;
     PERSISTENCE.Editor.historyPosition = PERSISTENCE.Editor.history.length;
-    log(`Editor->writeHistory(${cmd}) ==> ${JSON.stringify(PERSISTENCE.Editor.history)} [${typeof(PERSISTENCE.Editor.history)}]`, { level: 'LineEditor' });
+    log(`Editor->writeHistory(${cmd}) ==> ${JSON.stringify(PERSISTENCE.Editor.history)} [${typeof(PERSISTENCE.Editor.history)}]`, { level: 'LineEditor' }); //eslint-disable-line
   }
 
   previous() {
-    log('Editor->previous()', { level: 'LineEditor' });
+    log('Editor->previous()', {'level': 'LineEditor'});
     if (PERSISTENCE.Editor.historyPosition > 0) {
       PERSISTENCE.Editor.historyPosition--;
       this.setInputBox(PERSISTENCE.Editor.history[PERSISTENCE.Editor.historyPosition] || '');
     } else {
-      log('Out of array ( < 0 )', { level: 'LineEditor' });
+      log('Out of array ( < 0 )', {'level': 'LineEditor'});
     }
   }
 
   next() {
-    log('Editor->next()', { level: 'LineEditor' });
+    log('Editor->next()', {'level': 'LineEditor'});
     if (PERSISTENCE.Editor.historyPosition < PERSISTENCE.Editor.history.length) {
       PERSISTENCE.Editor.historyPosition++;
       this.setInputBox(PERSISTENCE.Editor.history[PERSISTENCE.Editor.historyPosition] || '');
     } else {
-      log('Out of array ( > max )', { level: 'LineEditor' });
+      log('Out of array ( > max )', {'level': 'LineEditor'});
     }
   }
 

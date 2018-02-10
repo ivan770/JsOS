@@ -43,44 +43,44 @@ const note = new class Note {
 
   get keynotes() {
     return {
-      z: 'C',
-      s: 'CD',
-      x: 'D',
-      d: 'DD',
-      c: 'E',
-      v: 'F',
-      g: 'FD',
-      b: 'G',
-      h: 'GD',
-      n: 'A',
-      j: 'AD',
-      m: 'H',
+      'z': 'C',
+      's': 'CD',
+      'x': 'D',
+      'd': 'DD',
+      'c': 'E',
+      'v': 'F',
+      'g': 'FD',
+      'b': 'G',
+      'h': 'GD',
+      'n': 'A',
+      'j': 'AD',
+      'm': 'H',
 
       ',': 'CP',
-      l: 'CDP',
+      'l': 'CDP',
       '.': 'DP',
       ';': 'DDP',
       '/': 'EP',
-      q: 'CP',
+      'q': 'CP',
       '2': 'CDP', //eslint-disable-line
-      w: 'DP',
+      'w': 'DP',
       '3': 'DDP', //eslint-disable-line
-      e: 'EP',
-      r: 'FP',
+      'e': 'EP',
+      'r': 'FP',
       '5': 'FDP', //eslint-disable-line
-      t: 'GP',
+      't': 'GP',
       '6': 'GDP', //eslint-disable-line
-      y: 'AP',
+      'y': 'AP',
       '7': 'ADP', //eslint-disable-line
-      u: 'HP',
-      i: 'CPP',
+      'u': 'HP',
+      'i': 'CPP',
       '9': 'CDPP', //eslint-disable-line
-      o: 'DPP',
+      'o': 'DPP',
       '0': 'DDPP', //eslint-disable-line
-      p: 'EPP',
+      'p': 'EPP',
       '[': 'FPP',
       '=': 'FDPP',
-      ']': 'GPP',
+      ']': 'GPP'
     };
   }
 
@@ -206,7 +206,7 @@ const note = new class Note {
     return this.convert(392);
   }
 
-};
+}();
 
 class Interface {
   // region eol
