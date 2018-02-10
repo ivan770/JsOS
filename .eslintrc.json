@@ -21,7 +21,6 @@
 		"no-undef": "warn",
 		"no-unused-vars": "warn",
 		"accessor-pairs": "error",
-		"array-bracket-newline": "error",
 		"array-bracket-spacing": [
 			"error",
 			"never"
@@ -78,15 +77,13 @@
 			"never"
 		],
 		"eqeqeq": "off",
-		"for-direction": "error",
 		"func-call-spacing": "error",
 		"func-name-matching": "error",
 		"func-names": 0,
 		"func-style": "off",
 		"generator-star-spacing": "error",
-		"getter-return": "error",
 		"global-require": "off",
-		"guard-for-in": "error",
+		"guard-for-in": "off",
 		"handle-callback-err": "error",
 		"id-blacklist": "error",
 		"id-length": "off",
@@ -137,7 +134,6 @@
 		"no-array-constructor": "error",
 		"no-await-in-loop": "error",
 		"no-bitwise": "off",
-		"no-buffer-constructor": "error",
 		"no-caller": "error",
 		"no-catch-shadow": "error",
 		"no-confusing-arrow": "warn",
@@ -221,10 +217,10 @@
 			}
 		],
 		"import/no-extraneous-dependencies": 0,
-		"no-const-assign":"error",
+		"no-const-assign": "error",
 		"no-dupe-keys": "error",
-		"no-dupe-class-members":"error",
-		"no-empty":"off",
+		"no-dupe-class-members": "error",
+		"no-empty": "off",
 		"wrap-iife": [
 			"error",
 			"inside"
@@ -253,10 +249,12 @@
 		"operator-assignment": "error",
 		"operator-linebreak": "error",
 		"padded-blocks": "off",
-		"padding-line-between-statements": "error",
 		"prefer-arrow-callback": "error",
 		"prefer-const": "error",
-		"prefer-destructuring": "error",
+		"prefer-destructuring": ["error", {
+			"object": true,
+			"array": true
+		}],
 		"prefer-numeric-literals": "error",
 		"prefer-promise-reject-errors": "error",
 		"prefer-reflect": "error",
@@ -274,10 +272,6 @@
 		"rest-spread-spacing": "error",
 		"semi": "error",
 		"semi-spacing": "error",
-		"semi-style": [
-			"error",
-			"last"
-		],
 		"sort-imports": "error",
 		"sort-keys": "off",
 		"sort-vars": "off",
@@ -293,7 +287,6 @@
 			"error",
 			"always"
 		],
-		"switch-colon-spacing": "error",
 		"symbol-description": "error",
 		"template-curly-spacing": "error",
 		"template-tag-spacing": "error",

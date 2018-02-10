@@ -1,5 +1,5 @@
 let hex2rgbString = require('rgb'),
-  x256 = require('x256'),
+  x256 = require('../x256'),
   rgbRegExp = /(\d+),(\d+),(\d+)/;
 
 /*
@@ -62,7 +62,7 @@ mauve.set = function (name, color) {
   } else {
     switch (color) {
       case 'bold':
-        misc = '\u001B[1m';
+        misc = '\u001B\u0001';
         this.hash[name] = {
 'misc': 'bold',
 name
@@ -131,10 +131,12 @@ name
       const raw = this.replace(/\u001B(?:.*)m/, '');
       let result = '';
 
-      if (fg) result += `\u001B[38;5;${fg}m`;
-      if (bg) result += `\u001B[48;5;${bg}m`;
+      // if (fg) result += `\u001B[38;5;${fg}m`;
+      // if (bg) result += `\u001B[48;5;${bg}m`;
+      if (fg) result += `\u001B${String.fromCharCode(fg)}`;
+      if (bg) result += `\u001B${String.fromCharCode(bg)}`;
       if (misc) result += misc;
-      result += `${raw}\u001B[0m`;
+      result += `${raw}\u001B\u000F`;
       return result;
     });
   }
