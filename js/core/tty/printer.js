@@ -22,6 +22,9 @@ const w = vga.WIDTH;
 const h = vga.HEIGHT;
 let posCurrent = 0;
 
+const tmpcolor = [vga.color.WHITE, vga.color.BLACK];
+const {color} = vga;
+
 class Printer {
   constructor() {
     {
@@ -32,11 +35,14 @@ class Printer {
       this.print = this.print.bind(this);
       this.moveOffset = this.moveOffset.bind(this);
       this.moveTo = this.moveTo.bind(this);
+      this.useControls = this.useControls.bind(this);
     }
     buffer.clear(vga.color.BLACK);
-    this.tmpcolor = [vga.color.WHITE, vga.color.BLACK];
-    this.color = vga.color;
     this.refresh();
+  }
+
+  get color() {
+    return color;
   }
 
   refresh() {
@@ -59,11 +65,47 @@ class Printer {
     this.refresh();
   }
 
-  print(textOpt = '', repeat = 1, fg = vga.color.WHITE, bg = vga.color.BLACK) {
-    const text = String(textOpt);
+  /**
+   * Reserved symbols:
+   * 0x1 -> 0xF - colors
+   * 0x10 -> 0x1F - background colors
+   * 0x20 -> 0x2F - special symbols (bold/italic/delete/clear/etc...)
+   * @param {string} symbol - Constrol? symbol
+   * @param {string} prevsymbol - Previous symbol (for 0x1B check)
+   * @param {array} [setcolor] - Color values to control
+   * @returns {bool} true - it's a control symbol; false - no
+   */
+  useControls(symbol, prevsymbol = '\0', setcolor = tmpcolor) {
+    const code = symbol.charCodeAt();
 
-    for (let j = 0; j < repeat; ++j) {
-      for (const c of text) {
+    if (code >= 0x0 && code <= 0xF && prevsymbol.charCodeAt() === 0x1B) {
+      setcolor[0] = code;
+      return true;
+    }
+
+    if (code >= 0x10 && code <= 0x1F && prevsymbol.charCodeAt() === 0x1B) {
+      setcolor[1] = code - 0x10;
+      return true;
+    }
+
+    switch (code) {
+      case 0x1B:
+        return true;
+      default:
+        return false;
+    }
+  }
+
+  print(textOpt = '', repeat = 1, fg = tmpcolor[0], bg = tmpcolor[1]) {
+    const text = String(textOpt);
+    const currentcolor = [fg, bg];
+
+    for (let j = 0; j < repeat; j++) {
+      for (const i in text) {
+        const c = text[i];
+
+        if (this.useControls(c, text[i - 1], currentcolor)) continue;
+
         if (c === '\n') {
           posCurrent -= (posCurrent % w) - w;
           if (posCurrent >= w * h) {
@@ -73,13 +115,13 @@ class Printer {
           if (posCurrent >= w * h) {
             this.scrollUp();
           }
-          buffer.setOffset(posCurrent++, c, fg, bg);
+          buffer.setOffset(posCurrent++, c, ...currentcolor);
         }
       }
     }
 
     this.refresh();
-  };
+  }
 
   moveOffset (offsetOpt) {
     const offset = offsetOpt | 0;
@@ -94,7 +136,7 @@ class Printer {
     }
 
     posCurrent = newPos;
-  };
+  }
 
   moveTo (xOpt, yOpt) {
     let x = xOpt;
@@ -113,7 +155,7 @@ class Printer {
       y = h - 1;
     }
     posCurrent = (y * w) + x;
-  };
+  }
 }
 
 
