@@ -159,13 +159,4 @@ class Printer {
 }
 
 
-<<<<<<< HEAD
-exports.scrollUp = scrollUp;
-exports.scrollDown = scrollDown;
-exports.clear = clear;
-exports.fill = clear;
-exports.width = w;
-exports.height = h;
-=======
 module.exports = new Printer();
->>>>>>> master
