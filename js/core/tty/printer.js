@@ -32,6 +32,7 @@ class Printer {
       this.scrollUp = this.scrollUp.bind(this);
       this.scrollDown = this.scrollDown.bind(this);
       this.clear = this.clear.bind(this);
+      this.fill = this.fill.bind(this);
       this.print = this.print.bind(this);
       this.moveOffset = this.moveOffset.bind(this);
       this.moveTo = this.moveTo.bind(this);
@@ -63,6 +64,10 @@ class Printer {
     buffer.clear(color);
     posCurrent = 0;
     this.refresh();
+  }
+
+  fill(color) {
+    return this.clear(color);
   }
 
   /**
