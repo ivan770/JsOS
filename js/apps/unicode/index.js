@@ -16,7 +16,11 @@ function main(api, res) {
   // io.writeLine('It works!!!');
 
   interval = setInterval(() => {
+<<<<<<< HEAD
     io.write(`${i}:${String.fromCharCode(i)} `);
+=======
+    io.write(String.fromCharCode(i));
+>>>>>>> origin/graphic
     i++;
   }, 10);
   return res(0); // 1 = error
