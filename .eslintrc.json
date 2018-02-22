@@ -294,7 +294,11 @@
 			"error",
 			"never"
 		],
-		"valid-jsdoc": "error",
+		"valid-jsdoc": ["error", {
+			"requireReturn": false,
+			"requireReturnType": false,
+			"requireReturnDescription": false
+		}],
 		"vars-on-top": "error",
 		"wrap-regex": "error",
 		"yield-star-spacing": "error",
