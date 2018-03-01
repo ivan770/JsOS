@@ -3,6 +3,12 @@
 const {Buffer} = require('buffer');
 
 class DMABuffer {
+  /**
+   * @constructor
+   * @param  {Number} address -
+   * @param  {Buffer} buffer -
+   * @param  {Number} size -
+   */
   constructor(address, buffer, size) {
     this.address = address;
     this.buffer = buffer;
@@ -11,11 +17,19 @@ class DMABuffer {
 }
 
 class DMAPool {
+  /**
+   * @constructor
+   */
   constructor() {
     this.poolDesc = __SYSCALL.allocDMA();
     this.pool = new Buffer(this.poolDesc.buffer);
     this.offset = 0;
   }
+  /**
+   * @param  {Number} size -
+   * @param  {Number} [align=1] -
+   * @returns {DMABuffer} buffer
+   */
   allocBuffer(size, align = 1) {
     this.offset = Math.ceil(this.offset / align) * align;
     if (this.offset + size > this.poolDesc.size) {
@@ -26,11 +40,13 @@ class DMAPool {
     const addr = this.poolDesc.address + this.offset;
 
     this.offset += size;
-    return {
-      'buffer': buf,
-      'address': addr,
-      size
-    };
+    return new DMABuffer(addr, buf, size);
+  }
+  /**
+   * @returns {class} DMABuffer
+   */
+  static get DMABuffer() {
+    return DMABuffer;
   }
 }
 

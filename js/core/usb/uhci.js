@@ -30,12 +30,12 @@ class UHCIController {
     this.frnum = null;
     this.frbaseadd = null;
     this.sofmod = null;
-    this.portPorts = null; // Array
-    this.dmaPool = null; // DMAPool
-    this.frameList = null;
-    this.qhPool = null;
-    this.qhPoolInfo = null; // Array: [{'active': Boolean,'offset': Number,'next': Object{this++},'prev': Object{this--}}]
-    this.firstQh = null;
+    this.portPorts = null; //   Array
+    this.dmaPool = null; //     DMAPool
+    this.frameList = null; //   DMABuffer
+    this.qhPool = null; //      DMABuffer
+    this.qhPoolInfo = null; //  Array: [{'active': Boolean,'offset': Number,'next': Object{this++},'prev': Object{this--}}]
+    this.firstQh = null; //     qhPoolInfo[i] || null
   }
   initFrameList() {
     for (let i = 0; i < FRAMELIST_SIZE; i += 4) {
