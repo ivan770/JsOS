@@ -2,6 +2,14 @@
 
 const {Buffer} = require('buffer');
 
+class DMABuffer {
+  constructor(address, buffer, size) {
+    this.address = address;
+    this.buffer = buffer;
+    this.size = size;
+  }
+}
+
 class DMAPool {
   constructor() {
     this.poolDesc = __SYSCALL.allocDMA();

@@ -21,7 +21,7 @@
 'use strict';
 
 const __SYSCALL = {
-  allocDMA() {
+  allocDMA() { // You can use js/core/system/dma-pool.js
     return {
       'address': String(),
       'buffer': String(),

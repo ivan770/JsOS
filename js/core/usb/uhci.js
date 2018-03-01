@@ -19,12 +19,23 @@ const co = require('./constants');
 const DMAPool = require('../system/dma-pool');
 
 const FRAMELIST_SIZE = 1024 * 4;
-const MAX_QH = 8;
+const MAX_QH = 8; // queue heads
 const QH_SIZE = 8;
 
 class UHCIController {
   constructor() {
-    '';
+    this.iobar = null;
+    this.cmd = null;
+    this.intr = null;
+    this.frnum = null;
+    this.frbaseadd = null;
+    this.sofmod = null;
+    this.portPorts = null; // Array
+    this.dmaPool = null; // DMAPool
+    this.frameList = null;
+    this.qhPool = null;
+    this.qhPoolInfo = null; // Array: [{'active': Boolean,'offset': Number,'next': Object{this++},'prev': Object{this--}}]
+    this.firstQh = null;
   }
   initFrameList() {
     for (let i = 0; i < FRAMELIST_SIZE; i += 4) {
