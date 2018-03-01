@@ -4,8 +4,7 @@ const GraphicsRenderer = require('./graphics-renderer');
 const {Screen, 'symbols': screenSymbols} = require('./screen');
 const renderers = require('./renderers');
 const screen = new Screen();
-let secondBuffer = null;
-let secondBufferView = null;
+let secondBuffer = Uint8Array;
 
 module.exports = {
   get 'screen'() {
@@ -13,7 +12,7 @@ module.exports = {
   },
 
   get 'displayBuffer'() {
-    return secondBufferView;
+    return secondBuffer;
   },
 
   get 'constants'() {
@@ -26,10 +25,9 @@ module.exports = {
   },
 
   enableGraphics(width, height, bitDepth) {
-    secondBuffer = new ArrayBuffer(width * height * (bitDepth / 8));
-    secondBufferView = new DataView(secondBuffer);
-    // secondBuffer.fill(0xff);
-    // secondBuffer = new Uint8Array(width * height * (bitDepth / 8));
+    // secondBuffer = new ArrayBuffer(width * height * (bitDepth / 8));
+    // secondBufferView = new DataView(secondBuffer);
+    secondBuffer = new Uint8Array(width * height * (bitDepth / 8));
     // secondBuffer.fill(0xff);
     const renderer = renderers.getDefaultRenderer();
 
@@ -47,9 +45,9 @@ module.exports = {
   setPixel(x, y, r, g, b) {
     const dboffset = (x + (y * screen.width)) * 3;
 
-    secondBufferView.setInt8(dboffset + 2, r);
-    secondBufferView.setInt8(dboffset + 1, g);
-    secondBufferView.setInt8(dboffset, b);
+    // secondBufferView.setInt8(dboffset + 2, r);
+    // secondBufferView.setInt8(dboffset + 1, g);
+    // secondBufferView.setInt8(dboffset, b);
     // secondBuffer[dboffset + 2] = r;
     // secondBuffer[dboffset + 1] = g;
     // secondBuffer[dboffset] = b;
