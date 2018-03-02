@@ -42,6 +42,7 @@ class UHCIController {
     this.qhPoolInfo = null; //  Array: [QH]
     this.firstQh = null; //     qhPoolInfo[i] || null
   }
+
   init(device) {
     // Initialize the PCI device
     device.setPciCommandFlag(PciDevice.commandFlag.BusMaster);
@@ -64,6 +65,7 @@ class UHCIController {
     this.frameList = this.dmaPool.allocBuffer(FRAMELIST_SIZE, 4096);
     this.qhPool = this.dmaPool.allocBuffer(QH_SIZE * MAX_QH, 8);
     this.qhPoolInfo = Array(MAX_QH);
+
     for (let i = 0; i < this.qhPoolInfo.length; i++) {
       this.qhPoolInfo[i] = new QH(false, i * QH_SIZE, this.qhPoolInfo[i], this.qhPoolInfo[i]);
       this.qhPoolInfo[i].write = this.writeQH.bind(this, this.qhPoolInfo[i]);
@@ -71,6 +73,7 @@ class UHCIController {
       this.qhPoolInfo[i].free = this.freeQH.bind(this, this.qhPoolInfo[i]);
       this.qhPoolInfo[i].address = this.QHaddr.bind(this, this.qhPoolInfo[i]);
     }
+
     this.firstQh = this.allocQH();
     this.firstQh.write(co.TD_PTR_TERMINATE, co.TD_PTR_TERMINATE);
     this.initFrameList();
@@ -81,23 +84,33 @@ class UHCIController {
     this.frbaseadd.write32(this.frameList.address);
     this.sofmod.write16(0x40);
     this.cmd.write16(co.CMD_GRESET);
+
     while (this.cmd.read16() & co.CMD_GRESET) __SYSCALL.halt();
+
     this.cmd.write16(co.CMD_RS);
     $$.usb.addController(this);
   }
+
   initFrameList() {
     for (let i = 0; i < FRAMELIST_SIZE; i += 4) {
       this.frameList.buffer.writeUInt32LE(co.TD_PTR_QH | this.firstQh.address());
     }
   }
+
+  /** Get port status (connection and speed)
+   * @param  {Number} port - Port id E [0, PORTS)
+   * @returns {PortStatus} .
+   */
   getPortStatus(port) {
     const val = this.portPorts[port].read16();
 
     return new PortStatus(Boolean(val & (1 << 0)), val & (1 << 8));
   }
+
   getPortCount() {
     return PORTS;
   }
+
   allocQH() {
     for (let i = 0; i < this.qhPoolInfo.length; i++) {
       if (!this.qhPoolInfo[i].active) {
@@ -107,16 +120,18 @@ class UHCIController {
     }
     return null;
   }
+
   writeQH(qh, head, element) {
     this.qhPool.buffer.writeUInt32LE(head, qh.offset);
     this.qhPool.buffer.writeUInt32LE(element, qh.offset + 4);
   }
+
   /**
    * @param  {QH} qh -
    * @returns {Object} {head, element}
    */
   readQH(qh) {
-    if (!(qh instanceof QH)) throw new TypeError('[UHCI] freeQH needs the argument of QH instances');
+    if (!(qh instanceof QH)) throw new TypeError('[UHCI] readQH needs the argument of QH instances');
 
     const head = this.qhPool.buffer.readUInt32LE(qh.offset);
     const element = this.qhPool.buffer.readUInt32LE(qh.offset + 4);
@@ -126,6 +141,7 @@ class UHCIController {
       element
     };
   }
+
   /**
    * @param  {QG} qh -
    * @returns {void}
@@ -134,9 +150,12 @@ class UHCIController {
     if (!(qh instanceof QH)) throw new TypeError('[UHCI] freeQH needs the argument of QH instances');
     qh.active = false;
   }
-  QHaddr(qh) {
+
+  QHaddr(qh) { // TODO: Alias to the QH
+    if (!(qh instanceof QH)) throw new TypeError('[UHCI] QHaddr needs the argument of QH instances');
     return this.qhPool.address + qh.offset;
   }
+
   static init(device) {
     return new UHCIController().init(device);
   }
@@ -192,6 +211,5 @@ class QH {
     yield* this.next; // TODO: Check
   }
 }
-
 
 module.exports = UHCIController;

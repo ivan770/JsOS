@@ -27,5 +27,8 @@ const __SYSCALL = {
       'buffer': String(),
       'size': String()
     };
+  },
+  halt() {
+    // sleep(1);
   }
 };
