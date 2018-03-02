@@ -12,15 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+/* eslint-disable no-use-before-define */
+// ^ Classes are exported, and additional classes are better declared below
+
 'use strict';
 
 const PciDevice = require('../pci/pci-device');
 const co = require('./constants');
 const DMAPool = require('../system/dma-pool');
+const {TypeError} = require('errors');
 
 const FRAMELIST_SIZE = 1024 * 4;
 const MAX_QH = 8; // queue heads
 const QH_SIZE = 8;
+const PORTS = 2;
 
 class UHCIController {
   constructor() {
@@ -34,52 +39,8 @@ class UHCIController {
     this.dmaPool = null; //     DMAPool
     this.frameList = null; //   DMABuffer
     this.qhPool = null; //      DMABuffer
-    this.qhPoolInfo = null; //  Array: [{'active': Boolean,'offset': Number,'next': Object{this++},'prev': Object{this--}}]
+    this.qhPoolInfo = null; //  Array: [QH]
     this.firstQh = null; //     qhPoolInfo[i] || null
-  }
-  initFrameList() {
-    for (let i = 0; i < FRAMELIST_SIZE; i += 4) {
-      this.frameList.buffer.writeUInt32LE(co.TD_PTR_QH | this.firstQh.address());
-    }
-  }
-  getPortStatus(port) {
-    const val = this.portPorts[port].read16();
-
-    return {
-      'speed': val & (1 << 8) ? 'low' : 'high',
-      'connected': Boolean(val & (1 << 0))
-    };
-  }
-  getPortCount() {
-    return 2;
-  }
-  allocQH() {
-    for (let i = 0; i < this.qhPoolInfo.length; i++) {
-      if (!this.qhPoolInfo[i].active) {
-        this.qhPoolInfo[i].active = true;
-        return this.qhPoolInfo[i];
-      }
-    }
-    return null;
-  }
-  writeQH(qh, head, element) {
-    this.qhPool.buffer.writeUInt32LE(head, qh.offset);
-    this.qhPool.buffer.writeUInt32LE(element, qh.offset + 4);
-  }
-  readQH(qh) {
-    const head = this.qhPool.buffer.readUInt32LE(qh.offset);
-    const element = this.qhPool.buffer.readUInt32LE(qh.offset + 4);
-
-    return {
-      head,
-      element
-    };
-  }
-  freeQH(qh) {
-    qh.active = false;
-  }
-  QHaddr(qh) {
-    return this.qhPool.address + qh.offset;
   }
   init(device) {
     // Initialize the PCI device
@@ -92,7 +53,10 @@ class UHCIController {
     this.frbaseadd = this.iobar.resource.offsetPort(co.REG_FRBASEADD);
     this.sofmod = this.iobar.resource.offsetPort(co.REG_SOFMOD);
     this.portPorts = [];
-    for (let i = 0x10; i < 0x14; i += 2) {
+
+    const from = 0x10;
+
+    for (let i = from; i < from + (PORTS * 2); i += 2) {
       this.portPorts.push(this.iobar.resource.offsetPort(i));
     }
 
@@ -101,12 +65,7 @@ class UHCIController {
     this.qhPool = this.dmaPool.allocBuffer(QH_SIZE * MAX_QH, 8);
     this.qhPoolInfo = Array(MAX_QH);
     for (let i = 0; i < this.qhPoolInfo.length; i++) {
-      this.qhPoolInfo[i] = {
-        'active': false,
-        'offset': i * QH_SIZE,
-        'next': this.qhPoolInfo[i],
-        'prev': this.qhPoolInfo[i]
-      };
+      this.qhPoolInfo[i] = new QH(false, i * QH_SIZE, this.qhPoolInfo[i], this.qhPoolInfo[i]);
       this.qhPoolInfo[i].write = this.writeQH.bind(this, this.qhPoolInfo[i]);
       this.qhPoolInfo[i].read = this.readQH.bind(this, this.qhPoolInfo[i]);
       this.qhPoolInfo[i].free = this.freeQH.bind(this, this.qhPoolInfo[i]);
@@ -126,12 +85,111 @@ class UHCIController {
     this.cmd.write16(co.CMD_RS);
     $$.usb.addController(this);
   }
+  initFrameList() {
+    for (let i = 0; i < FRAMELIST_SIZE; i += 4) {
+      this.frameList.buffer.writeUInt32LE(co.TD_PTR_QH | this.firstQh.address());
+    }
+  }
+  getPortStatus(port) {
+    const val = this.portPorts[port].read16();
+
+    return new PortStatus(Boolean(val & (1 << 0)), val & (1 << 8));
+  }
+  getPortCount() {
+    return PORTS;
+  }
+  allocQH() {
+    for (let i = 0; i < this.qhPoolInfo.length; i++) {
+      if (!this.qhPoolInfo[i].active) {
+        this.qhPoolInfo[i].active = true;
+        return this.qhPoolInfo[i];
+      }
+    }
+    return null;
+  }
+  writeQH(qh, head, element) {
+    this.qhPool.buffer.writeUInt32LE(head, qh.offset);
+    this.qhPool.buffer.writeUInt32LE(element, qh.offset + 4);
+  }
+  /**
+   * @param  {QH} qh -
+   * @returns {Object} {head, element}
+   */
+  readQH(qh) {
+    if (!(qh instanceof QH)) throw new TypeError('[UHCI] freeQH needs the argument of QH instances');
+
+    const head = this.qhPool.buffer.readUInt32LE(qh.offset);
+    const element = this.qhPool.buffer.readUInt32LE(qh.offset + 4);
+
+    return {
+      head,
+      element
+    };
+  }
+  /**
+   * @param  {QG} qh -
+   * @returns {void}
+   */
+  freeQH(qh) {
+    if (!(qh instanceof QH)) throw new TypeError('[UHCI] freeQH needs the argument of QH instances');
+    qh.active = false;
+  }
+  QHaddr(qh) {
+    return this.qhPool.address + qh.offset;
+  }
   static init(device) {
     return new UHCIController().init(device);
   }
 
   static load() {
     return $$.pci.addClassDriver(0x0C, 0x03, 0x00, UHCIController);
+  }
+}
+
+class PortStatus {
+  /**
+   * @constructor
+   * @param  {Boolean} connected -
+   * @param  {Number} speed - *:low, 0:high
+   */
+  constructor(connected, speed) {
+    this._connected = connected;
+    this._speed = speed;
+  }
+
+  get speed() {
+    return this._speed ? 'low' : 'high';
+  }
+
+  get connected() {
+    return this._connected;
+  }
+
+  *[Symbol.iterator]() {
+    yield this.connected;
+    yield this.speed;
+  }
+}
+
+class QH {
+  /**
+   * @constructor
+   * @param  {Boolean} active -
+   * @param  {Number} offset -
+   * @param  {QH} next -
+   * @param  {QH} prev=next -
+   */
+  constructor(active, offset, next, prev = next) {
+    this.active = active;
+    this.offset = offset;
+    this.next = next;
+    this.prev = prev;
+  }
+
+  *[Symbol.iterator]() {
+    yield this.active;
+    yield this.offset;
+    yield* this.next; // TODO: Check
   }
 }
 
