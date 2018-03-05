@@ -26,4 +26,4 @@ LICENSE
 /out
 /runtimejs
 *.o
-/build
+/mkiso

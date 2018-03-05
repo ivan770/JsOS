@@ -41,3 +41,8 @@ build.iso
 .initrd
 etc/kernel.map
 /build
+/etc/kernel.map
+
+# mkiso kernel and initrd files
+/mkiso/kernel
+/mkiso/initrd

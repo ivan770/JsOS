@@ -202,7 +202,7 @@ const cmds = {
           }
         }
         log(firstsec);
-        return iface.read(firstsec, buf);
+        return iface.read(firstsec, whilebuf);
       })
 .then((fsbuf) => {
         f.stdio.writeLine('  assumming that FS is FAT, header:');
