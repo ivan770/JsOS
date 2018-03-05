@@ -1,5 +1,5 @@
 // Copyright 2014-present runtime.js project authors
-// Copyright 2017 JsOS project authors
+// Copyright 2017-2018    JsOS       project authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,11 +15,9 @@
 
 'use strict';
 
-/* global PERSISTENCE */
-
 const printer = require('./printer');
 const logger = new (require('../../modules/logger'))({'defaultStdio': printer});// $$.logger.log;
-const log = logger.log;
+const {log} = logger;
 
 try {
   logger.setLevels(require('../../../package.json').logLevels); // FIXME: Костыль, но без него никак
@@ -79,7 +77,7 @@ class LineEditor {
       }
       printer.moveOffset(-rightSide.length);
     }
-    ++this.inputPosition;
+    this.inputPosition++;
     this.drawCursor();
   }
 
@@ -100,7 +98,7 @@ class LineEditor {
         printer.print(' ');
         printer.moveOffset(-rightSide.length - 1);
       }
-      --this.inputPosition;
+      this.inputPosition--;
       this.drawCursor();
     }
   }
@@ -115,38 +113,36 @@ class LineEditor {
       log('Out of text ( > right )', {'level': 'LineEditor'});
     }
   }
-  moveCursorLeft() {
-    if (this.inputPosition > 0) {
-      this.removeCursor();
-      --this.inputPosition;
-      printer.moveOffset(-1);
-      this.drawCursor();
-    }
+  moveCursorLeft(num = 1) {
+    if (this.inputPosition - 3 < 0) num = this.inputPosition;
+
+    this.removeCursor();
+    this.inputPosition -= num;
+    printer.moveOffset(-num);
+    this.drawCursor();
   }
 
-  moveCursorRight() {
-    if (this.inputPosition < this.inputText.length) {
-      this.removeCursor();
-      ++this.inputPosition;
-      printer.moveOffset(1);
-      this.drawCursor();
-    }
+  moveCursorRight(num = 1) {
+    if (this.inputPosition + num >= this.inputText.length) num = this.inputText.length - this.inputPosition;
+
+    this.removeCursor();
+    this.inputPosition += num;
+    printer.moveOffset(num);
+    this.drawCursor();
   }
 
   moveCursorStart() {
-		// console.warn("Not implented!");
     this.removeCursor();
-    while (this.inputPosition > 0) {
-      this.moveCursorLeft();
+    if (this.inputPosition > 0) {
+      this.moveCursorLeft(this.inputPosition);
     }
     this.drawCursor();
   }
 
   moveCursorEnd() {
-		// console.warn("Not implented!");
     this.removeCursor();
-    while (this.inputPosition < this.inputText.length) {
-      this.moveCursorRight();
+    if (this.inputPosition < this.inputText.length) {
+      this.moveCursorRight(this.inputText.length);
     }
     this.drawCursor();
   }
@@ -156,9 +152,8 @@ class LineEditor {
       cmd.trim() === '')
       return log('Don\'t write to history because repeation or empty', {'level': 'LineEditor'});
     PERSISTENCE.Editor.history.push(cmd);
-    // PERSISTENCE.Editor.historyPosition++;
     PERSISTENCE.Editor.historyPosition = PERSISTENCE.Editor.history.length;
-    log(`Editor->writeHistory(${cmd}) ==> ${JSON.stringify(PERSISTENCE.Editor.history)} [${typeof(PERSISTENCE.Editor.history)}]`, { level: 'LineEditor' }); //eslint-disable-line
+    log(`Editor->writeHistory(${cmd}) ==> ${JSON.stringify(PERSISTENCE.Editor.history)} [${typeof (PERSISTENCE.Editor.history)}]`, { level: 'LineEditor' }); //eslint-disable-line
   }
 
   previous() {
@@ -182,11 +177,11 @@ class LineEditor {
   }
 
   clearInputBox() {
-    while (this.inputPosition < this.inputText.length) {
-      this.moveCursorRight();
+    if (this.inputPosition < this.inputText.length) {
+      this.moveCursorRight(this.inputText.length);
     }
     while (this.inputPosition > 0) {
-      this.removeChar();
+      this.removeChar(); // TODO: slice
     }
   }
 
