@@ -57,8 +57,8 @@ module.exports = {
     const colorArray = [b, g, r];
     // secondBuffer = (new Uint8Array(secondBuffer.length)).map((_, i) => colorArray[i % 3]);
 
-    for (let i = 0; i < secondBufferView.byteLength; i++) {
-      secondBufferView.setInt8(i, colorArray[i % 3]);
+    for (let i = 0; i < secondBuffer.lenfth; i++) {
+      secondBuffer[i] = colorArray[i % 3];
     }
   },
 

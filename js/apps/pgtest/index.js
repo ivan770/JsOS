@@ -16,32 +16,32 @@ function draw() {
   JsMB.cls();
   switch (page) {
     case 1:
-      JsMB.fillScreen(0x2);
+      JsMB.fillScreen([0, 128, 0]);
       break;
     case 2:
       JsMB
-        .fillScreen(0xA)
-        .setColor(0xC)
+        .fillScreen([0, 255, 0])
+        .setColor([255, 0, 0])
         .drawRect(0, 0, scw, sch);
       break;
     case 3:
       JsMB
-        .fillScreen(0xA)
-        .setColor(0xC)
+        .fillScreen([0, 255, 0])
+        .setColor([255, 0, 0])
         .drawArc(scw / 2, sch / 2, 5);
       break;
     case 4:
       JsMB
-        .fillScreen(0xA)
-        .setColor(0xC)
+        .fillScreen([0, 255, 0])
+        .setColor([255, 0, 0])
         .drawArc(scw / 4, sch / 4, 5)
         .drawArc(3 * scw / 4, sch / 4, 5)
         .drawLine((scw / 4) + 5, 7 * sch / 8, (3 * scw / 4) - 5, 7 * sch / 8);
       break;
     case 5:
       JsMB
-        .fillScreen(0xC)
-        .setColor(0xB)
+        .fillScreen([255, 0, 0])
+        .setColor([0, 255, 255])
         .drawCube(0, 0, scw - 5, sch - 5, 5);
       break;
     case 6:
