@@ -1,4 +1,5 @@
 // Copyright 2014-present runtime.js project authors
+// Copyright 2017-2018    JsOS       project authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,14 +15,12 @@
 
 'use strict';
 
-const driverUtils = require('../driver-utils');
-
-/* global $$ */
+// const driverUtils = require('../driver-utils');
 
 const vgaOld = require('./vga-old');
 
 const fontLib = require('./font8x16');
-const font = fontLib.font;
+const {font} = fontLib;
 const fw = fontLib.width;
 const fh = fontLib.height;
 
@@ -71,11 +70,9 @@ function setCharOffset(u8, offset, char, fg, bg, ivb) {
     throw new Error('vga error: offset is out of bounds');
   }
 
-  /* eslint-disable no-param-reassign */
   u8[offset * 2] = char.charCodeAt(0);
   u8[(offset * 2) + 1] = getColor(fg, bg);
   ivb[offset] = 1;
-  /* eslint-enable no-param-reassign */
 }
 
 function setCharXY(u8, x, y, char, fg, bg, ivb) {
@@ -144,6 +141,14 @@ class VGABuffer {
     // }
     return debug('Not implemented!');
   }
+
+  /** Erases some space (fills with the background color)
+   * @param  {Number} from - The index where the erasure begins
+   * @param  {Number} to - The index where the erasure ends
+   */
+  erase(from, to) {
+    $$.graphics.displayBuffer.fill(0, from, to);
+  }
 }
 
 function testInstance(obj) {
@@ -154,11 +159,7 @@ function testInstance(obj) {
 
 exports.draw = (drawbuf) => {
   testInstance(drawbuf);
-  if (!(global.$$ && global.$$.graphics && global.$$.graphics.graphicsAvailable())) {
-    vgaOld.draw(drawbuf);
-    // TODO: Сделать условие во время первой отрисовки
-    prevState.set(drawbuf.b);
-  } else {
+  if (global.$$ && global.$$.graphics && global.$$.graphics.graphicsAvailable()) {
     if (!graphicsEnabled) {
       graphicsEnabled = true;
       $$.graphics.enableGraphics(640, 400, 24);
@@ -170,8 +171,8 @@ exports.draw = (drawbuf) => {
         // debug(drawbuf.ivb[(y * w) + x]);
         if (!drawbuf.ivb[(y * w) + x]) continue;
         drawbuf.ivb[(y * w) + x] = 0;
-    // for (let y = 0; y < h; y++) {
-    //   for (let x = 0; x < w; x++) {
+        // for (let y = 0; y < h; y++) {
+        //   for (let x = 0; x < w; x++) {
         const offset = ((y * w) + x) * 2;
         const colorByte = drawbuf.b[offset + 1];
         const bg = (colorByte >> 4) & 0xF;
@@ -190,21 +191,26 @@ exports.draw = (drawbuf) => {
             const py = (y * fh) + fy;
             // const dboffset = ((y * w * fh + fy) + x * fw * fx) * 3;
             const dboffset = (px + (py * w * fw)) * 3;
-            // dbuf[dboffset + 2] = (state ? colorScheme[fg] : colorScheme[bg])[0];// * 255;
-            // dbuf[dboffset + 1] = (state ? colorScheme[fg] : colorScheme[bg])[1];// * 255;
-            // dbuf[dboffset] = (state ? colorScheme[fg] : colorScheme[bg])[2];// * 255;
 
-            dbuf.setInt8(dboffset + 2, (state ? colorScheme[fg] : colorScheme[bg])[0]);
-            dbuf.setInt8(dboffset + 1, (state ? colorScheme[fg] : colorScheme[bg])[1]);
-            dbuf.setInt8(dboffset, (state ? colorScheme[fg] : colorScheme[bg])[2]);
+            dbuf[dboffset + 2] = (state ? colorScheme[fg] : colorScheme[bg])[0];
+            dbuf[dboffset + 1] = (state ? colorScheme[fg] : colorScheme[bg])[1];
+            dbuf[dboffset] = (state ? colorScheme[fg] : colorScheme[bg])[2];
+
+            // dbuf.setInt8(dboffset + 2, (state ? colorScheme[fg] : colorScheme[bg])[0]);
+            // dbuf.setInt8(dboffset + 1, (state ? colorScheme[fg] : colorScheme[bg])[1]);
+            // dbuf.setInt8(dboffset, (state ? colorScheme[fg] : colorScheme[bg])[2]);
           }
         }
         // }
       }
     }
-    prevState.set(drawbuf.b);
-    $$.graphics.repaint();
+    // prevState.set(drawbuf.b);
+    // $$.graphics.repaint();
+  } else {
+    vgaOld.draw(drawbuf);
+    // TODO: Сделать условие во время первой отрисовки
   }
+  prevState.set(drawbuf.b);
   if (global.$$ && global.$$.graphics && global.$$.graphics.graphicsAvailable()) $$.graphics.repaint();
 };
 
