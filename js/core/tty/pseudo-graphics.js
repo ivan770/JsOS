@@ -153,7 +153,73 @@ class Button extends EventEmitter {
 Button.width = 10;
 Button.height = 0;
 
+class Cursor extends EventEmitter {
+  constructor(x = scw / 2, y = sch / 2, color = 0xF, bgcolor = 0x0, symbolid = 6) {
+    super();
+    this.x = x;
+    this.y = y;
+    this.color = color;
+    this.bgcolor = bgcolor;
+    this.symbolid = symbolid;
+
+    this.render();
+  }
+
+  render() {
+    // FIXME: Remove old cursor...
+    JsMB
+      .drawPlot(this.x, this.y, this.symbolid)
+      .repaint();
+  }
+
+  click() {
+    this.emit('click', {
+      'x': this.x,
+      'y': this.y
+    });
+  }
+
+  rclick() {
+    this.emit('contextmenu', {
+      'x': this.x,
+      'y': this.y
+    });
+  }
+
+  move(direction) {
+    switch (direction) {
+      case 'up':
+        this.y--;
+        break;
+
+      case 'down':
+        this.y++;
+        break;
+
+      case 'left':
+        this.x--;
+        break;
+
+      case 'right':
+        this.x++;
+        break;
+
+      default:
+        throw new Error('Invalid direction to move the cursor');
+    }
+
+    this.render();
+
+    this.emit('move', {
+      'x': this.x,
+      'y': this.y,
+      direction
+    });
+  }
+}
+
 UI.Window = Window;
 UI.Button = Button;
+UI.Cursor = Cursor;
 
 module.exports = UI;

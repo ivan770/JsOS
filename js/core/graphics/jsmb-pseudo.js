@@ -276,10 +276,11 @@ const JsMB = {
   /** Draw plot at x, y
    * @param  {number} x - x
    * @param  {number} y - y
+   * @param  {string} [symbol] - Pseudo-graphics symbol
    * @returns {bool} true
    */
-  drawPlot(x, y) {
-    const plot = String.fromCharCode(this._plot);
+  drawPlot(x, y, symbol = this._plot) {
+    const plot = typeof symbol === 'number' ? String.fromCharCode(symbol) : symbol;
 
     x = Math.floor(this.limit(x, 0, this.screenWidth()));
     y = Math.floor(this.limit(y, 0, this.screenHeight()));
@@ -288,6 +289,9 @@ const JsMB = {
     printer.print(plot, 1, $TMP.color, $TMP.bgcolor);
     printer.moveTo(this.screenWidth(), this.screenHeight());
     return this;
+  },
+  repaint() {
+    //
   },
   clearRect(x, y, w, h) {
     const tmp = $TMP.color;

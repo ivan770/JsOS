@@ -9,7 +9,7 @@ const UI = require('../../core/tty/pseudo-graphics');
 const scw = JsMB.screenWidth();
 const sch = JsMB.screenHeight();
 
-let io, resp, kb, window;
+let io, resp, kb, window, cursor;
 
 let page = 0;
 let demonstration = false;
@@ -30,6 +30,8 @@ function draw() {
 
   exitbtn.once('click', exit);
   window.addButton(exitbtn);
+
+  cursor = new UI.Cursor();
 }
 
 function sdraw() {
@@ -96,6 +98,22 @@ function onKeyDown(key) {
       if (!demonstration) return window.nextButton();
       break;
     default:
+      switch (key.character) {
+        case 'w':
+          cursor.move('up');
+          break;
+        case 'a':
+          cursor.move('left');
+          break;
+        case 's':
+          cursor.move('down');
+          break;
+        case 'd':
+          cursor.move('right');
+          break;
+        default:
+          break;
+      }
       if (!demonstration) return;
       break;
   }
