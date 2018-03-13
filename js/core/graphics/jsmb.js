@@ -5,7 +5,7 @@
  * ~~~~~~~~~~by PROPHESSOR~~~~~~~~~~
  * ================================//
  */
-// Alpha 11 58884391d121876a2269f10202c65a9761b25e78
+// Alpha 11 df00a065d1a216076eee144a111ef60d0d58195b
 
 /* eslint-disable no-console */
 
@@ -798,7 +798,7 @@ try {
      * @returns {number}
      */
     limit(variable, min, max) {
-      return variable <= min ? min : max;
+      return variable > max ? max : variable < min ? min : variable;
     },
 
     /** Возвращает минимальное значение из аргументов
