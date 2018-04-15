@@ -45,12 +45,9 @@ module.exports = {
   setPixel(x, y, r, g, b) {
     const dboffset = (x + (y * screen.width)) * 3;
 
-    // secondBufferView.setInt8(dboffset + 2, r);
-    // secondBufferView.setInt8(dboffset + 1, g);
-    // secondBufferView.setInt8(dboffset, b);
-    // secondBuffer[dboffset + 2] = r;
-    // secondBuffer[dboffset + 1] = g;
-    // secondBuffer[dboffset] = b;
+    secondBuffer[dboffset + 2] = r;
+    secondBuffer[dboffset + 1] = g;
+    secondBuffer[dboffset] = b;
   },
 
   fillScreen(r = 0, g = 0, b = 0) {
