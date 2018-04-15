@@ -29,4 +29,4 @@ function main(_args, api, res) {
     return res(0); // 1 = error
 }
 exports.call = (cmd, args, api, res) => main(args, api, res);
-exports.commands = ['example'];
+exports.commands = ['brainfuck'];
