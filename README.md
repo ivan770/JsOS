@@ -24,7 +24,7 @@ RAM: >128MB
 First thing is the command line tool `jsos-cli`, it will add `jsos` command to the shell. Type `jsos --help` to get full usage help.
 
 ```
-npm i -g https://github.com/PROPHESSOR/jsos-cli
+sudo npm i -g jsos-cli
 ```
 
 Make sure QEMU installed, it enables running applications locally.
@@ -44,7 +44,7 @@ cd JsOS
 npm i
 ```
 
-Run project locally in QEMU:
+Run project locally in QEMU (in the root of the git folder):
 
 ```
 jsos start
@@ -62,7 +62,8 @@ The kernel is written in C++ and manages low-level resources like CPU and memory
 License
 
 ## I wanna help!
-[We will be grateful if you help we](https://github.com/PROPHESSOR/JsOS/issues?q=is%3Aissue+is%3Aopen+label%3A%22need+help%22)
+[We will be grateful if you help we](https://github.com/PROPHESSOR/JsOS/issues/30)
+[Description of folders](https://github.com/PROPHESSOR/JsOS/blob/master/map.md) (russian)
 
 ----
 Apache License, Version 2.0
