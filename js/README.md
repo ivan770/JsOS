@@ -1,4 +1,4 @@
-# Карта проекта JsOS / JsOS project map
+# /js
 
 ## English
 
