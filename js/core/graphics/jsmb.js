@@ -193,15 +193,15 @@ try {
      */
     drawRect(x, y, w, h) {
       // =
-      for (let i = x; i <= x + w; i++) {
-        this.drawPlot(i, y);
-        this.drawPlot(i, y + h);
+      for (let i = x; i < x + w; i++) {
+        this.drawPlot(i, y, true);
+        this.drawPlot(i, y + h - 1, true);
       }
 
       // ||
-      for (let i = y; i <= y + h; i++) {
-        this.drawPlot(x, i);
-        this.drawPlot(x + w, i);
+      for (let i = y; i < y + h; i++) {
+        this.drawPlot(x, i, true);
+        this.drawPlot(x + w - 1, i, true);
       }
       graphics.repaint();
       return this;
@@ -252,8 +252,9 @@ try {
       for (let x = x1; x <= x2; x++) {
         const y = y1 + (dy * (x - x1) / dx);
 
-        this.drawPlot(x, y);
+        this.drawPlot(x, y, true);
       }
+      graphics.repaint();
       return this;
     },
 
@@ -299,14 +300,14 @@ try {
       let err = dx - (radius * 2);
 
       while (x >= y) {
-        this.drawPlot(x0 + x, y0 + y);
-        this.drawPlot(x0 + y, y0 + x);
-        this.drawPlot(x0 - y, y0 + x);
-        this.drawPlot(x0 - x, y0 + y);
-        this.drawPlot(x0 - x, y0 - y);
-        this.drawPlot(x0 - y, y0 - x);
-        this.drawPlot(x0 + y, y0 - x);
-        this.drawPlot(x0 + x, y0 - y);
+        this.drawPlot(x0 + x, y0 + y, true);
+        this.drawPlot(x0 + y, y0 + x, true);
+        this.drawPlot(x0 - y, y0 + x, true);
+        this.drawPlot(x0 - x, y0 + y, true);
+        this.drawPlot(x0 - x, y0 - y, true);
+        this.drawPlot(x0 - y, y0 - x, true);
+        this.drawPlot(x0 + y, y0 - x, true);
+        this.drawPlot(x0 + x, y0 - y, true);
 
         if (err <= 0) {
           y++;
