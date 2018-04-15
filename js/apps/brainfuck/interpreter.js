@@ -94,7 +94,7 @@ class Brainfuck {
       self._data = [];
       self._ptr = 0;
 
-      self.input = inputString ? inputString.split('') : [];
+      self._input = inputString ? inputString.split('') : [];
 
       nodes.forEach((node) => {
         node();

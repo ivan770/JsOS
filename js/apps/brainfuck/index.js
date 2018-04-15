@@ -2,6 +2,8 @@
 // Original: https://github.com/skilldrick/brainfuck-js
 // Ported by PROPHESSOR
 
+// demo 10+[>7+>10+>3+>+4<-]>2+.>+.7+2.3+.>2+.2<15+.>.3+.6-.8-.>+.>.
+
 'use strict';
 
 const Brainfuck = require('./interpreter');
@@ -20,7 +22,7 @@ function main(_args, api, res) {
   io.write(`BF: Starting program ${args[0]}\n`);
   if (args[1]) io.write(`with data: ${args[1]}`);
     //   debugger;
-  const bf = new Brainfuck(args[0], args[1]);
+  const bf = new Brainfuck();
 
   io.setColor('green');
   io.writeLine(bf.parse(args[0])(args[1]));
@@ -28,4 +30,3 @@ function main(_args, api, res) {
 }
 exports.call = (cmd, args, api, res) => main(args, api, res);
 exports.commands = ['example'];
-// demo 10+[>7+>10+>3+>+4<-]>2+.>+.7+2.3+.>2+.2<15+.>.3+.6-.8-.>+.>.
