@@ -1,6 +1,34 @@
-# Карта проекта JsOS
+# Карта проекта JsOS / JsOS project map
 
-//TODO: Translate to English
+## English
+
+src - Here are loader and kernel sources (c++ and asm)
+js - OS files
+- apps - Apps installed via `install` comamnd
+- core - OS core
+  - block - Block devices
+  - fs - File system
+  - keyboard - Keyboard
+  - mouse - Mouse
+  - net - Network
+  - pci - PCI devices
+  - ps2 - PS/2 devices
+  - stdio - Interface and OS input/output
+  - storage - Data storage (temporary, not used right now)
+  - tty - Terminal (OS command line)
+- driver - Several drivers
+  - ata - Drivers for ATA hard drives
+  - bga - Drivers for graphics mode (see branch graphic-mode and JsMB)
+  - ibm->pcspeaker - Driver for PCSpeaker (beeper)
+  - ps2 - Drivers for PS/2 mice and keyboards
+  - realtek - Drivers for RealTek network cards
+  - virtio - Drivers for QEMU network cards
+- module - Implementation of node.js modules for JsOS
+- service - Embedded services
+  - appman - Application manager (commands `install` and `start`)
+  - shell - Terminal interpreter + standard commands
+
+## Russian
 
 src - Здесь находятся исходники загрузчика и ядра на c++ и asm
 js - Файлы операционной системы
