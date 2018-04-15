@@ -27,6 +27,10 @@ Here are OS files
   - appman - Application manager (commands `install` and `start`)
   - shell - Terminal interpreter + standard commands
 
+In file `__loader` base modules are included (fs, http, events, buffer, sys, os, console, etc.)
+In `index.js` basic loader (ran right after kernel) is placed. Drivers are also included here.
+
+
 ## Russian
 
 В этой папке находятся файлы операционной системы
