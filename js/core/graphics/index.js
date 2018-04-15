@@ -3,10 +3,15 @@
 const GraphicsRenderer = require('./graphics-renderer');
 const {Screen, 'symbols': screenSymbols} = require('./screen');
 const renderers = require('./renderers');
+
 const screen = new Screen();
-let secondBuffer = Uint8Array;
+let secondBuffer; // Uint8Array
 
 module.exports = {
+  GraphicsRenderer,
+
+  'addRenderer': renderers.addRenderer,
+
   get 'screen'() {
     return screen;
   },
@@ -25,11 +30,9 @@ module.exports = {
   },
 
   enableGraphics(width, height, bitDepth) {
-    // secondBuffer = new ArrayBuffer(width * height * (bitDepth / 8));
-    // secondBufferView = new DataView(secondBuffer);
-    secondBuffer = new Uint8Array(width * height * (bitDepth / 8));
-    // secondBuffer.fill(0xff);
     const renderer = renderers.getDefaultRenderer();
+
+    secondBuffer = new Uint8Array(width * height * (bitDepth / 8));
 
     renderer.enableGraphics(width, height, bitDepth);
     screen[screenSymbols.reset]();
@@ -39,7 +42,7 @@ module.exports = {
   repaint() {
     const buf = renderers.getDefaultRenderer().displayBuffer;
 
-    buf.set(new Uint8Array(secondBuffer));
+    buf.set(secondBuffer);
   },
 
   setPixel(x, y, r, g, b) {
@@ -52,14 +55,8 @@ module.exports = {
 
   fillScreen(r = 0, g = 0, b = 0) {
     const colorArray = [b, g, r];
-    // secondBuffer = (new Uint8Array(secondBuffer.length)).map((_, i) => colorArray[i % 3]);
 
-    for (let i = 0; i < secondBuffer.length; i++) {
-      secondBuffer[i] = colorArray[i % 3];
-    }
-  },
+    secondBuffer = secondBuffer.map((_, i) => colorArray[i % 3]);
+  }
 
-
-  GraphicsRenderer,
-  'addRenderer': renderers.addRenderer
 };
