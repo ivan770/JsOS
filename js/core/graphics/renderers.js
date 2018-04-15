@@ -33,9 +33,10 @@ module.exports = {
   },
   getConstants() {
     const consts = {};
+
     for (const renderer of availableRenderers.values()) {
       Object.assign(consts, renderer.constants);
     }
     return consts;
-  },
+  }
 };

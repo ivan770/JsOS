@@ -13,7 +13,7 @@
 
 try {
   const io = $$.stdio.defaultStdio;
-  const graphics = require('.');// $$.graphics;
+  const graphics = require('.'); // $$.graphics;
   const printer = require('../tty/printer');
 
   const $Config = {
@@ -125,7 +125,7 @@ try {
       return this;
     },
 
-    // FIXME: Это он с pseudo-graphics, что-ли?
+    // FIXME: для drawString
     setBackColor(color) {
       $TMP.bgcolor = color;
       return this;

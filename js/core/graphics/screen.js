@@ -17,13 +17,13 @@
 // The properties `width`, `height`, and `bitDepth` are
 // Symbols because they shouldn't be set.
 const symbols = {
-  width: Symbol('width'),
-  height: Symbol('height'),
-  bitDepth: Symbol('bitDepth'),
-  init: Symbol('init'),
-  reset: Symbol('reset'),
-  initialized: Symbol('initialized'),
-  renderer: Symbol('renderer'),
+  'width': Symbol('width'),
+  'height': Symbol('height'),
+  'bitDepth': Symbol('bitDepth'),
+  'init': Symbol('init'),
+  'reset': Symbol('reset'),
+  'initialized': Symbol('initialized'),
+  'renderer': Symbol('renderer')
 };
 
 class Screen {
@@ -60,5 +60,5 @@ class Screen {
 
 module.exports = {
   Screen,
-  symbols,
+  symbols
 };
