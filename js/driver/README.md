@@ -8,7 +8,7 @@
 
 Подключаются в файле [/js/index.js](https://github.com/PROPHESSOR/JsOS/blob/master/js/index.js)
 
-Для работы с оборудованием используется [/core/driver-utils](https://github.com/PROPHESSOR/JsOS/blob/master/js/core/driver-utils)
+Для работы с оборудованием используется [/core/driver-utils](https://github.com/PROPHESSOR/JsOS/blob/master/js/core/driver-utils.js)
 
 
 # English
@@ -21,4 +21,4 @@ All the drivers must inherit `Driver`, which can be found in `index.js`.
 
 The drivers are connected in [/js/index.js](https://github.com/PROPHESSOR/JsOS/blob/master/js/index.js)
 
-For devices, use [/core/driver-utils](https://github.com/PROPHESSOR/JsOS/blob/master/js/core/driver-utils)
+For devices, use [/core/driver-utils](https://github.com/PROPHESSOR/JsOS/blob/master/js/core/driver-utils.js)
