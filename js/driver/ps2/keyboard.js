@@ -70,7 +70,8 @@ const statuses = {
   'rightalt': false,
   'capslock': false,
   'numlock': false,
-  'scrllock': false
+  'scrllock': false,
+  'cmd': false // TODO: add win/cmd/jsos key
 };
 
 function keyEvent(codeOpt, isPressed) {
@@ -135,9 +136,11 @@ function keyEvent(codeOpt, isPressed) {
     }
   }
 
+  if (cmd === 'character' && !character) character = '';
+
   const keyinfo = {
-    'type': cmd,
     character,
+    'type': cmd,
     'alt': statuses.leftalt || statuses.rightalt,
     'shift': statuses.leftshift || statuses.rightshift,
     'ctrl': statuses.leftctrl || statuses.rightctrl
