@@ -46,6 +46,8 @@ defaultStdio.onsetbackgroundcolor = (bg) => {
   bgcolor = tty.color[String(bg).toUpperCase()];
 };
 
+defaultStdio.onmoveto = (x, y) => tty.moveTo(x, y);
+
 defaultStdio.onread = cb => tty.read(cb);
 
 defaultStdio.onreadline = cb => tty.readLine(cb);
