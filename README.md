@@ -62,8 +62,9 @@ The kernel is written in C++ and manages low-level resources like CPU and memory
 License
 
 ## I wanna help!
-[We will be grateful if you help we](https://github.com/PROPHESSOR/JsOS/issues/30)
-[Description of folders](https://github.com/PROPHESSOR/JsOS/blob/master/map.md) (russian)
+[We will be grateful if you help us](https://github.com/PROPHESSOR/JsOS/issues/30)
+
+[Description of folders](https://github.com/PROPHESSOR/JsOS/blob/master/map.md)
 
 ----
 Apache License, Version 2.0
