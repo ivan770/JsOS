@@ -49,12 +49,25 @@ function main(api, cb) {
 
   kb.onKeydown.add(keyboard);
 
+  let previousLines = vim.view.getArray();
   io.clear();
-  io.write(vim.view.getText());
+  io.write(previousLines.join("\n"));
 
   vim.view.on('change', () => {
-    io.clear();
-    io.write(vim.view.getText());
+    let newLines = vim.view.getArray();
+
+    for(let i = 0; i < newLines.length; i++) {
+      if(newLines[i] != previousLines[i]) {
+        // Line changed, redraw it
+        io.moveTo(0, i);
+        io.write(newLines[i]);
+        if(newLines[i].length < previousLines[i].length) {
+          io.write(" ".repeat(previousLines[i].length - newLines[i].length));
+        }
+      }
+    }
+
+    previousLines = newLines;
   });
 }
 exports.commands = ['vim'];
