@@ -214,8 +214,8 @@ try {
      * @returns {this}
      */
     drawPlot(x, y, norepaint = false) {
-      x = x >= this.screenWidth() ? x = this.screenWidth() - 1 : x;
-      y = y >= this.screenHeight() ? y = this.screenHeight() - 1 : y;
+      x = x >= this.screenWidth() ? this.screenWidth() - 1 : x;
+      y = y >= this.screenHeight() ? this.screenHeight() - 1 : y;
 
       graphics.setPixel(x, y, ...$TMP.color);
       if (!norepaint) graphics.repaint();
