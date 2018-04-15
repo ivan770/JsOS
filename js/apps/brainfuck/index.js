@@ -20,7 +20,7 @@ function main(_args, api, res) {
   io.write(`BF: Starting program ${args[0]}\n`);
   if (args[1]) io.write(`with data: ${args[1]}`);
     //   debugger;
-  const bf = new Brainfuck(args[0], args[1]);
+  const bf = new Brainfuck();
 
   io.setColor('green');
   io.writeLine(bf.parse(args[0])(args[1]));
