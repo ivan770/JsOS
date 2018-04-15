@@ -246,13 +246,29 @@ try {
      * @returns {this}
      */
     drawLine(x1, y1, x2, y2) {
+      if (x1 > x2) {
+        [x1, x2] = [x2, x1];
+        [y1, y2] = [y2, y1];
+      }
       const dx = x2 - x1;
-      const dy = y2 - y1;
+      let dy = y2 - y1;
 
-      for (let x = x1; x <= x2; x++) {
-        const y = y1 + (dy * (x - x1) / dx);
+      let yi = 1;
 
+      if (dy < 0) {
+        yi = -1;
+        dy = -dy;
+      }
+      let D = (2 * dy) - dx;
+      let y = y1;
+
+      for (let x = x1; x < x2; x++) {
         this.drawPlot(x, y, true);
+        if (D > 0) {
+          y += yi;
+          D -= 2 * dx;
+        }
+        D += 2 * dy;
       }
       graphics.repaint();
       return this;
