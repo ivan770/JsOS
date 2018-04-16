@@ -266,3 +266,8 @@ exports.request = (opt, cb) => {
   if (cb) req.on('response', cb);
   return req;
 };
+exports.get = (opt, cb) => {
+  if (typeof opt === 'string') opt = url.parse(opt);
+  opt.method = "GET";
+  return exports.request(opt, cb);
+};
