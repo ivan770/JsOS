@@ -9,6 +9,8 @@
 
 /* eslint-disable no-console */
 /* eslint-disable valid-jsdoc */
+/* eslint-disable no-unused-vars */
+// ^ Many functions haven't implementation
 
 'use strict';
 
@@ -796,7 +798,7 @@ try {
      * @returns {number}
      */
     limit(variable, min, max) {
-      return variable > max ? max : variable < min ? min : variable;
+      return variable > max ? max : variable < min ? min : variable; // eslint-disable-line
     },
 
     /** Возвращает минимальное значение из аргументов
