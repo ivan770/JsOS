@@ -112,7 +112,7 @@
 		"no-new": "error",
 		"no-octal-escape": "error",
 		"no-octal": "error",
-		"no-param-reassign": "error",
+		"no-param-reassign": "off",
 		"no-proto": "error",
 		"no-redeclare": "error",
 		"no-restricted-properties": "error",
@@ -211,7 +211,7 @@
 		"max-nested-callbacks": "error",
 		"max-params": [
 			"error",
-			4
+			6
 		],
 		"max-statements-per-line": "error",
 		"new-cap": [
@@ -229,7 +229,7 @@
 		"newline-per-chained-call": "off",
 		"no-array-constructor": "error",
 		"no-bitwise": "off",
-		"no-continue": "error",
+		"no-continue": "off",
 		"no-inline-comments": "off",
 		"no-lonely-if": "error",
 		"no-mixed-operators": "off",
