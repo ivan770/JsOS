@@ -19,7 +19,7 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
 // USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-function EventEmitter() {
+function EventEmitter () {
   this._events = this._events || {};
   this._maxListeners = this._maxListeners || undefined;
 }
@@ -37,14 +37,15 @@ EventEmitter.defaultMaxListeners = 10;
 
 // Obviously not all Emitters should be limited to 10. This function allows
 // that to be increased. Set to zero for unlimited.
-EventEmitter.prototype.setMaxListeners = function(n) {
+EventEmitter.prototype.setMaxListeners = function (n) {
   if (!isNumber(n) || n < 0 || isNaN(n))
     throw TypeError('n must be a positive number');
   this._maxListeners = n;
+
   return this;
 };
 
-EventEmitter.prototype.emit = function(type) {
+EventEmitter.prototype.emit = function (type) {
   let args, er, handler, i, len, listeners;
 
   if (!this._events)
@@ -53,13 +54,13 @@ EventEmitter.prototype.emit = function(type) {
   // If there is no 'error' event listener then throw.
   if (type === 'error') {
     if (!this._events.error ||
-        (isObject(this._events.error) && !this._events.error.length)) {
+        isObject(this._events.error) && !this._events.error.length) {
       er = arguments[1];
       if (er instanceof Error) {
         throw er; // Unhandled 'error' event
       } else {
         // At least give some kind of context to the user
-        const err = new Error('Uncaught, unspecified "error" event. (' + er + ')');
+        const err = new Error(`Uncaught, unspecified "error" event. (${er})`);
 
         err.context = er;
         throw err;
@@ -100,7 +101,7 @@ EventEmitter.prototype.emit = function(type) {
   return true;
 };
 
-EventEmitter.prototype.addListener = function(type, listener) {
+EventEmitter.prototype.addListener = function (type, listener) {
   let m;
 
   if (!isFunction(listener))
@@ -113,8 +114,8 @@ EventEmitter.prototype.addListener = function(type, listener) {
   // adding it to the listeners, first emit "newListener".
   if (this._events.newListener)
     this.emit('newListener', type,
-              isFunction(listener.listener)
-              ? listener.listener : listener);
+      isFunction(listener.listener)
+        ? listener.listener : listener);
 
   if (!this._events[type])
     // Optimize the case of one listener. Don't need the extra array object.
@@ -139,7 +140,7 @@ EventEmitter.prototype.addListener = function(type, listener) {
       console.error('(node) warning: possible EventEmitter memory ' +
                     'leak detected. %d listeners added. ' +
                     'Use emitter.setMaxListeners() to increase limit.',
-                    this._events[type].length);
+      this._events[type].length);
       if (typeof console.trace === 'function') {
         // not supported in IE 10
         console.trace();
@@ -152,13 +153,13 @@ EventEmitter.prototype.addListener = function(type, listener) {
 
 EventEmitter.prototype.on = EventEmitter.prototype.addListener;
 
-EventEmitter.prototype.once = function(type, listener) {
+EventEmitter.prototype.once = function (type, listener) {
   if (!isFunction(listener))
     throw TypeError('listener must be a function');
 
   let fired = false;
 
-  function g() {
+  function g () {
     this.removeListener(type, g);
 
     if (!fired) {
@@ -174,7 +175,7 @@ EventEmitter.prototype.once = function(type, listener) {
 };
 
 // emits a 'removeListener' event iff the listener was removed
-EventEmitter.prototype.removeListener = function(type, listener) {
+EventEmitter.prototype.removeListener = function (type, listener) {
   let i, length, list, position;
 
   if (!isFunction(listener))
@@ -188,7 +189,7 @@ EventEmitter.prototype.removeListener = function(type, listener) {
   position = -1;
 
   if (list === listener ||
-      (isFunction(list.listener) && list.listener === listener)) {
+      isFunction(list.listener) && list.listener === listener) {
     delete this._events[type];
     if (this._events.removeListener)
       this.emit('removeListener', type, listener);
@@ -196,7 +197,7 @@ EventEmitter.prototype.removeListener = function(type, listener) {
   } else if (isObject(list)) {
     for (i = length; i-- > 0;) {
       if (list[i] === listener ||
-          (list[i].listener && list[i].listener === listener)) {
+          list[i].listener && list[i].listener === listener) {
         position = i;
         break;
       }
@@ -219,7 +220,7 @@ EventEmitter.prototype.removeListener = function(type, listener) {
   return this;
 };
 
-EventEmitter.prototype.removeAllListeners = function(type) {
+EventEmitter.prototype.removeAllListeners = function (type) {
   let key, listeners;
 
   if (!this._events)
@@ -231,6 +232,7 @@ EventEmitter.prototype.removeAllListeners = function(type) {
       this._events = {};
     else if (this._events[type])
       delete this._events[type];
+
     return this;
   }
 
@@ -242,6 +244,7 @@ EventEmitter.prototype.removeAllListeners = function(type) {
     }
     this.removeAllListeners('removeListener');
     this._events = {};
+
     return this;
   }
 
@@ -259,7 +262,7 @@ EventEmitter.prototype.removeAllListeners = function(type) {
   return this;
 };
 
-EventEmitter.prototype.listeners = function(type) {
+EventEmitter.prototype.listeners = function (type) {
   let ret;
 
   if (!this._events || !this._events[type])
@@ -268,10 +271,11 @@ EventEmitter.prototype.listeners = function(type) {
     ret = [this._events[type]];
   else
     ret = this._events[type].slice();
+
   return ret;
 };
 
-EventEmitter.prototype.listenerCount = function(type) {
+EventEmitter.prototype.listenerCount = function (type) {
   if (this._events) {
     const evlistener = this._events[type];
 
@@ -280,25 +284,26 @@ EventEmitter.prototype.listenerCount = function(type) {
     else if (evlistener)
       return evlistener.length;
   }
+
   return 0;
 };
 
-EventEmitter.listenerCount = function(emitter, type) {
+EventEmitter.listenerCount = function (emitter, type) {
   return emitter.listenerCount(type);
 };
 
-function isFunction(arg) {
+function isFunction (arg) {
   return typeof arg === 'function';
 }
 
-function isNumber(arg) {
+function isNumber (arg) {
   return typeof arg === 'number';
 }
 
-function isObject(arg) {
+function isObject (arg) {
   return typeof arg === 'object' && arg !== null;
 }
 
-function isUndefined(arg) {
+function isUndefined (arg) {
   return arg === void 0;
 }

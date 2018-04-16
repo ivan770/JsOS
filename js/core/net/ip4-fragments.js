@@ -16,15 +16,15 @@
 
 const ip4header = require('./ip4-header');
 const ip4receive = require('./ip4-receive');
-const {timeNow} = require('../../utils');
+const { timeNow } = require('../../utils');
 const FRAGMENT_QUEUE_MAX_AGE_MS = 30000;
 const FRAGMENT_QUEUE_MAX_COUNT = 100;
 
-function fragmentHash(srcIP, destIP, protocolId, packetId) {
+function fragmentHash (srcIP, destIP, protocolId, packetId) {
   return `${srcIP.toInteger()}-${destIP.toInteger()}-${(packetId + (protocolId << 16))}`;
 }
 
-function dropFragmentQueue(intf, hash) {
+function dropFragmentQueue (intf, hash) {
   return intf.fragments.delete(hash);
 }
 
@@ -49,9 +49,9 @@ exports.addFragment = (intf, u8, headerOffset, fragmentOffset, isMoreFragments) 
     firstFragment = true;
     fragmentQueue = {
       'receivedLength': 0,
-      'totalLength': 0,
-      'createdAt': timeNow(),
-      'fragments': []
+      'totalLength':    0,
+      'createdAt':      timeNow(),
+      'fragments':      [],
     };
   }
 

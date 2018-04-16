@@ -9,24 +9,26 @@
 const Brainfuck = require('./interpreter');
 let io;
 
-function main(_args, api, res) {
+function main (_args, api, res) {
   const args = _args.split(/\s+/);
 
-    io = api.stdio;
-    if (!args[0]) {
+  io = api.stdio;
+  if (!args[0]) {
     io.writeError('You forgot to specify the program');
+
     return res(6);
   }
-    if (args[0] === 'hw') args[0] = '++++++++++[>+++++++>++++++++++>+++>+<<<<-]>++.>+.+++++++..+++.>++.<<+++++++++++++++.>.+++.------.--------.>+.>.';
-    io.setColor('yellow');
+  if (args[0] === 'hw') args[0] = '++++++++++[>+++++++>++++++++++>+++>+<<<<-]>++.>+.+++++++..+++.>++.<<+++++++++++++++.>.+++.------.--------.>+.>.';
+  io.setColor('yellow');
   io.write(`BF: Starting program ${args[0]}\n`);
   if (args[1]) io.write(`with data: ${args[1]}`);
-    //   debugger;
+  //   debugger;
   const bf = new Brainfuck();
 
   io.setColor('green');
   io.writeLine(bf.parse(args[0])(args[1]));
-    return res(0); // 1 = error
+
+  return res(0); // 1 = error
 }
 exports.call = (cmd, args, api, res) => main(args, api, res);
 exports.commands = ['brainfuck'];

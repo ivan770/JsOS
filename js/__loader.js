@@ -17,19 +17,19 @@
 (() => {
   // from https://github.com/runtimejs/runtime-module-loader/blob/master/index.js
   class Loader {
-    constructor(existsFileFn, readFileFn, evalScriptFn, builtins = {}, builtinsResolveFrom = '/') {
+    constructor (existsFileFn, readFileFn, evalScriptFn, builtins = {}, builtinsResolveFrom = '/') {
       const cache = {};
       const builtinsResolveFromComponents = builtinsResolveFrom.split('/');
 
-      function throwError(err) {
+      function throwError (err) {
         throw err;
       }
 
-      function endsWith(str, suffix) {
+      function endsWith (str, suffix) {
         return str.indexOf(suffix, str.length - suffix.length) !== -1;
       }
 
-      function normalizePath(components) {
+      function normalizePath (components) {
         const r = [];
 
         for (const p of components) {
@@ -58,7 +58,7 @@
         return r;
       }
 
-      function loadAsFile(path) {
+      function loadAsFile (path) {
         if (existsFileFn(path)) return path;
         if (existsFileFn(`${path}.js`)) return `${path}.js`;
         if (existsFileFn(`${path}.json`)) return `${path}.json`;
@@ -67,7 +67,7 @@
         return null;
       }
 
-      function getPackageMain(packageJsonFile) {
+      function getPackageMain (packageJsonFile) {
         const json = readFileFn(packageJsonFile);
         let parsed = null;
 
@@ -87,7 +87,7 @@
         return parsed.main || 'index.js';
       }
 
-      function loadAsDirectory(path, ignoreJson) {
+      function loadAsDirectory (path, ignoreJson) {
         let mainFile = 'index';
         let dir = false;
 
@@ -116,7 +116,7 @@
         return null;
       }
 
-      function loadNodeModules(dirComponents, parts) {
+      function loadNodeModules (dirComponents, parts) {
         let count = dirComponents.length;
 
         while (count-- > 0) {
@@ -150,7 +150,7 @@
         return null;
       }
 
-      function resolve(module, pathOpt = '') {
+      function resolve (module, pathOpt = '') {
         let path = String(pathOpt);
 
         let resolveFrom = module.dirComponents;
@@ -167,7 +167,7 @@
         if (firstPathComponent === '.' ||
           firstPathComponent === '..' ||
           firstPathComponent === '') {
-          const combinedPathComponents = (firstPathComponent === '')
+          const combinedPathComponents = firstPathComponent === ''
             ? pathComponents
             : resolveFrom.concat(pathComponents);
 
@@ -187,14 +187,14 @@
       }
 
       class Module {
-        constructor(pathComponents) {
+        constructor (pathComponents) {
           this.dirComponents = pathComponents.slice(0, -1);
           this.pathComponents = pathComponents;
           this.filename = pathComponents.join('/');
           this.dirname = this.dirComponents.length > 1 ? this.dirComponents.join('/') : '/';
           this.exports = {};
         }
-        require(path, nocache = false) {
+        require (path, nocache = false) {
           let module = this;
           const resolvedPath = resolve(module, path);
 
@@ -236,9 +236,10 @@
           }
 
           global.module = currentModule;
+
           return module.exports;
         }
-        resolve(module = this, pathOpt) {
+        resolve (module = this, pathOpt) {
           return resolve(module, pathOpt);
         }
       }
@@ -247,6 +248,7 @@
         const rootModule = new Module(['', '']);
 
         global.module = rootModule;
+
         return rootModule.require(path);
       };
     }
@@ -259,7 +261,7 @@
     files[file] = true;
   }
 
-  function fileExists(path) {
+  function fileExists (path) {
     return Boolean(files[path]);
   }
 
@@ -267,29 +269,29 @@
     .slice(0, -1)
     .join('/');
   const loader = new Loader(fileExists, __SYSCALL.initrdReadFile, __SYSCALL.eval, {
-    'assert': 'assert',
-    'events': 'events',
-    'buffer': 'buffer',
-    'process': './modules/process.js',
-    'console': './modules/console.js',
-    'constants': 'constants-browserify',
-    'fs': './modules/fs.js',
-    'os': './modules/os.js',
-    'net': './modules/net.js',
-    'dns': './modules/dns.js',
+    'assert':         'assert',
+    'events':         'events',
+    'buffer':         'buffer',
+    'process':        './modules/process.js',
+    'console':        './modules/console.js',
+    'constants':      'constants-browserify',
+    'fs':             './modules/fs.js',
+    'os':             './modules/os.js',
+    'net':            './modules/net.js',
+    'dns':            './modules/dns.js',
     // http: 'http-node',
-    'punycode': 'punycode',
-    'querystring': 'querystring-es3',
+    'punycode':       'punycode',
+    'querystring':    'querystring-es3',
     'string_decoder': 'string_decoder',
-    'path': 'path-browserify',
-    'url': 'url',
-    'stream': './modules/stream.js',
-    'inherits': './modules/inherits.js',
-    'sys': 'util/util.js',
-    'util': 'util/util.js',
-    'http': './modules/http.js',
-    'logger': './modules/logger.js',
-    'errors': './modules/errors.js'
+    'path':           'path-browserify',
+    'url':            'url',
+    'stream':         './modules/stream.js',
+    'inherits':       './modules/inherits.js',
+    'sys':            'util/util.js',
+    'util':           'util/util.js',
+    'http':           './modules/http.js',
+    'logger':         './modules/logger.js',
+    'errors':         './modules/errors.js',
     /* eslint-enable camelcase */
   }, runtimePackagePath);
 
@@ -300,25 +302,25 @@
   const stream = loader.require('stream');
 
   class StdoutStream extends stream.Writable {
-    _write(chunk, encoding, callback) {
+    _write (chunk, encoding, callback) {
       __SYSCALL.write(String(chunk));
       callback();
     }
   }
   class StderrStream extends stream.Writable {
-    _write(chunk, encoding, callback) {
+    _write (chunk, encoding, callback) {
       __SYSCALL.write(String(chunk));
       callback();
     }
   }
   class TermoutStream extends stream.Writable {
-    _write(chunk, encoding, callback) {
+    _write (chunk, encoding, callback) {
       runtime.stdio.defaultStdio.write(String(chunk));
       callback();
     }
   }
   class TermerrStream extends stream.Writable {
-    _write(chunk, encoding, callback) {
+    _write (chunk, encoding, callback) {
       runtime.stdio.defaultStdio.writeError(String(chunk));
       callback();
     }

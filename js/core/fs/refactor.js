@@ -6,7 +6,7 @@
 'use strict';
 
 class Path {
-  constructor(path) {
+  constructor (path) {
     if (path instanceof Path) {
       return path;
     }
@@ -31,29 +31,31 @@ class Path {
   }
 
 
-  toString() {
+  toString () {
     return `/${this.parts.join('/')}`;
   }
 
-  includes(path) {
+  includes (path) {
     path = new Path(path);
     for (let i = 0; i < this.length; i++) {
       if (this.parts[i] !== path.parts[i]) {
         return false;
       }
     }
+
     return true;
   }
 
-  equals(path) {
+  equals (path) {
     path = new Path(path);
     if (this.length !== path.length) {
       return false;
     }
+
     return this.includes(path);
   }
 
-  removePrefix(prefix) {
+  removePrefix (prefix) {
     prefix = new Path(prefix);
     if (!prefix.includes(this)) {
       return null;
@@ -63,17 +65,17 @@ class Path {
     return new Path(`/${parts.join('/')}`);
   }
 
-  normalize() {
-		// TODO: Write me...
+  normalize () {
+    // TODO: Write me...
   }
 
-  static normalize(/* path */) {
-		// TODO: Write me...
+  static normalize (/* path */) {
+    // TODO: Write me...
   }
 }
 
 class Filesystem {
-  constructor() {
+  constructor () {
     this.mountpoints = [];
 
     this.mount = this.mount.bind(this);
@@ -83,18 +85,18 @@ class Filesystem {
     this.findMountpoint = this.findMountpoint.bind(this);
   }
 
-  mount(path, fs) {
+  mount (path, fs) {
     path = new Path(path);
     if (typeof fs.init === 'function') {
       fs.init();
     }
     this.mountpoints.push({
       path,
-      fs
+      fs,
     });
   }
 
-  unmount(path) {
+  unmount (path) {
     const mountpoint = this.findMountpoint(path);
 
     for (let i = 0; i < this.mountpoints.length; i++) {
@@ -103,32 +105,36 @@ class Filesystem {
           mountpoint.fs.close();
         }
         this.mountpoints.splice(i, 1);
+
         return true;
       }
     }
+
     return false;
   }
 
-  read(path) {
+  read (path) {
     const file = this.find(path);
 
     if (file === null || file.getType() !== 'file') {
       return null;
     }
+
     return file.readAllBytes();
   }
 
-  find(path) {
+  find (path) {
     path = new Path(path);
     const mountpoint = this.findMountpoint(path);
 
     if (mountpoint === null) {
       return null;
     }
+
     return mountpoint.fs.find(path.removePrefix(mountpoint.path).toString());
   }
 
-  findMountpoint(path) {
+  findMountpoint (path) {
     path = new Path(path);
     let bestMatch = null;
 
@@ -139,11 +145,12 @@ class Filesystem {
         }
       }
     }
+
     return bestMatch;
   }
 }
 
 module.exports = {
   Filesystem,
-  Path
+  Path,
 };

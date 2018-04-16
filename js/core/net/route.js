@@ -21,10 +21,10 @@ const bitTwiddle = require('bit-twiddle');
 const table = [];
 
 class Entry {
-  constructor(ip, mask, gateway, intf) {
+  constructor (ip, mask, gateway, intf) {
     assert(ip instanceof IP4Address);
     assert(mask instanceof IP4Address);
-    assert(gateway === null || (gateway instanceof IP4Address));
+    assert(gateway === null || gateway instanceof IP4Address);
 
     this.ip = ip;
     this.mask = mask;

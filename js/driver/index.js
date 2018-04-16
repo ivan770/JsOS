@@ -1,9 +1,9 @@
 'use strict';
 
-const {log} = console; // FIXME: $$.logger;
+const { log } = console; // FIXME: $$.logger;
 
 class Driver {
-  constructor(name, vendor = 'vendor', author = 'author') {
+  constructor (name, vendor = 'vendor', author = 'author') {
     this.NAME = name;
     this.VENDOR = vendor;
     this.AUTHOR = author;
@@ -15,7 +15,7 @@ class Driver {
   /**
    * @param  {string} name - Name like ibmpc/pcspeaker
    */
-  static load(name) {
+  static load (name) {
     try {
       return require(`./${name}`);
     } catch (e) {

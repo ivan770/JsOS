@@ -16,9 +16,9 @@
 
 const u8view = require('u8-view');
 
-exports.getSrcPort = (u8, headerOffset) => ((u8[headerOffset] << 8) + u8[headerOffset + 1]) >>> 0;
-exports.getDestPort = (u8, headerOffset) => ((u8[headerOffset + 2] << 8) + u8[headerOffset + 3]) >>> 0;
-exports.getDataLength = (u8, headerOffset) => ((u8[headerOffset + 4] << 8) + u8[headerOffset + 5]) >>> 0;
+exports.getSrcPort = (u8, headerOffset) => (u8[headerOffset] << 8) + u8[headerOffset + 1] >>> 0;
+exports.getDestPort = (u8, headerOffset) => (u8[headerOffset + 2] << 8) + u8[headerOffset + 3] >>> 0;
+exports.getDataLength = (u8, headerOffset) => (u8[headerOffset + 4] << 8) + u8[headerOffset + 5] >>> 0;
 
 exports.headerLength = 8;
 

@@ -38,13 +38,13 @@ runtime.dns.resolve('pool.ntp.org', {}, (err, res) => {
     let fractpart = 0;
 
     for (i = 0; i <= 3; i++) {
-      intpart = (256 * intpart) + u8[offset + i];
+      intpart = 256 * intpart + u8[offset + i];
     }
     for (i = 4; i <= 7; i++) {
-      fractpart = (256 * fractpart) + u8[offset + i];
+      fractpart = 256 * fractpart + u8[offset + i];
     }
 
-    const milli = ((intpart * 1000) + ((fractpart * 1000) / 0x100000000));
+    const milli = intpart * 1000 + fractpart * 1000 / 0x100000000;
 
     const date = new Date('Jan 01 1900 GMT');
 

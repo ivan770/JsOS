@@ -7,7 +7,7 @@
 /* eslint-disable no-use-before-define */
 
 const JsMB = require('../graphics/jsmb-pseudo');
-const {EventEmitter} = require('events');
+const { EventEmitter } = require('events');
 
 const scw = JsMB.screenWidth();
 const sch = JsMB.screenHeight();
@@ -37,7 +37,7 @@ class Window extends EventEmitter {
     this.render();
   }
 
-  render() {
+  render () {
     const offset = Math.floor(this.title.length / 2);
 
     JsMB.fillScreen(this.bgcolor)
@@ -45,10 +45,10 @@ class Window extends EventEmitter {
       .drawRect(this.offsetx, this.offsety, this.width, this.height)
       .setColor(this.bgcolor)
       .setBackColor(this.linecolor)
-      .drawString(this.title, (this.width / 2) - offset, 0);
+      .drawString(this.title, this.width / 2 - offset, 0);
   }
 
-  addButton(button) {
+  addButton (button) {
     if (!(button instanceof Button)) throw new TypeError();
 
     this.buttons.push(button);
@@ -65,21 +65,21 @@ class Window extends EventEmitter {
 
   // Navigation
 
-  nextButton() {
+  nextButton () {
     if (this.btnselectposition < this.buttons.length - 1) this.btnselectposition++;
     this.selectButton();
   }
 
-  prevButton() {
+  prevButton () {
     if (this.btnselectposition > 0) this.btnselectposition--;
     this.selectButton();
   }
 
-  pressButton() {
+  pressButton () {
     this.buttons[this.btnselectposition].click();
   }
 
-  selectButton(number = this.btnselectposition) {
+  selectButton (number = this.btnselectposition) {
     this.unselectAll();
     if (this.buttons[number]) {
       this.btnselectposition = number;
@@ -87,7 +87,7 @@ class Window extends EventEmitter {
     }
   }
 
-  unselectAll() {
+  unselectAll () {
     for (const i of this.buttons) {
       i.hover(false);
     }
@@ -117,7 +117,7 @@ class Button extends EventEmitter {
     this.tempoffset = [0, 0];
   }
 
-  render(offsetx, offsety) {
+  render (offsetx, offsety) {
     if (typeof offsetx !== 'number') [offsetx, offsety] = this.offset;
     this.offset = [offsetx, offsety];
 
@@ -134,7 +134,7 @@ class Button extends EventEmitter {
       .drawString(this.title.slice(0, width - 2), offsetx + textoffset, offsety);
   }
 
-  hover(mode) {
+  hover (mode) {
     if (mode) {
       this.tmpcolor = this.color;
       this.color = this.hovercolor;
@@ -145,7 +145,7 @@ class Button extends EventEmitter {
     this.emit('hover', mode);
   }
 
-  click(mode) {
+  click (mode) {
     this.emit('click', mode);
   }
 }

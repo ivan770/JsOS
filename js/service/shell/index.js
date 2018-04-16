@@ -33,11 +33,11 @@ exports.setCommand = (name, cb) => {
 
 exports.getCommands = () => commands.keys();
 
-exports.getDescription = cmd => commands.has(cmd)
+exports.getDescription = (cmd) => commands.has(cmd)
   ? commands.get(cmd).description
   : 'Command doesn\'t exist';
 
-exports.getUsage = cmd => commands.has(cmd)
+exports.getUsage = (cmd) => commands.has(cmd)
   ? commands.get(cmd).usage
   : 'Command doesn\'t exist';
 
@@ -60,7 +60,7 @@ exports.runCommand = (name, args, done) => {
     commands.get(name).run(stringargs, {
       'stdio': opts.stdio,
       keyboard,
-      mouse
+      mouse,
     }, done);
   } catch (e) {
     new (require('errors').TerminalError)(`Command ${name} crashed!`);
@@ -68,7 +68,7 @@ exports.runCommand = (name, args, done) => {
   }
 };
 
-function prompt() {
+function prompt () {
   stdio.setColor('yellow');
   stdio.write('$');
   stdio.setColor('white');

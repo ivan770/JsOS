@@ -17,10 +17,10 @@
 
 const PERSISTENCE = {
   'Editor': {
-    'history': [],
-    'historyPosition': 0
+    'history':         [],
+    'historyPosition': 0,
   },
-  'Apps': {'_commands': {}}
+  'Apps': { '_commands': {}},
 };
 
 global.PERSISTENCE = module.exports = PERSISTENCE;

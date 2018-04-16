@@ -27,6 +27,7 @@ exports.find = (options, id, minLength = 0) => {
       return opt.bytes;
     }
   }
+
   return null;
 };
 
@@ -38,5 +39,6 @@ exports.findAll = (options, id, minLength = 0) => {
       result.push(opt.bytes);
     }
   }
+
   return result;
 };

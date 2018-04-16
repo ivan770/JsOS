@@ -15,28 +15,28 @@
 'use strict';
 
 const EventEmitter = require('events');
-const {Warning} = require('./errors');
+const { Warning } = require('./errors');
 
 class Process extends EventEmitter {
-  constructor() {
+  constructor () {
     super();
     Object.assign(this, {
-      abort() {
+      abort () {
         throw new Error('abort()');
       },
-      'arch': 'x64', // since runtime.js only runs in qemu-system-x86_64, it's an x64 system.
-      'argv': [],
+      'arch':    'x64', // since runtime.js only runs in qemu-system-x86_64, it's an x64 system.
+      'argv':    [],
       'browser': true,
-      binding(name) {
+      binding (name) {
         throw new Error(`no such module: ${name}`);
       },
-      chdir() {
+      chdir () {
         throw new Error('chdir is not supported');
       },
-      'config': {},
-      'connected': false,
-      'cwd': () => '/',
-      disconnect() {},
+      'config':      {},
+      'connected':   false,
+      'cwd':         () => '/',
+      disconnect () {},
       'emitWarning': (msgOpt, name = 'Warning') => {
         let msg = msgOpt;
 
@@ -49,18 +49,18 @@ class Process extends EventEmitter {
         console.error(`(jsos) ${msg.name}${msg.message ? `: ${msg.message}` : ''}`); //eslint-disable-line
         // Because this module loads before logger and this message is important
       },
-      'env': {},
+      'env':      {},
       'execArgv': [],
       'execPath': '',
-      exit() {
+      exit () {
         throw new Error('exit()');
       },
       'exitCode': 0,
-      hrtime(prev) {
+      hrtime (prev) {
         const now = performance.now();
         const time = now / 1000;
         let seconds = Math.round(time);
-        let nanoseconds = Math.floor((time % 1) * 1e9);
+        let nanoseconds = Math.floor(time % 1 * 1e9);
 
         if (prev) {
           seconds -= prev[0];
@@ -73,26 +73,26 @@ class Process extends EventEmitter {
 
         return [seconds, nanoseconds];
       },
-      kill() {},
-      'mainModule': void 0,
+      kill () {},
+      'mainModule':  void 0,
       'memoryUsage': () => ({
-        'rss': 0,
+        'rss':       0,
         'heapTotal': 0,
-        'heapUsed': 0
+        'heapUsed':  0,
       }),
       'nextTick': (fn, ...args) => setImmediate(() => fn(...args)),
-      'pid': 1,
+      'pid':      1,
       'platform': 'jsos',
-      'release': {'name': 'jsos'},
-      'send': void 0,
-      'stderr': null,
-      'stdin': null,
-      'stdout': null,
-      'title': '',
-      'umask': () => 0,
-      'uptime': () => Math.round(performance.now() / 1000),
-      'version': require('../../package.json').version,
-      'versions': {}
+      'release':  { 'name': 'jsos' },
+      'send':     void 0,
+      'stderr':   null,
+      'stdin':    null,
+      'stdout':   null,
+      'title':    '',
+      'umask':    () => 0,
+      'uptime':   () => Math.round(performance.now() / 1000),
+      'version':  require('../../package.json').version,
+      'versions': {},
     });
   }
 }
