@@ -255,6 +255,12 @@ exports.request = (opt, cb) => {
   const onresolved = () => {
     req._handle = new eshttp.HttpClient(ip, port);
     req._emitInterals();
+    req._handle.request(
+      new eshttp.HttpRequest(req._method, req._path, req._headers), (err, response) => {
+        if (req._aborted) return;
+        if (err) return req.emit('error', err);
+        req.emit('response', new IncomingMessage(false, response));
+    });
   };
 
   if (net.isIP(ip)) {
@@ -269,4 +275,10 @@ exports.request = (opt, cb) => {
   if (cb) req.on('response', cb);
 
   return req;
+};
+
+exports.get = (opt, cb) => {
+  if (typeof opt === 'string') opt = url.parse(opt);
+  opt.method = "GET";
+  return exports.request(opt, cb);
 };
