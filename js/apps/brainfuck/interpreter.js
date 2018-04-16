@@ -5,7 +5,7 @@
 'use strict';
 
 class Brainfuck {
-  constructor() {
+  constructor () {
     this._input = [];
     this._output = [];
     this._data = [];
@@ -16,7 +16,7 @@ class Brainfuck {
     // this.ops =
   }
 
-  get ops() {
+  get ops () {
     const self = this;
 
     return {
@@ -59,16 +59,17 @@ class Brainfuck {
           self._data[self._ptr] = c.charCodeAt(0);
         }
         self.debug(',', c, self._data[self._ptr]);
-      }
+      },
     };
   }
 
-  parse(str) {
+  parse (str) {
     this._programChars = str.split('');
+
     return this.parseProgram();
   }
 
-  parseProgram() {
+  parseProgram () {
     const nodes = [];
     let nextChar;
 
@@ -86,7 +87,7 @@ class Brainfuck {
     return this.program(nodes);
   }
 
-  program(nodes) {
+  program (nodes) {
     const self = this;
 
     return function (inputString) {
@@ -105,7 +106,7 @@ class Brainfuck {
   }
 
 
-  loop(nodes) {
+  loop (nodes) {
     const self = this;
 
     return function () {
@@ -123,7 +124,7 @@ class Brainfuck {
     };
   }
 
-  parseLoop() {
+  parseLoop () {
     const nodes = [];
     let nextChar;
 

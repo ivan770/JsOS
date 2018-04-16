@@ -62,18 +62,19 @@ const keymapCaps = [
 /* eslint-enable no-multi-spaces, max-len */
 
 const statuses = {
-  'leftshift': false,
+  'leftshift':  false,
   'rightshift': false,
-  'leftctrl': false,
-  'rightctrl': false,
-  'leftalt': false,
-  'rightalt': false,
-  'capslock': false,
-  'numlock': false,
-  'scrllock': false
+  'leftctrl':   false,
+  'rightctrl':  false,
+  'leftalt':    false,
+  'rightalt':   false,
+  'capslock':   false,
+  'numlock':    false,
+  'scrllock':   false,
+  'cmd':        false, // TODO: add win/cmd/jsos key
 };
 
-function keyEvent(codeOpt, isPressed) {
+function keyEvent (codeOpt, isPressed) {
   let code = codeOpt;
   let cmd = controlKeys[code & 0xFF];
   let character = '';
@@ -88,12 +89,10 @@ function keyEvent(codeOpt, isPressed) {
     cmd = 'character';
     if (statuses.leftshift || statuses.rightshift) {
       character = keymapShift[code];
+    } else if (statuses.capslock) {
+      character = keymapCaps[code];
     } else {
-      if (statuses.capslock) {
-        character = keymapCaps[code];
-      } else {
-        character = keymapNormal[code];
-      }
+      character = keymapNormal[code];
     }
   } else {
     switch (cmd) {
@@ -135,12 +134,14 @@ function keyEvent(codeOpt, isPressed) {
     }
   }
 
+  if (cmd === 'character' && !character) character = '';
+
   const keyinfo = {
-    'type': cmd,
     character,
-    'alt': statuses.leftalt || statuses.rightalt,
+    'type':  cmd,
+    'alt':   statuses.leftalt || statuses.rightalt,
     'shift': statuses.leftshift || statuses.rightshift,
-    'ctrl': statuses.leftctrl || statuses.rightctrl
+    'ctrl':  statuses.leftctrl || statuses.rightctrl,
   };
 
   if (isPressed) {
@@ -151,12 +152,12 @@ function keyEvent(codeOpt, isPressed) {
 }
 
 const driver = {
-  init(device) {
+  init (device) {
     const irq = device.irq;
     const port = device.ioPort;
     const sport = device.statusPort;
 
-    function init() {
+    function init () {
       while (true) {
         port.read8();
         const status = sport.read8();
@@ -174,20 +175,16 @@ const driver = {
 
       if (code === 0xe0) {
         escaped = true;
-      } else {
-        if (code & 0x80) {
-          if (escaped) {
-            keyEvent(code, false);
-          } else {
-            keyEvent(code & 0x7f, false);
-          }
+      } else if (code & 0x80) {
+        if (escaped) {
+          keyEvent(code, false);
         } else {
-          if (escaped) {
-            keyEvent(code | 0x80, true);
-          } else {
-            keyEvent(code, true);
-          }
+          keyEvent(code & 0x7f, false);
         }
+      } else if (escaped) {
+        keyEvent(code | 0x80, true);
+      } else {
+        keyEvent(code, true);
       }
 
       escaped = false;
@@ -195,7 +192,7 @@ const driver = {
 
     init();
   },
-  reset() {}
+  reset () {},
 };
 
 runtime.ps2.setKeyboardDriver(driver);

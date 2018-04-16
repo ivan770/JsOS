@@ -8,13 +8,13 @@ let hex2rgbString = require('rgb'),
 
 let mauve;
 
-function getPrefix(scheme) {
-	// Handle the CSS here TODO: bold
+function getPrefix (scheme) {
+  // Handle the CSS here TODO: bold
   return `<span style="${
-		scheme.fg ? `color:${scheme.fg};` : ''
-		}${scheme.bg ? `background-color:${scheme.bg};` : ''
-		}${scheme.misc ? 'font-weight:700;' : ''
-		}">`;
+    scheme.fg ? `color:${scheme.fg};` : ''
+  }${scheme.bg ? `background-color:${scheme.bg};` : ''
+  }${scheme.misc ? 'font-weight:700;' : ''
+  }">`;
 }
 
 mauve = function (raw) {
@@ -28,6 +28,7 @@ mauve = function (raw) {
       };
     }
   }
+
   return freshString;
 };
 
@@ -35,11 +36,12 @@ mauve.hash = {};
 
 mauve.set = function (name, color) {
 // Pass k, v of item name and ideal color
-	// Allow setting via a hash, i.e. "set theme"
+  // Allow setting via a hash, i.e. "set theme"
   if (typeof name === 'object') {
     for (const i in name) {
       this.set(i, name[i]);
     }
+
     return;
   }
 
@@ -64,16 +66,16 @@ mauve.set = function (name, color) {
       case 'bold':
         misc = '\u001B\u0001';
         this.hash[name] = {
-'misc': 'bold',
-name
-};
+          'misc': 'bold',
+          name,
+        };
         break;
     }
   }
 
-	// In node, ammend this TODO: kill this in favor of above strategy.
+  // In node, ammend this TODO: kill this in favor of above strategy.
   if (typeof window === 'undefined') { // || document.getElementById('terminals') ) { //node or substack unix
-		// When called, overwrite the substring method to ignore the added characters
+    // When called, overwrite the substring method to ignore the added characters
     String.prototype.substring = function (start, end) {
       if (start === end) return '';
       if (!end) end = this.length;
@@ -102,7 +104,7 @@ name
         }
       }
 
-			// If there is current formatting, apply it.
+      // If there is current formatting, apply it.
       if (currentCommand !== '\u001B[0m') {
         text += currentCommand;
       }
@@ -115,14 +117,13 @@ name
             inEscape = false;
           }
           continue;
-        } else {
-          if (curChar === '\u001B') {
-            inEscape = true;
-            continue;
-          }
+        } else if (curChar === '\u001B') {
+          inEscape = true;
+          continue;
         }
         index++;
       }
+
       return text;
     };
 
@@ -137,12 +138,13 @@ name
       if (bg) result += `\u001B${String.fromCharCode(bg)}`;
       if (misc) result += misc;
       result += `${raw}\u001B\u000F`;
+
       return result;
     });
   }
 };
 
-function hex2Address(hex) {
+function hex2Address (hex) {
   const rgb = hex2rgbString(hex);
   const nums = rgbRegExp.exec(rgb);
 

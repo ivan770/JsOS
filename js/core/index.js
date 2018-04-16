@@ -15,7 +15,7 @@
 
 'use strict';
 
-const {allocator} = require('./resources');
+const { allocator } = require('./resources');
 
 require('./polyfill');
 
@@ -44,7 +44,7 @@ try {
 // const fs = require('./fs');
 
 class Runtime {
-  constructor() {
+  constructor () {
     Object.assign(this, {
       random,
       block,
@@ -59,10 +59,10 @@ class Runtime {
       logger,
       // globalStorage: new Storage,
       'machine': {
-        'reboot': __SYSCALL.reboot,
+        'reboot':   __SYSCALL.reboot,
         'shutdown': () => __SYSCALL.acpiEnterSleepState(5),
-        'suspend': () => __SYSCALL.acpiEnterSleepState(3)
-      }
+        'suspend':  () => __SYSCALL.acpiEnterSleepState(3),
+      },
     });
   }
 }

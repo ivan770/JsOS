@@ -8,11 +8,11 @@ It tries to be compatible with npm module ecosystem and supports some of the Nod
 
 _WARNING: project is in development and not ready for production use._
 
-[Documentation in progress](https://github.com/PROPHESSOR/JsOS/wiki)
+[Documentation in progress](https://github.com/JsOS-Team/JsOS/wiki)
 
 ### Ready ISO image
 
-[Download](https://github.com/PROPHESSOR/JsOS/releases)
+[Download](https://github.com/JsOS-Team/JsOS/releases)
 
 ### System requirements
 
@@ -23,13 +23,13 @@ RAM: >128MB
 
 First thing is the command line tool `jsos-cli`, it will add `jsos` command to the shell. Type `jsos --help` to get full usage help.
 
-```
+```sh
 sudo npm i -g jsos-cli
 ```
 
 Make sure QEMU installed, it enables running applications locally.
 
-```
+```sh
 brew install qemu           # OSX
 sudo apt-get install qemu   # Ubuntu
 ```
@@ -38,20 +38,19 @@ sudo apt-get install qemu   # Ubuntu
 
 Clone this repository and install dependencies:
 
-```
-git clone https://github.com/PROPHESSOR/JsOS.git
+```sh
+git clone https://github.com/JsOS-Team/JsOS.git
 cd JsOS
 npm i
 ```
 
 Run project locally in QEMU (in the root of the git folder):
 
-```
+```sh
 jsos start
 ```
 
 That's it, operating system should start.
-
 
 ## How does it work?
 
@@ -62,9 +61,10 @@ The kernel is written in C++ and manages low-level resources like CPU and memory
 License
 
 ## I wanna help!
-[We will be grateful if you help us](https://github.com/PROPHESSOR/JsOS/issues/30)
 
-[Description of folders](https://github.com/PROPHESSOR/JsOS/blob/master/map.md)
+[We will be grateful if you help us](https://github.com/JsOS-Team/JsOS/issues/30)
+
+[Description of folders](https://github.com/JsOS-Team/JsOS/blob/master/map.md)
 
 ----
 Apache License, Version 2.0

@@ -16,7 +16,7 @@
 'use strict';
 
 const terminal = require('./terminal');
-const {DARKGRAY, BLACK, YELLOW, GREEN, LIGHTGRAY} = terminal.color;
+const { DARKGRAY, BLACK, YELLOW, GREEN, LIGHTGRAY } = terminal.color;
 
 terminal.print(`
 

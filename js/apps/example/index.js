@@ -5,10 +5,11 @@
 
 let io;
 
-function main(api, res) {
+function main (api, res) {
   io = api.stdio;
   io.setColor('green');
   io.writeLine('It works!!!');
+
   return res(0); // 1 = error
 }
 

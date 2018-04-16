@@ -15,19 +15,19 @@
 'use strict';
 
 class App {
-  constructor() {
+  constructor () {
     'do nothing';
 
     $$.shell.setCommand('start', {
       'description': 'Run the app',
-      'usage': 'start <command> <arguments>',
-      'run': this.run
+      'usage':       'start <command> <arguments>',
+      'run':         this.run,
     });
     this.isAppExist = this.isAppExist.bind(this);
     debug(`PERSISTENCE: ${PERSISTENCE}`);
   }
 
-  install(name) {
+  install (name) {
     debug(`Installing app ${name}...`);
 
     let app;
@@ -36,13 +36,14 @@ class App {
       app = require(`../../apps/${name}`);
     } catch (e) {
       debug(e);
+
       return Boolean($$.stdio.defaultStdio.writeError(`Unable to install app ${name}`));
     }
 
     // Install app
     PERSISTENCE.Apps[name] = {
-      'run': app.call,
-      'commands': app.commands
+      'run':      app.call,
+      'commands': app.commands,
     };
 
     // Create links
@@ -61,19 +62,21 @@ class App {
     // return console.warn('Not implemented!');
   }
 
-  run(__args, f, res) {
+  run (__args, f, res) {
     // FIXME: Похоже на костыль
     const _args = __args.split(/\s+/);
     const app = _args.shift();
 
-    function isAppExist(x) { // FIXME: Точно костыль, но спать хочется
+    function isAppExist (x) { // FIXME: Точно костыль, но спать хочется
       return Boolean(PERSISTENCE.Apps[x]); // || PERSISTENCE.Apps._commands[app]);
     }
     if (!isAppExist(app) || app === 0) {
       f.stdio.writeError(`App ${app} doesn't exist!`);
+
       return res('App doesn\'t exist!');
     }
     const args = _args.join(' ');
+
     /* const callback =  */
 
     try {
@@ -81,21 +84,22 @@ class App {
     } catch (e) {
       f.stdio.writeError(`App ${app} crashed!`);
       debug(e);
+
       return res(1);
     }
     // return res(callback);
     // return console.warn('Not implemented!');
   }
 
-  isAppExist(app) {
+  isAppExist (app) {
     return Boolean(PERSISTENCE.Apps[app]); // || PERSISTENCE.Apps._commands[app]);
   }
 
-  runByCmd(cmd) {
+  runByCmd (cmd) {
     return this.run(this.cmd2app(cmd));
   }
 
-  cmd2app(cmd) {
+  cmd2app (cmd) {
     return PERSISTENCE.Apps._commands[cmd] || 0;
   }
 }

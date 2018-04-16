@@ -69,17 +69,17 @@ const suffix = [
   () => undefined,
   () => undefined,
   () => `${
-            Number((__SYSCALL.memoryInfo().pmUsed / 1024 / 1024).toFixed(2))
-          }M / ${
-            Number((__SYSCALL.memoryInfo().pmTotal / 1024 / 1024).toFixed(2))
-          }M`,
+    Number((__SYSCALL.memoryInfo().pmUsed / 1024 / 1024).toFixed(2))
+  }M / ${
+    Number((__SYSCALL.memoryInfo().pmTotal / 1024 / 1024).toFixed(2))
+  }M`,
   0,
   0,
   0,
   0
 ];
 
-function main(cmd, args, api, res) {
+function main (cmd, args, api, res) {
   io = api.stdio;
   for (const i in prefix) { // eslint-disable-line
     io.setColor('cyan');

@@ -9,6 +9,8 @@
 
 /* eslint-disable no-console */
 /* eslint-disable valid-jsdoc */
+/* eslint-disable no-unused-vars */
+// ^ Many functions haven't implementation
 
 'use strict';
 
@@ -17,17 +19,17 @@ try {
   const printer = require('../tty/printer');
 
   const $Config = {
-    'type': 'api',
+    'type':        'api',
     'canvas_size': ['*', '*', false], // [x,y,вместить]
-    'Debug_Mode': true,
-    'name': 'JsMB',
-    'fullscreen': false
+    'Debug_Mode':  true,
+    'name':        'JsMB',
+    'fullscreen':  false,
   };
 
   const $TMP = {
-    'color': 0xF,
-    'bgcolor': 0x0,
-    'linewidth': 1
+    'color':     0xF,
+    'bgcolor':   0x0,
+    'linewidth': 1,
   };
 
   /** Implemented
@@ -48,39 +50,40 @@ try {
    * @namespace JsMB
    */
   const JsMB = {
+
     /** Символ для псевдо-графического режима
      */
     '_plot': 219, // 249
 
     '$Mouse': {
-      'x': 0,
-      'y': 0,
+      'x':      0,
+      'y':      0,
       'lcount': 0,
-      'rcount': 0
+      'rcount': 0,
     },
-    '$Gel': {'$Sprite': {}},
+    '$Gel':  { '$Sprite': {}},
     '$Font': {
       'family': 'arial',
-      'size': '10'
+      'size':   '10',
     },
     '$JsMobileBasic': {
-      'name': 'JsMobileBasic for JsOS',
-      'version': 'Alpha 11',
-      'author': 'PROPHESSOR',
-      'url': 'http://vk.com/JsMobileBasic',
-      'Mobile': false,
-      'Debug': true,
-      'canvas': null,
+      'name':     'JsMobileBasic for JsOS',
+      'version':  'Alpha 11',
+      'author':   'PROPHESSOR',
+      'url':      'http://vk.com/JsMobileBasic',
+      'Mobile':   false,
+      'Debug':    true,
+      'canvas':   null,
       'graphics': false,
       'supports': {
-        'document': false,
-        'window': false,
-        'browser': false,
-        'ls': false,
-        'module': true,
-        'jsos_graphics': false,
-        'jsos_pseudographics': true
-      }
+        'document':            false,
+        'window':              false,
+        'browser':             false,
+        'ls':                  false,
+        'module':              true,
+        'jsos_graphics':       false,
+        'jsos_pseudographics': true,
+      },
     },
 
     /** Число PI до 15 знака (3.1415....)
@@ -99,17 +102,17 @@ try {
      */
     'DEG2RAD': Math.PI / 180,
 
-    __preinit() {
+    __preinit () {
       for (const i in this) {
         if (typeof this[i] === 'function') this[i] = this[i].bind(this);
       }
     },
 
-    __init() {
+    __init () {
       this.debug('#===== Debug mode enabled =====#', 'color:gray;');
       this.debug(this.$JsMobileBasic.name, 'background:gray;color:yellow;');
-      this.debug('v. ' + this.$JsMobileBasic.version, 'background:gray;color:yellow;');
-      this.debug('by ' + this.$JsMobileBasic.author, 'background:gray;color:yellow;');
+      this.debug(`v. ${this.$JsMobileBasic.version}`, 'background:gray;color:yellow;');
+      this.debug(`by ${this.$JsMobileBasic.author}`, 'background:gray;color:yellow;');
       this.debug(this.$JsMobileBasic.url, 'background:gray;color:yellow;');
 
       this.debug('// ======Initializing workspace======//', 'color:gray;');
@@ -122,13 +125,15 @@ try {
      * @param  {string} color - Свет в CSS формате
      * @returns {this}
      */
-    setColor(color) {
+    setColor (color) {
       $TMP.color = color;
+
       return this;
     },
 
-    setBackColor(color) {
+    setBackColor (color) {
       $TMP.bgcolor = color;
+
       return this;
     },
 
@@ -136,8 +141,9 @@ try {
      * @param  {number} width - Толщина
      * @returns {this}
      */
-    setLineWidth(width) {
+    setLineWidth (width) {
       $TMP.linewidth = width;
+
       return this;
     },
 
@@ -148,12 +154,13 @@ try {
      * @param  {number} h - Высота
      * @returns {this}
      */
-    fillRect(x, y, w = this.screenWidth(), h = this.screenHeight()) {
+    fillRect (x, y, w = this.screenWidth(), h = this.screenHeight()) {
       for (let i = x; i <= x + w; i++) {
         for (let j = y; j <= y + h; j++) {
           this.drawPlot(i, j);
         }
       }
+
       return this;
     },
 
@@ -161,15 +168,16 @@ try {
      * @param  {bool} mode - true - включить, false - отключить
      * @returns {this}
      */
-    fullScreen(mode) {
+    fullScreen (mode) {
       return this;
     },
 
     /** Очищает экран
      * @returns {this}
      */
-    cls() {
+    cls () {
       printer.clear();
+
       return this;
     },
 
@@ -177,8 +185,9 @@ try {
      * @param  {string} color - Цвет в CSS формате
      * @returns {this}
      */
-    fillScreen(color = $TMP.color) {
+    fillScreen (color = $TMP.color) {
       printer.fill(color);
+
       return this;
     },
 
@@ -189,7 +198,7 @@ try {
      * @param  {number} h - Высота
      * @returns {this}
      */
-    drawRect(x, y, w, h) {
+    drawRect (x, y, w, h) {
       // =
       for (let i = x; i <= x + w; i++) {
         this.drawPlot(i, y);
@@ -201,6 +210,7 @@ try {
         this.drawPlot(x, i);
         this.drawPlot(x + w, i);
       }
+
       return this;
     },
 
@@ -210,7 +220,7 @@ try {
      * @param  {bool}   [symbol] - Символ точки для JsOS псевдографики
      * @returns {this}
      */
-    drawPlot(x, y, symbol = this._plot) {
+    drawPlot (x, y, symbol = this._plot) {
       const plot = typeof symbol === 'number' ? String.fromCharCode(this._plot) : symbol;
 
       x = Math.floor(this.limit(x, 0, this.screenWidth()));
@@ -219,6 +229,7 @@ try {
       printer.moveTo(x, y);
       printer.print(plot, 1, $TMP.color, $TMP.bgcolor);
       printer.moveTo(this.screenWidth(), this.screenHeight());
+
       return this;
     },
 
@@ -229,12 +240,13 @@ try {
      * @param  {number} h - Высота
      * @returns {this}
      */
-    clearRect(x, y, w, h) {
+    clearRect (x, y, w, h) {
       const tmp = $TMP.color;
 
       this.setColor($TMP.bgcolor);
       this.fillRect(x, y, w, h);
       this.setColor(tmp);
+
       return this;
     },
 
@@ -245,15 +257,16 @@ try {
      * @param  {number} y2 - Y 2 точки
      * @returns {this}
      */
-    drawLine(x1, y1, x2, y2) {
+    drawLine (x1, y1, x2, y2) {
       const dx = x2 - x1;
       const dy = y2 - y1;
 
       for (let x = x1; x <= x2; x++) {
-        const y = y1 + (dy * (x - x1) / dx);
+        const y = y1 + dy * (x - x1) / dx;
 
         this.drawPlot(x, y);
       }
+
       return this;
     },
 
@@ -265,8 +278,8 @@ try {
      * @param  {number} q - глубина
      * @returns {this}
      */
-    drawCube(x, y, w, h, q) {
-      const depth = (q / Math.sqrt(2));
+    drawCube (x, y, w, h, q) {
+      const depth = q / Math.sqrt(2);
 
       this.drawRect(x, y, w, h);
       this.drawRect(x + depth, y + depth, w, h);
@@ -274,6 +287,7 @@ try {
       this.drawLine(x + w, y, x + w + depth, y + depth);
       this.drawLine(x, y + h, x + depth, y + h + depth);
       this.drawLine(x + w, y + h, x + w + depth, y + h + depth);
+
       return this;
     },
 
@@ -286,7 +300,7 @@ try {
      * @param  {bool} counterClockwise=false - По часовой стрелке?
      * @returns {this}
      */
-    drawArc(x0, y0, radius
+    drawArc (x0, y0, radius
       /* startAngle = (15 * Math.PI / 7),
       endAngle = (13 * Math.PI / 2),
       counterClockwise = false */) {
@@ -296,7 +310,7 @@ try {
       let y = 0;
       let dx = 1;
       let dy = 1;
-      let err = dx - (radius * 2);
+      let err = dx - radius * 2;
 
       while (x >= y) {
         this.drawPlot(x0 + x, y0 + y);
@@ -317,9 +331,10 @@ try {
         if (err > 0) {
           x--;
           dx += 2;
-          err += dx - (radius * 2);
+          err += dx - radius * 2;
         }
       }
+
       return this;
     },
 
@@ -332,7 +347,7 @@ try {
      * @param  {bool} counterClockwise=false - По часовой стрелке?
      * @returns {this}
      */
-    fillArc(x0, y0, radius
+    fillArc (x0, y0, radius
       /* startAngle = (15 * Math.PI / 7),
       endAngle = (13 * Math.PI / 2),
       counterClockwise = false */) {
@@ -342,7 +357,7 @@ try {
       let y = 0;
       let dx = 1;
       let dy = 1;
-      let err = dx - (radius * 2);
+      let err = dx - radius * 2;
 
       while (x >= y) {
         this.drawLine(x0, y0, x0 + x, y0 + y);
@@ -363,9 +378,10 @@ try {
         if (err > 0) {
           x--;
           dx += 2;
-          err += dx - (radius * 2);
+          err += dx - radius * 2;
         }
       }
+
       return this;
     },
 
@@ -381,8 +397,9 @@ try {
      * @param  {number} y4 - Y 4 точки
      * @returns {this}
      */
-    fillRect4(x1, y1, x2, y2, x3, y3, x4, y4) {
+    fillRect4 (x1, y1, x2, y2, x3, y3, x4, y4) {
       this.drawRect4(x1, y1, x2, y2, x3, y3, x4, y4);
+
       return this;
     },
 
@@ -397,7 +414,7 @@ try {
      * @param  {number} y4 - Y 4 точки
      * @returns {this}
      */
-    drawRect4(x1, y1, x2, y2, x3, y3, x4, y4) {
+    drawRect4 (x1, y1, x2, y2, x3, y3, x4, y4) {
       this.drawLine(x1, y1, x2, y2);
       this.drawLine(x2, y2, x3, y3);
       this.drawLine(x3, y3, x4, y4);
@@ -416,7 +433,7 @@ try {
      * @param  {number} y3 - Y 3 точки
      * @returns {this}
      */
-    fillTriangle(x1, y1, x2, y2, x3, y3) {
+    fillTriangle (x1, y1, x2, y2, x3, y3) {
       this.drawTriangle(x1, y1, x2, y2, x3, y3);
 
       return this;
@@ -426,9 +443,10 @@ try {
      * @param  {array} array - Двумерный массив точек ([[x,y],[x1,y1],...])
      * @returns {this}
      */
-    drawNangle(array) {
+    drawNangle (array) {
       if (!(array && array.length)) {
         console.warn('drawNangle requires 2-dimentional array!'); // eslint-disable-line
+
         return this;
       }
 
@@ -439,6 +457,7 @@ try {
       this.drawLine(array[array.length][0], array[array.length][1], array[0][0], array[0][0]);
       this.ctx.closePath();
       this.ctx.stroke();
+
       return this;
     },
 
@@ -447,8 +466,9 @@ try {
      * @param  {array} array - Двумерный массив точек ([[x,y],[x1,y1],...])
      * @returns {this}
      */
-    fillNangle(array) {
+    fillNangle (array) {
       this.drawNangle(array);
+
       return this;
     },
 
@@ -461,7 +481,7 @@ try {
      * @param  {number} y3 - Y 3 точки
      * @returns {this}
      */
-    drawTriangle(x1, y1, x2, y2, x3, y3) {
+    drawTriangle (x1, y1, x2, y2, x3, y3) {
       this.drawLine(x1, y1, x2, y2);
       this.drawLine(x2, y2, x3, y3);
       this.drawLine(x3, y3, x1, y1);
@@ -475,13 +495,14 @@ try {
      * @param  {number} y - Y
      * @returns {this}
      */
-    drawString(text, x, y) {
+    drawString (text, x, y) {
       x = Math.floor(this.limit(x, 0, this.screenWidth()));
       y = Math.floor(this.limit(y, 0, this.screenHeight()));
 
       printer.moveTo(x, y);
       printer.print(text, 1, $TMP.color, $TMP.bgcolor);
       printer.moveTo(this.screenWidth(), this.screenHeight());
+
       return this;
     },
 
@@ -491,7 +512,7 @@ try {
      * JsOS-PseudoGraphics - Ничего не делает
      * @returns {this}
      */
-    repaint() {
+    repaint () {
       return this;
     },
 
@@ -499,7 +520,7 @@ try {
      * @param  {number} size - Размер
      * @returns {this}
      */
-    setFontSize(size) {
+    setFontSize (size) {
       return this;
     },
 
@@ -507,7 +528,7 @@ try {
      * @param  {string} family - Шрифт
      * @returns {this}
      */
-    setFont(family) {
+    setFont (family) {
       return this;
     },
 
@@ -518,7 +539,7 @@ try {
      * @param  {number} y1 - Y координата правого нижнего угла
      * @returns {this}
      */
-    makeLinearGradient(x, y, x1, y1) {
+    makeLinearGradient (x, y, x1, y1) {
       return null;
     },
 
@@ -531,7 +552,7 @@ try {
      * @param  {number} r1 - Радиус внешнего круга
      * @returns {this}
      */
-    makeRadialGradient(x, y, r, x1, y1, r1) {
+    makeRadialGradient (x, y, r, x1, y1, r1) {
       return null;
     },
 
@@ -541,7 +562,7 @@ try {
      * @param  {string} color - Цвет в CSS формате
      * @returns {this}
      */
-    setGradientColor(g, pos, color) {
+    setGradientColor (g, pos, color) {
       return this;
     },
 
@@ -553,7 +574,7 @@ try {
      * @param  {number} blue=0 - Значение синего цвета (0 - 255)
      * @returns {string} "rgb(red, green, blue)"
      */
-    rgb(red = 0, green = 0, blue = 0) {
+    rgb (red = 0, green = 0, blue = 0) {
       return 0xF; // TODO: Convert to 16 color system
     },
 
@@ -564,7 +585,7 @@ try {
      * @param  {number} alpha=0 - Прозрачность (0 - 1)
      * @returns {string} "rgba(red, green, blue, alpha)"
      */
-    rgba(red = 0, green = 0, blue = 0, alpha = 0) {
+    rgba (red = 0, green = 0, blue = 0, alpha = 0) {
       return 0xF; // TODO: Convert to 16 color system
     },
 
@@ -575,7 +596,7 @@ try {
      * @param  {string} name - Имя геля
      * @returns {this}
      */
-    gelLoad(file, name) {
+    gelLoad (file, name) {
       return this;
     },
 
@@ -585,7 +606,7 @@ try {
      * @param  {string} gel - Имя геля
      * @returns {this}
      */
-    spriteGel(/* sprite, gel */) {
+    spriteGel (/* sprite, gel */) {
       return this;
     },
 
@@ -595,7 +616,7 @@ try {
      * @param  {number} y - Y координата левого верхнего угла
      * @returns {this}
      */
-    drawGel(name, x, y) {
+    drawGel (name, x, y) {
       return this;
     },
 
@@ -606,7 +627,7 @@ try {
      * @param  {number} y - Y координата левого верхнего угла
      * @returns {this}
      */
-    drawSprite(/* name, x, y */) {
+    drawSprite (/* name, x, y */) {
       return this;
     },
 
@@ -616,7 +637,7 @@ try {
      * @param  {number} h - Высота
      * @returns {this}
      */
-    gelSize(name, w, h) {
+    gelSize (name, w, h) {
       return this;
     },
 
@@ -632,7 +653,7 @@ try {
      * @param  {number} h=fh - высота для рисования
      * @returns {this}
      */
-    drawGelFragment(name, fx, fy, fw, fh, x, y, w = fw, h = fh) {
+    drawGelFragment (name, fx, fy, fw, fh, x, y, w = fw, h = fh) {
       return this;
     },
 
@@ -641,7 +662,7 @@ try {
      * @param  {string} repeat='repeat' - Повторение (repeat/no-repeat)
      * @returns {this}
      */
-    makeTexture(gelname, repeat = 'repeat') { // repeat/no-repeat
+    makeTexture (gelname, repeat = 'repeat') { // repeat/no-repeat
       return null;
     },
 
@@ -653,7 +674,7 @@ try {
      * @param  {string} [def] - Текст по умолчанию
      * @returns {this}
      */
-    input(text, def) {
+    input (text, def) {
       const tmp = io.readLine(text);
 
       return Number(tmp) || tmp;
@@ -666,8 +687,9 @@ try {
      * @param {string} text - Текст для вывода
      * @returns {this}
      */
-    print(text) {
+    print (text) {
       io.write(text);
+
       return this;
     },
 
@@ -675,8 +697,9 @@ try {
      * @param {string} text - Текст для вывода
      * @returns {this}
      */
-    println(text) {
+    println (text) {
       io.writeLine(text);
+
       return this;
     },
 
@@ -688,7 +711,7 @@ try {
      * @param  {string} channel=0 - Канал
      * @returns {this}
      */
-    playSound(file, loop = false, channel = 0) {
+    playSound (file, loop = false, channel = 0) {
       return this;
     },
 
@@ -696,7 +719,7 @@ try {
      * @param  {number} channel=-1 - Канал (-1 для остановки на всех каналах)
      * @returns {this}
      */
-    pauseSound(channel = -1) {
+    pauseSound (channel = -1) {
       return this;
     },
 
@@ -706,7 +729,7 @@ try {
      * @param  {number} number - Число
      * @returns {number}
      */
-    'sqrt': number => Math.sqrt(number),
+    'sqrt': (number) => Math.sqrt(number),
 
     /** Возвращает случайное число
      * @param  {number} min - От
@@ -719,43 +742,43 @@ try {
      * @param  {number} angle - Угол в радианах
      * @returns {number}
      */
-    'sin': angle => Math.sin(angle),
+    'sin': (angle) => Math.sin(angle),
 
     /** Возвращает косинус угла
      * @param  {number} angle - Угол в радианах
      * @returns {number}
      */
-    'cos': angle => Math.cos(angle),
+    'cos': (angle) => Math.cos(angle),
 
     /** Возвращает тангенс угла
      * @param  {number} angle - Угол в радианах
      * @returns {number}
      */
-    'tan': angle => Math.tan(angle),
+    'tan': (angle) => Math.tan(angle),
 
     /** Возвращает котангенс угла
      * @param  {number} angle - Угол в радианах
      * @returns {number}
      */
-    'ctg': angle => 1 / Math.tan(angle),
+    'ctg': (angle) => 1 / Math.tan(angle),
 
     /** Возвращает арксинус угла (в радианах)
      * @param  {number} number - Угол в радианах
      * @returns {number}
      */
-    'asin': number => Math.asin(number),
+    'asin': (number) => Math.asin(number),
 
     /** Возвращает арккосинус угла (в радианах)
      * @param  {number} number - Угол в радианах
      * @returns {number}
      */
-    'acos': number => Math.acos(number),
+    'acos': (number) => Math.acos(number),
 
     /** Возвращает арктангенс угла (в радианах)
      * @param  {number} number - Угол в радианах
      * @returns {number}
      */
-    'atan': number => Math.atan(number),
+    'atan': (number) => Math.atan(number),
 
     /** Возвращает остаток от деления 2-х чисел
      * @param  {number} x - Делимое
@@ -768,7 +791,7 @@ try {
      * @param  {number} number - Число
      * @returns {number}
      */
-    'abs': number => Math.abs(number),
+    'abs': (number) => Math.abs(number),
 
     /** Возводит число в степень
      * @param  {number} number - Число
@@ -781,13 +804,13 @@ try {
      * @param  {number} number - Число
      * @returns {number}
      */
-    'ln': number => Math.log(number),
+    'ln': (number) => Math.log(number),
 
     /** Возвращает число e в степени
      * @param  {number} power - Степень
      * @returns {number}
      */
-    'exp': power => Math.exp(power),
+    'exp': (power) => Math.exp(power),
 
     /** Возвращает ограниченное значение переменной
      * @param  {number} variable - Начальное значение
@@ -795,8 +818,8 @@ try {
      * @param  {number} max - Максимум (верхняя граница)
      * @returns {number}
      */
-    limit(variable, min, max) {
-      return variable > max ? max : variable < min ? min : variable;
+    limit (variable, min, max) {
+      return variable > max ? max : variable < min ? min : variable; // eslint-disable-line
     },
 
     /** Возвращает минимальное значение из аргументов
@@ -813,9 +836,10 @@ try {
      * @param  {number} deg - Значение в градусах
      * @returns {number} Радианы
      */
-    rad(deg) {
+    rad (deg) {
       if (deg === 90) return this.PI / 2;
       if (deg === 270) return 3 * this.PI / 2;
+
       return deg * this.DEG2RAD;
     },
 
@@ -823,7 +847,7 @@ try {
      * @param  {number} rad - Значение в радианах
      * @returns {number} Градусы
      */
-    deg(rad) {
+    deg (rad) {
       return rad * this.RAD2DEG;
     },
 
@@ -834,19 +858,19 @@ try {
      * @param  {string} str - Строка/массив
      * @returns {number}
      */
-    'len': str => str.length,
+    'len': (str) => str.length,
 
     /** Переводит число/значение в строку
      * @param  {*} num - Число или другое значение
      * @returns {string}
      */
-    'str': num => String(num),
+    'str': (num) => String(num),
 
     /** Переводит строку в число (или возвращает NaN, если это невозможно)
      * @param  {string} str - Строка с числом
      * @returns {number}
      */
-    'val': str => Number(str),
+    'val': (str) => Number(str),
 
     /** Переводит строку в число (или возвращает NaN, если это невозможно)
      * Лучше использовать val
@@ -854,7 +878,7 @@ try {
      * @param  {number} [system=10] - Система исчисления
      * @returns {number} Int
      */
-    int(str, system = 10) {
+    int (str, system = 10) {
       return parseInt(str, system);
     },
 
@@ -862,19 +886,19 @@ try {
      * @param  {string} str - Строка с числом
      * @returns {number} Float
      */
-    'float': str => parseFloat(str),
+    'float': (str) => parseFloat(str),
 
     /** Приводит все символы строки в ВЕРХНИЙ РЕГИСТР
      * @param  {string} str - Строка
      * @returns {string}
      */
-    'upper': str => str.toUpperCase(),
+    'upper': (str) => str.toUpperCase(),
 
     /** Приводит все символы строки в нижний регистр
      * @param  {string} str - Строка
      * @returns {string}
      */
-    'lower': str => str.toLowerCase(),
+    'lower': (str) => str.toLowerCase(),
 
     /** Возвращает часть строки
      * @param  {string} str - Строка
@@ -918,8 +942,9 @@ try {
      * @param  {bool} [all=false] - Заменять все включения
      * @returns {string}
      */
-    replace(str, reg, to, all = false) {
+    replace (str, reg, to, all = false) {
       if (all) return str.replace(new RegExp(reg, 'g'));
+
       return str.replace(reg, to);
     },
 
@@ -930,7 +955,7 @@ try {
      * @param  {*} _data - Данные
      * @returns {this}
      */
-    localSaveData(name, _data) {
+    localSaveData (name, _data) {
       return this;
     },
 
@@ -938,7 +963,7 @@ try {
      * @param  {string} name - Название ячейки
      * @returns {this}
      */
-    localReadData(name) {
+    localReadData (name) {
       return null;
     },
 
@@ -975,32 +1000,37 @@ try {
      * @param  {string} file - Имя/адрес файла
      * @returns {this}
      */
-    include(file) {
+    include (file) {
       return require(file);
     },
 
-    getModuleName(ID) {
+    getModuleName (ID) {
       console.warn('This function is deprecated!');
+
       return ID.name;
     },
 
-    getModuleAuthor(ID) {
+    getModuleAuthor (ID) {
       console.warn('This function is deprecated!');
+
       return ID.author;
     },
 
-    getModuleDescription(ID) {
+    getModuleDescription (ID) {
       console.warn('This function is deprecated!');
+
       return ID.description;
     },
 
-    getModuleUrl(ID) {
+    getModuleUrl (ID) {
       console.warn('This function is deprecated!');
+
       return ID.url;
     },
 
-    getModuleVersion(ID) {
+    getModuleVersion (ID) {
       console.warn('This function is deprecated!');
+
       return ID.version;
     },
 
@@ -1009,42 +1039,42 @@ try {
     /** Возвращает ширину экрана
      * @returns {number}
      */
-    screenWidth() {
+    screenWidth () {
       return 80;
     },
 
     /** Возвращает высоту экрана
      * @returns {number}
      */
-    screenHeight() {
+    screenHeight () {
       return 25;
     },
 
     /** Возвращает X координату мыши в данный момент
      * @returns {number}
      */
-    getMouseX() {
+    getMouseX () {
       return this.$Mouse.x;
     },
 
     /** Возвращает Y координату мыши в данный момент
      * @returns {number}
      */
-    getMouseY() {
+    getMouseY () {
       return this.$Mouse.y;
     },
 
     /** Возвращает количество кликов с момента запуска программы
      * @returns {number}
      */
-    getLeftClicksCount() {
+    getLeftClicksCount () {
       return this.$Mouse.lcount;
     },
 
     /** Возвращает количество правых кликов с момента запуска программы
      * @returns {number}
      */
-    getRightClicksCount() {
+    getRightClicksCount () {
       return this.$Mouse.rcount;
     },
 
@@ -1055,8 +1085,9 @@ try {
      * @param  {*} text - Данные
      * @returns {this}
      */
-    log(...text) {
+    log (...text) {
       console.log(...text);
+
       return this;
     },
 
@@ -1065,10 +1096,11 @@ try {
      * @param  {string} [style] - Оформление сообщения (CSS)
      * @returns {this}
      */
-    debug(text) {
+    debug (text) {
       if ($Config.Debug_Mode) {
         console.log(text);
       }
+
       return this;
     },
 
@@ -1076,13 +1108,13 @@ try {
     /** Закрыть программу
      * @returns {this}
      */
-    exit() {
+    exit () {
       return this;
     },
 
     // TODO: Внедрить
     '_Color': class {
-      constructor(color) {
+      constructor (color) {
         {
           this.getRgbArray = this.getRgbArray.bind(this);
           this.getArgbArray = this.getArgbArray.bind(this);
@@ -1094,14 +1126,14 @@ try {
           'a': 0,
           'r': 0,
           'g': 0,
-          'b': 0
+          'b': 0,
         };
         if (typeof color === 'number') {
           this._color = {
-            'a': (color >> 24) & 0xFF,
-            'r': (color >> 16) & 0xFF,
-            'g': (color >> 8) & 0xFF,
-            'b': (color >> 0) & 0xFF
+            'a': color >> 24 & 0xFF,
+            'r': color >> 16 & 0xFF,
+            'g': color >> 8 & 0xFF,
+            'b': color >> 0 & 0xFF,
           };
         } else if (typeof color === 'object') {
           if (color instanceof JsMB._Color) {
@@ -1111,10 +1143,10 @@ try {
               if (color[3] > 0 && color[3] <= 1) {
                 // Css RGBA format
                 this._color = {
-                  'a': (color[3] * 1000) & 0xFF,
+                  'a': color[3] * 1000 & 0xFF,
                   'r': color[0],
                   'g': color[1],
-                  'b': color[2]
+                  'b': color[2],
                 };
               } else {
                 // [TEMP] SDL ARGB format
@@ -1122,7 +1154,7 @@ try {
                   'a': color[0],
                   'r': color[1],
                   'g': color[2],
-                  'b': color[3]
+                  'b': color[3],
                 };
               }
             } else {
@@ -1132,7 +1164,7 @@ try {
                 'a': 0,
                 'r': color[0] || 0,
                 'g': color[1] || 0,
-                'b': color[2] || 0
+                'b': color[2] || 0,
               };
             }
           } else if (color.r + 1 && color.g + 1 && color.b + 1 && color.a + 1) {
@@ -1143,50 +1175,51 @@ try {
               'a': 0,
               'r': 0,
               'g': 0,
-              'b': 0
+              'b': 0,
             };
           }
         }
       }
 
-      getRgbArray() {
+      getRgbArray () {
         const c = this._color;
 
         return [c.r, c.g, c.b];
       }
 
-      getArgbArray() {
+      getArgbArray () {
         const c = this._color;
 
         return [c.a, c.r, c.g, c.b];
       }
 
-      getHex() {
+      getHex () {
         return this.getNumber();
       }
 
-      getNumber() {
+      getNumber () {
         // FIXME: Можно проще
         const c = this._color;
         let a = c.a.toString(16);
 
-        a = a.length === 1 ? '0' + a : a;
+        a = a.length === 1 ? `0${a}` : a;
         let r = c.r.toString(16);
 
-        r = r.length === 1 ? '0' + r : r;
+        r = r.length === 1 ? `0${r}` : r;
         let g = c.g.toString(16);
 
-        g = g.length === 1 ? '0' + g : g;
+        g = g.length === 1 ? `0${g}` : g;
         let b = c.b.toString(16);
 
-        b = b.length === 1 ? '0' + b : b;
+        b = b.length === 1 ? `0${b}` : b;
+
         return Number(`0x${a}${r}${g}${b}`);
       }
 
-      getObject() {
+      getObject () {
         return this._color;
       }
-    }
+    },
 
   };
 

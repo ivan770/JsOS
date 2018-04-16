@@ -3,20 +3,21 @@
 const io = $$.stdio.defaultStdio;
 const fs = require('fs');
 
-function main(Vim, exit) {
+function main (Vim, exit) {
   Vim.addCommand({
-    'mode': 'command',
+    'mode':  'command',
     'match': /^:q\n$/,
-    fn() {
+    fn () {
       io.clear();
+
       return exit();
-    }
+    },
   });
 
   Vim.addCommand({
-    'mode': 'command',
+    'mode':  'command',
     'match': /^:(?:e|o) (.*)\n$/,
-    fn(keys, vim, match) {
+    fn (keys, vim, match) {
       const filePath = match[1];
       let text = '';
       // text = fs.readFileSync(filePath, 'binary');
@@ -32,13 +33,13 @@ function main(Vim, exit) {
         doc.text(text);
         vim.add(doc);
       });
-    }
+    },
   });
 
   Vim.addCommand({
-    'mode': 'command',
+    'mode':  'command',
     'match': /^:w\n$/,
-    fn(keys, vim, match) {
+    fn (keys, vim, match) {
       const filePath = vim.curDoc.path;
 
       if (!filePath) {
@@ -53,25 +54,25 @@ function main(Vim, exit) {
         vim.view.set('status', status);
       });
       // fs.writeFileSync(filePath, text, 'binary');
-    }
+    },
   });
 
   Vim.addCommand({
-    'mode': 'command',
+    'mode':  'command',
     'match': 'zz', // ZZ
-    fn(keys, vim /* , match */) {
+    fn (keys, vim /* , match */) {
       //   vim.exec(':w\n');
       vim.exec(':q\n');
-    }
+    },
   });
 
   Vim.addCommand({
-    'mode': 'command',
+    'mode':  'command',
     'match': '<C-c>',
-    fn(keys, vim /* , match */) {
+    fn (keys, vim /* , match */) {
       vim.exec(':q\n');
       vim.notify('Type  :quit<Enter>  to exit Vim');
-    }
+    },
   });
 }
 

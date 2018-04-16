@@ -23,10 +23,10 @@ const h = vga.HEIGHT;
 let posCurrent = 0;
 
 const tmpcolor = [vga.color.WHITE, vga.color.BLACK];
-const {color} = vga;
+const { color } = vga;
 
 class Printer {
-  constructor() {
+  constructor () {
     {
       this.refresh = this.refresh.bind(this);
       this.scrollUp = this.scrollUp.bind(this);
@@ -42,31 +42,31 @@ class Printer {
     this.refresh();
   }
 
-  get color() {
+  get color () {
     return color;
   }
 
-  refresh() {
+  refresh () {
     vga.draw(buffer);
   }
 
-  scrollUp() {
+  scrollUp () {
     buffer.scrollUp(vga.color.BLACK);
     posCurrent -= w;
   }
 
-  scrollDown() {
+  scrollDown () {
     buffer.scrollDown(vga.color.BLACK);
     posCurrent -= w;
   }
 
-  clear(color = vga.color.BLACK) {
+  clear (color = vga.color.BLACK) {
     buffer.clear(color);
     posCurrent = 0;
     this.refresh();
   }
 
-  fill(color) {
+  fill (color) {
     return this.clear(color);
   }
 
@@ -80,16 +80,18 @@ class Printer {
    * @param {array} [setcolor] - Color values to control
    * @returns {bool} true - it's a control symbol; false - no
    */
-  useControls(symbol, prevsymbol = '\0', setcolor = tmpcolor) {
+  useControls (symbol, prevsymbol = '\0', setcolor = tmpcolor) {
     const code = symbol.charCodeAt();
 
     if (code >= 0x0 && code <= 0xF && prevsymbol.charCodeAt() === 0x1B) {
       setcolor[0] = code;
+
       return true;
     }
 
     if (code >= 0x10 && code <= 0x1F && prevsymbol.charCodeAt() === 0x1B) {
       setcolor[1] = code - 0x10;
+
       return true;
     }
 
@@ -101,7 +103,7 @@ class Printer {
     }
   }
 
-  print(textOpt = '', repeat = 1, fg = tmpcolor[0], bg = tmpcolor[1]) {
+  print (textOpt = '', repeat = 1, fg = tmpcolor[0], bg = tmpcolor[1]) {
     const text = String(textOpt);
     const currentcolor = [fg, bg];
 
@@ -112,7 +114,7 @@ class Printer {
         if (this.useControls(c, text[i - 1], currentcolor)) continue;
 
         if (c === '\n') {
-          posCurrent -= (posCurrent % w) - w;
+          posCurrent -= posCurrent % w - w;
           if (posCurrent >= w * h) {
             this.scrollUp();
           }
@@ -137,7 +139,7 @@ class Printer {
     }
 
     if (newPos >= w * h) {
-      newPos = (w * h) - 1;
+      newPos = w * h - 1;
     }
 
     posCurrent = newPos;
@@ -159,7 +161,7 @@ class Printer {
     if (y >= h) {
       y = h - 1;
     }
-    posCurrent = (y * w) + x;
+    posCurrent = y * w + x;
   }
 }
 

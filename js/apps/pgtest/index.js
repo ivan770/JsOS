@@ -14,7 +14,7 @@ let io, resp, kb, window;
 let page = 0;
 let demonstration = false;
 
-function draw() {
+function draw () {
   window = new UI.Window('Pseudo-GUI Demonstration');
 
   const startbtn = new UI.Button('Start');
@@ -32,7 +32,7 @@ function draw() {
   window.addButton(exitbtn);
 }
 
-function sdraw() {
+function sdraw () {
   if (!demonstration) return;
   JsMB
     .cls()
@@ -60,14 +60,14 @@ function sdraw() {
         .setColor(0xC)
         .drawArc(scw / 4, sch / 4, 5)
         .drawArc(3 * scw / 4, sch / 4, 5)
-        .drawLine((scw / 4) + 5, 7 * sch / 8, (3 * scw / 4) - 5, 7 * sch / 8);
+        .drawLine(scw / 4 + 5, 7 * sch / 8, 3 * scw / 4 - 5, 7 * sch / 8);
       break;
     case 5:
       JsMB
         .drawLine(0, 0, scw, 0)
         .setColor(0x4)
         .setBackColor(0xF)
-        .drawString('LOL', (scw / 2) - 1, 0);
+        .drawString('LOL', scw / 2 - 1, 0);
       break;
     case 6:
       JsMB
@@ -82,7 +82,7 @@ function sdraw() {
   }
 }
 
-function onKeyDown(key) {
+function onKeyDown (key) {
   switch (key.type) {
     case 'f12':
       return exit();
@@ -103,14 +103,15 @@ function onKeyDown(key) {
   sdraw();
 }
 
-function exit() {
+function exit () {
   page = 0;
   kb.onKeydown.remove(onKeyDown);
   JsMB.cls();
+
   return resp(0);
 }
 
-function main(api, res) {
+function main (api, res) {
   io = api.stdio;
   kb = api.keyboard;
   resp = res;

@@ -33,8 +33,8 @@ module.exports = (intf, destIP, viaIP, srcPort, destPort, u8data) => {
     ip4header.minHeaderLength + udpHeader.headerLength + u8data.length);
   udpHeader.write(u8headers, udpOffset, srcPort, destPort, datagramLength);
 
-  const sum = ((destIP.a << 8) | destIP.b) + ((destIP.c << 8) | destIP.d) +
-      ((srcIP.a << 8) | srcIP.b) + ((srcIP.c << 8) | srcIP.d) +
+  const sum = (destIP.a << 8 | destIP.b) + (destIP.c << 8 | destIP.d) +
+      (srcIP.a << 8 | srcIP.b) + (srcIP.c << 8 | srcIP.d) +
       datagramLength + ip4header.PROTOCOL_UDP +
       srcPort + destPort + datagramLength;
 

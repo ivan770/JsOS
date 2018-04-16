@@ -11,37 +11,37 @@ let io, kb, resp; //eslint-disable-line
 
 
 const note = new class Note {
-  constructor() {
+  constructor () {
     this.octave = 4;
     this.duration = DURATION;
   }
 
-  convert(note) {
+  convert (note) {
     return note * this.octaver;
   }
 
-  upDuration() {
-    return (this.duration += 10);
+  upDuration () {
+    return this.duration += 10;
   }
 
-  downDuration() {
-    return this.duration === 10 ? this.duration : (this.duration -= 10);
+  downDuration () {
+    return this.duration === 10 ? this.duration : this.duration -= 10;
   }
 
-  upOctave() {
+  upOctave () {
     return this.octave === MAX_OCTAVE ? this.octave : ++this.octave;
   }
 
-  downOctave() {
+  downOctave () {
     return this.octave === MIN_OCTAVE ? this.octave : --this.octave;
   }
 
 
-  get octaver() {
+  get octaver () {
     return Math.pow(2, this.octave - 2);
   }
 
-  get keynotes() {
+  get keynotes () {
     return {
       'z': 'C',
       's': 'CD',
@@ -80,129 +80,129 @@ const note = new class Note {
       'p': 'EPP',
       '[': 'FPP',
       '=': 'FDPP',
-      ']': 'GPP'
+      ']': 'GPP',
     };
   }
 
   // [z - m]
 
-  get C() {
+  get C () {
     return this.convert(65);
   }
 
-  get CD() {
+  get CD () {
     return this.convert(69);
   }
 
-  get D() {
+  get D () {
     return this.convert(73);
   }
-  get DD() {
+  get DD () {
     return this.convert(78);
   }
-  get E() {
+  get E () {
     return this.convert(82);
   }
-  get F() {
+  get F () {
     return this.convert(87);
   }
-  get FD() {
+  get FD () {
     return this.convert(92);
   }
 
-  get G() {
+  get G () {
     return this.convert(98);
   }
 
-  get GD() {
+  get GD () {
     return this.convert(104);
   }
 
-  get A() {
+  get A () {
     return this.convert(110);
   }
 
-  get AD() {
+  get AD () {
     return this.convert(116);
   }
 
-  get H() {
+  get H () {
     return this.convert(123);
   }
 
   // [, - /] U [q - u]
 
-  get CP() {
+  get CP () {
     return this.convert(131);
   }
 
-  get CDP() {
+  get CDP () {
     return this.convert(139);
   }
 
-  get DP() {
+  get DP () {
     return this.convert(147);
   }
-  get DDP() {
+  get DDP () {
     return this.convert(156);
   }
-  get EP() {
+  get EP () {
     return this.convert(165);
   }
-  get FP() {
+  get FP () {
     return this.convert(175);
   }
-  get FDP() {
+  get FDP () {
     return this.convert(185);
   }
 
-  get GP() {
+  get GP () {
     return this.convert(196);
   }
 
-  get GDP() {
+  get GDP () {
     return this.convert(208);
   }
 
-  get AP() {
+  get AP () {
     return this.convert(220);
   }
 
-  get ADP() {
+  get ADP () {
     return this.convert(233);
   }
 
-  get HP() {
+  get HP () {
     return this.convert(247);
   }
 
   // [i - ]]
 
-  get CPP() {
+  get CPP () {
     return this.convert(262);
   }
 
-  get CDPP() {
+  get CDPP () {
     return this.convert(277);
   }
 
-  get DPP() {
+  get DPP () {
     return this.convert(294);
   }
-  get DDPP() {
+  get DDPP () {
     return this.convert(311);
   }
-  get EPP() {
+  get EPP () {
     return this.convert(330);
   }
-  get FPP() {
+  get FPP () {
     return this.convert(349);
   }
-  get FDPP() {
+  get FDPP () {
     return this.convert(370);
   }
 
-  get GPP() {
+  get GPP () {
     return this.convert(392);
   }
 
@@ -211,7 +211,7 @@ const note = new class Note {
 class Interface {
   // region eol
 // ######################################################################################
-  static render() {
+  static render () {
     io.write(` 
  ##############################################################################
  #                          SpeakPlay (c) PROPHESSOR 2017                     #
@@ -242,7 +242,7 @@ OCTAVE: ${note.octave}
   // endregion eol
 }
 
-function main(api, res) {
+function main (api, res) {
   io = api.stdio;
   kb = api.keyboard;
   resp = res;
@@ -253,7 +253,7 @@ function main(api, res) {
   // return res(0); // 1 = error
 }
 
-function keylog(key) {
+function keylog (key) {
   switch (key.type) {
     case 'f12':
       stop();
@@ -281,11 +281,12 @@ function keylog(key) {
   return false;
 }
 
-function stop() {
+function stop () {
   io.setColor('yellow');
   io.writeLine('Synthezier stoped');
   kb.onKeydown.remove(keylog);
   io.clear();
+
   return resp(0);
 }
 
