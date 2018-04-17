@@ -26,7 +26,7 @@ const cmds = {
     'description': 'Shut down the computer',
     'usage':       'shutdown',
     run (args, f, res) {
-      warn('Shuting down...');
+      warn('Shutting down...');
       $$.machine.shutdown();
 
       return res(0);
@@ -150,7 +150,7 @@ const cmds = {
     },
   },
   'install': {
-    'description': 'Install the applications',
+    'description': 'Install applications',
     'usage':       'install <app>',
     run (app, f, res) {
       if ($$.appman.install(app.trim())) {
